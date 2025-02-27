@@ -1,0 +1,281 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.text_edit {
+    font-family: Arial;
+    text-decoration: none;
+    font-weight: normal;
+    font-style: normal;
+}
+
+header img {
+    width: 30px;
+    height: 30px;
+}
+table img {
+    width: 20px;
+    height: 20px;
+}
+
+button {
+    background: none;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Анімація переходу */
+    display: inline-block;
+
+}
+
+button:hover {
+    background-color: lightgrey;
+    transform: scale(1.05); /* Злегка збільшується при наведенні */
+}
+
+.clickable {
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease; /* Анімація переходу */
+}
+
+.clickable:hover {
+    transform: scale(1.01); /* Збільшення елементу при наведенні */
+}
+
+
+
+
+header {
+    height:50px;
+    background-color:grey;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px;
+}
+
+.logo {
+    line-height: 40px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+.headerItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerItem a {
+    margin-top: 6px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-right: 10px;
+    margin-left: 20px;
+}
+
+.profile .name {
+    font-size: 13px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 30px;
+
+}
+
+#nav-placeholder {
+    /* background-color: lightgrey; */
+    width: 15%;
+    max-width: 200px;
+    /* padding: 5px; */
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type:none;
+}
+
+nav a {
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: lightgrey;
+}
+
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 85%;
+    /* background-color: bisque; */
+}
+
+.tableName {
+    font-size: 35px;
+    color: rgb(0, 0, 0);
+    line-height: 37px;
+}
+
+.add_student {
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    line-height: 40px;
+    text-align: center;
+    margin: 10px 0 10px auto;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    /* background-color: aquamarine; */
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    height: 50px;
+    white-space: nowrap;
+
+    font-family: Arial;
+    text-decoration: none;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+}
+
+table {
+    width: 1248px;
+    margin: auto;
+    /* background-color: antiquewhite; */
+}
+
+th {
+    font-weight:600;
+}
+
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.statusBar {
+    background-color: lightgray;
+    border-radius: 100%;
+    border: 0.5px solid black;
+    margin: auto;
+    width: 20px;
+    height: 20px;
+}
+
+.option_cell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:10px;
+
+    max-width: 80px;
+    margin: auto;
+}
+
+.option_cell button {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.option_cell button img {
+    margin: auto;
+}
+
+
+.tableNext {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    margin: auto;
+}
+
+.tableNext button {
+    width: 30px;
+    height: 25px;
+
+    font-size: 18px;
+    line-height: 25px;
+}
+
+
+
+@media (max-width: 1045px) {
+    main {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    #nav-placeholder { 
+        width: 100%;
+        max-width: none;
+        border: 1px solid black;
+        border-right: none;
+    }
+
+    nav ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+    }
+
+    nav a {
+        padding-right: 20px;
+    }
+
+    section { width: 100% }
+}
+
+@media (max-width: 327px) {
+    .profile .name {
+        display: none;
+    }
+
+    #nav-placeholder {
+        width: auto;
+        overflow-x: auto;
+    }
+}
