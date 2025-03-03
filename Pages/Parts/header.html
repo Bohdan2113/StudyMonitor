@@ -1,12 +1,41 @@
 <header>
-    <h1><a href="./students.html" class="text_edit logo" aria-label="Main page" tabindex="1">CMS</a></h1>
-    <div class="headerItem">
-        <a href="./messages.html" aria-label="Notifications" tabindex="2" class="clickable">
-            <img src="../Images/notification.png" alt="notification">
-        </a>
-        <div class="profile clickable" aria-label="My profile" tabindex="3">
-            <img src="../Images/user.png" alt="user">
-            <span class="text_edit name">Bohdan Kruk</span>
-        </div>
+  <h1>
+    <a
+      href="./students.html"
+      class="text_edit logo"
+      aria-label="Main page"
+      tabindex="1"
+      >CMS</a
+    >
+  </h1>
+  <div class="headerItem">
+    <div class="notif clickable notif-dropbtn">
+      <a
+        href="./messages.html"
+        aria-label="Notifications"
+        tabindex="2"
+      >
+        <img src="../Images/notification.png" alt="notification" />
+      </a>
+
+      <div class="notif-dropdown-list">
+        <a href="#" class="text_edit clickable">Profile</a>
+        <a href="#" class="text_edit clickable">Log Out</a>
+      </div>
     </div>
+
+    <div
+      class="profile clickable profile-dropbtn"
+      aria-label="My profile"
+      tabindex="3"
+    >
+      <img src="../Images/user.png" alt="user" />
+      <span class="text_edit name">Bohdan Kruk</span>
+
+      <div class="profile-dropdown-list">
+        <a href="#" class="text_edit clickable">Profile</a>
+        <a href="#" class="text_edit clickable">Log Out</a>
+      </div>
+    </div>
+  </div>
 </header>
