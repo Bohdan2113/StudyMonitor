@@ -7,7 +7,10 @@
     <title>Students</title>
 
     <link rel="stylesheet" , href="../styles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <script src="../script.js"></script>
   </head>
 
@@ -15,63 +18,81 @@
     <div id="header-placeholder"></div>
     <div id="nav-placeholder"></div>
 
-    <main>
-      <section>
-        <div class="table_header">
-          <h2 class="text_edit tableName">Students</h2>
-          <button class="add_student" aria-label="Add student" title="Add new student">+</button>
-        </div>
+    <section>
+      <div class="table_header">
+        <h2 class="text_edit tableName">Students</h2>
+        <button
+          class="add_student"
+          aria-label="Add student"
+          title="Add new student"
+        >
+          +
+        </button>
+      </div>
 
-        <div class="table-container">
-          <table>
-            <tr>
-              <th style="width: 40px">
-                <img
-                  src="../Images/free-icon-approved-7211333.png"
-                  alt="checkboxHeader"
-                  style="max-width: 40px"
-                />
-              </th>
-              <th style="width: 100px">Group</th>
-              <th style="width: 200px">Name</th>
-              <th style="width: 80px">Gender</th>
-              <th style="width: 100px">Birthday</th>
-              <th style="width: 70px">Status</th>
-              <th style="width: 90px">Options</th>
-            </tr>
-            <tr>
-              <td>
-                <button class="checkbox" aria-label="Select student" title="Select"></button>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <div class="statusBar" style="background-color: green"></div>
-              </td>
-              <td>
-                <div class="option_cell">
-                  <button aria-label="Edit" title="Edit">
-                    <img src="../Images/pencil.png" />
-                  </button>
-                  <button aria-label="Delete" title="Delete">
-                    <img src="../Images/bin.png" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
+      <div class="table-container">
+        <table>
+          <tr>
+            <th style="width: 40px">
+              <img
+                src="../Images/select.png"
+                alt="checkboxHeader"
+                style="max-width: 40px"
+              />
+            </th>
+            <th style="width: 70px">Group</th>
+            <th style="width: 235px">Name</th>
+            <th style="width: 75px">Gender</th>
+            <th style="width: 100px">Birthday</th>
+            <th style="width: 70px">Status</th>
+            <th style="width: 90px">Options</th>
+          </tr>
+          <tr>
+            <td>
+              <button
+                class="checkbox"
+                aria-label="Select student"
+                title="Select"
+              ></button>
+            </td>
+            <td>PZ-21</td>
+            <td>Bohdan Kruk</td>
+            <td>Male</td>
+            <td>05.01.2006</td>
+            <td>
+              <div class="statusBar" style="background-color: green"></div>
+            </td>
+            <td>
+              <div class="option_cell">
+                <button aria-label="Edit" title="Edit">
+                  <img src="../Images/pencil.png" />
+                </button>
+                <button aria-label="Delete" title="Delete">
+                  <img src="../Images/bin.png" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-        <div class="tableNext">
-          <button class="text_edit" aria-label="Previous table page" title="Previous page">
-            &lt
-          </button>
-          <button class="text_edit">1</button>
-          <button class="text_edit" aria-label="Next table page" title="Next page">&gt</button>
-        </div>
-      </section>
-    </main>
+      <div class="tableNext">
+        <button
+          class="text_edit"
+          aria-label="Previous table page"
+          title="Previous page"
+        >
+          &lt
+        </button>
+        <button class="text_edit">1</button>
+        <button
+          class="text_edit"
+          aria-label="Next table page"
+          title="Next page"
+        >
+          &gt
+        </button>
+      </div>
+    </section>
   </body>
 </html>

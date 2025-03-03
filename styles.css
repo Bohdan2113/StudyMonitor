@@ -4,6 +4,7 @@
   padding: 0;
 }
 
+
 .text_edit {
   font-family: Arial;
   text-decoration: none;
@@ -99,7 +100,7 @@ header {
 }
 
 .profile-dropbtn,
-.notif-dropbtn{
+.notif-dropbtn {
   /* display: inline-block; */
   position: relative;
 }
@@ -136,10 +137,6 @@ header {
 .profile-dropbtn:hover .profile-dropdown-list,
 .notif-dropbtn:hover .notif-dropdown-list {
   display: block;
-}
-
-main {
-  width: 100%;
 }
 
 #nav-placeholder {
@@ -190,7 +187,7 @@ nav.open {
 }
 
 #nav-placeholder.open {
-  width: 200px; /* Ширина контейнера, коли меню відкривається */
+  width: 200px;
 }
 
 section {
@@ -207,12 +204,15 @@ section {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+
+  /* background-color: rgb(69, 161, 161); */
 }
 
 .tableName {
-  font-size: 35px;
+  font-size: 30px;
   color: rgb(0, 0, 0);
-  line-height: 37px;
+  line-height: 40px;
 }
 
 .add_student {
@@ -221,13 +221,11 @@ section {
   font-size: 30px;
   line-height: 40px;
   text-align: center;
-  /* margin: 10px 0 10px auto; */
 }
 
 .table-container {
   width: 100%;
   overflow-x: auto;
-  /* margin-bottom: 30px; */
 }
 
 table,
@@ -337,10 +335,24 @@ table {
   section {
     margin-left: 48px;
   }
+
+  section {
+    padding: 3vw;
+  }
 }
 
 @media (max-width: 327px) {
   .profile .name {
     display: none;
+  }
+  .tableName {
+    font-size: 8.6vw;
+    line-height: 11.5vw;
+  }
+  .add_student {
+    width: 11.5vw;
+    height: 11.5vw;
+    font-size: 8.6vw;
+    line-height: 10vw;
   }
 }
