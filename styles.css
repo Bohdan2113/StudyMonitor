@@ -4,6 +4,13 @@
   padding: 0;
 }
 
+body {
+  background-image: url("/Images/helloKitty.png");
+  background-size: 40vw auto; /* Задає конкретний розмір */
+  background-repeat: no-repeat; /* Забороняє повторення */
+  background-position: center 18vh; /* Розміщує в центрі */
+  /* background-position: 500px 120px; Розміщує в центрі */
+}
 
 .text_edit {
   font-family: Arial;
