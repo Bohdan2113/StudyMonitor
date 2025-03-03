@@ -6,9 +6,9 @@
 
 body {
   background-image: url("/Images/helloKitty.png");
-  background-size: 600px 600px; /* Задає конкретний розмір */
+  background-size: 600px auto; /* Задає конкретний розмір */
   background-repeat: no-repeat; /* Забороняє повторення */
-  background-position: 500px 80px; /* Розміщує в центрі */
+  background-position: 500px 120px; /* Розміщує в центрі */
 }
 
 .text_edit {
