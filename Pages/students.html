@@ -1,100 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Students</title>
 
-    <link rel="stylesheet", href="../styles.css">
+    <link rel="stylesheet" , href="../styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="../script.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="header-placeholder"></div>
+    <div id="nav-placeholder"></div>
 
     <main>
-        <div id="nav-placeholder"></div>
+      <section>
+        <div class="table_header">
+          <h2 class="text_edit tableName">Students</h2>
+          <button class="add_student" aria-label="Add student">+</button>
+        </div>
 
-        <section>
-            <div class="text_edit tableName">Students</div>
-            <button class="add_student" aria-label="Add student">+</button>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th><img src="../Images/free-icon-approved-7211333.png" alt="checkboxHeader"></th>
-                        <th>Group</th>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Birthday</th>
-                        <th>Status</th>
-                        <th>Options</th>
-                    </tr>
-                    <tr>
-                        <td><button class="checkbox" aria-label="Select student"></button></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><div class="statusBar"></div></td>
-                        <td>
-                            <div class="option_cell">
-                                <button aria-label="Edit">
-                                    <img src="../Images/pencil.png">
-                                </button>
-                                <button aria-label="Delete">
-                                    <img src="../Images/bin.png">
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><button class="checkbox" aria-label="Select student"></button></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><div class="statusBar" style="background-color: green;"></div></td>
-                        <td>
-                            <div class="option_cell">
-                                <button aria-label="Edit">
-                                    <img src="../Images/pencil.png">
-                                </button>
-                                <button aria-label="Delete">
-                                    <img src="../Images/bin.png">
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><button class="checkbox" aria-label="Select student"></button></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><div class="statusBar"></div></td>
-                        <td>
-                            <div class="option_cell">
-                                <button aria-label="Edit">
-                                    <img src="../Images/pencil.png">
-                                </button>
-                                <button aria-label="Delete">
-                                    <img src="../Images/bin.png">
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="tableNext">
-                <button class="text_edit" aria-label="Previous table page">&lt</button>
-                <button class="text_edit">1</button>
-                <button class="text_edit" aria-label="Next table page">&gt</button>
-            </div>
-        </section>
-        
+        <div class="table-container">
+          <table>
+            <tr>
+              <th style="width: 40px">
+                <img
+                  src="../Images/free-icon-approved-7211333.png"
+                  alt="checkboxHeader"
+                  style="max-width: 40px"
+                />
+              </th>
+              <th style="width: 100px">Group</th>
+              <th style="width: 200px">Name</th>
+              <th style="width: 80px">Gender</th>
+              <th style="width: 100px">Birthday</th>
+              <th style="width: 70px">Status</th>
+              <th style="width: 90px">Options</th>
+            </tr>
+            <tr>
+              <td>
+                <button class="checkbox" aria-label="Select student"></button>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><div class="statusBar"></div></td>
+              <td>
+                <div class="option_cell">
+                  <button aria-label="Edit">
+                    <img src="../Images/pencil.png" />
+                  </button>
+                  <button aria-label="Delete">
+                    <img src="../Images/bin.png" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="checkbox" aria-label="Select student"></button>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="statusBar" style="background-color: green"></div>
+              </td>
+              <td>
+                <div class="option_cell">
+                  <button aria-label="Edit">
+                    <img src="../Images/pencil.png" />
+                  </button>
+                  <button aria-label="Delete">
+                    <img src="../Images/bin.png" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="checkbox" aria-label="Select student"></button>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><div class="statusBar"></div></td>
+              <td>
+                <div class="option_cell">
+                  <button aria-label="Edit">
+                    <img src="../Images/pencil.png" />
+                  </button>
+                  <button aria-label="Delete">
+                    <img src="../Images/bin.png" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="tableNext">
+          <button class="text_edit" aria-label="Previous table page">
+            &lt
+          </button>
+          <button class="text_edit">1</button>
+          <button class="text_edit" aria-label="Next table page">&gt</button>
+        </div>
+      </section>
     </main>
-
-</body>
-
+  </body>
 </html>
