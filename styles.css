@@ -129,8 +129,6 @@ header {
   display: block;
 }
 
-
-
 main {
   width: 100%;
   /* display: flex;
@@ -147,7 +145,6 @@ main {
   overflow-y: auto;
 
   transition: width 0.3s ease;
-
 }
 
 .hamburger-icon {
@@ -189,9 +186,6 @@ nav.open {
 #nav-placeholder.open {
   width: 200px; /* Ширина контейнера, коли меню відкривається */
 }
-
-
-
 
 section {
   display: flex;
