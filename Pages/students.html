@@ -48,36 +48,6 @@
             <th style="width: 70px">Status</th>
             <th style="width: 90px">Options</th>
           </tr>
-          <!-- <tr id="student--1">
-            <td>
-              <input
-                type="checkbox"
-                title="Select"
-                aria-label="Select student"
-              />
-            </td>
-            <td id="-1-group">PZ-21</td>
-            <td id="-1-name">Bohdan Kruk</td>
-            <td id="-1-gender">Male</td>
-            <td id="-1-bdate">05.01.2006</td>
-            <td>
-              <div class="statusBar" style="background-color: lightgray"></div>
-            </td>
-            <td>
-              <div class="option_cell">
-                <button aria-label="Edit" title="Edit" onclick="editStudentButton('-1')">
-                  <img src="../Images/pencil.png" />
-                </button>
-                <button
-                  aria-label="Delete"
-                  title="Delete"
-                  onclick="deleteStudentButton('-1')"
-                >
-                  <img src="../Images/bin.png" />
-                </button>
-              </div>
-            </td>
-          </tr> -->
         </table>
       </div>
 
@@ -116,7 +86,7 @@
         <button class="cancel_button" onclick="Close('del-student-block')">
           Cancel
         </button>
-        <button class="ok_button" onclick="OkDelete('del-student-block')">
+        <button id="ok_button">
           Ok
         </button>
       </div>
@@ -125,7 +95,7 @@
     <div id="edit-student-block">
       <div class="newBlock-header">
         <h2 class="text_edit" id="edit-block-header">Add student</h2>
-        <button class="close_button" onclick="Close('edit-student-block')">
+        <button class="close_button" onclick="CloseEdit('edit-student-block')">
           <div>+</div>
         </button>
       </div>
@@ -170,7 +140,7 @@
       </div>
 
       <div class="btn-container">
-        <button class="cancel_button" onclick="Close('edit-student-block')">
+        <button class="cancel_button" onclick="CloseEdit('edit-student-block')">
           Cancel
         </button>
         <button id="confirm-edit-button">
