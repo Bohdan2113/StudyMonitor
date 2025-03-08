@@ -7,7 +7,7 @@ window.onload = function () {
     fname: "Bohdan",
     lname: "Kruk",
     gender: "Male",
-    bdate: "2006-05-01"
+    bdate: "2006-05-01",
   };
   studentList.push(newStudent);
   addStudentToTable(newStudent, table);
@@ -120,7 +120,9 @@ function CreateAdd() {
   studentList.push(newStudent);
   addStudentToTable(newStudent, table);
 
-  Close("edit-student-block");
+  CloseEdit("edit-student-block");
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.removeEventListener("click", saveEditListener);
 }
 
 function addStudentToTable(newStudent, table) {
@@ -178,7 +180,7 @@ function editStudentButton(id) {
 
   let inputFields = GetFormInputFields();
   let curStudent = studentList.find((s) => s.id === id);
-  if(!curStudent) {
+  if (!curStudent) {
     console.log("Studen`t not in the list");
     return;
   }
@@ -194,11 +196,11 @@ function SaveEdit(id) {
   let inputFields = GetFormInputFields();
   let studentTableFields = GetStudentTableFields(id);
   let curStudent = studentList.find((s) => s.id === id);
-  if(!curStudent) {
+  if (!curStudent) {
     console.log("Studen`t not in the list");
     return;
   }
-  
+
   curStudent.group = inputFields.group.value;
   curStudent.fname = inputFields.fname.value;
   curStudent.lname = inputFields.lname.value;
@@ -211,16 +213,38 @@ function SaveEdit(id) {
   studentTableFields.studentGender.textContent = curStudent.gender;
   studentTableFields.studentBdate.textContent = curStudent.bdate;
 
-  Close("edit-student-block");
+  CloseEdit("edit-student-block");
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.removeEventListener("click", CreateAdd);
 }
 
-function deleteStudentButton() {
+let saveDeleteListener;
+function deleteStudentButton(id) {
   let deleteBlock = document.getElementById("del-student-block");
   deleteBlock.style.display = "flex";
+
+  let confirmButton = document.getElementById("ok_button");
+  saveDeleteListener = () => {
+    OkDelete(id);
+  };
+  confirmButton.addEventListener("click", saveDeleteListener);
 }
 
 function OkDelete(id) {
-  Close(id);
+  const tr = document.getElementById(`student-${id}`);
+  if (tr) {
+    tr.remove();
+  }
+  studentList = studentList.filter((s) => s.id !== id);
+
+  Close("del-student-block");
+  let confirmButton = document.getElementById("ok_button");
+  confirmButton.removeEventListener("click", saveDeleteListener);
+}
+
+function CloseEdit(id) {
+  Close(id)
+  ClearForm();
 }
 
 function Close(id) {
@@ -230,14 +254,8 @@ function Close(id) {
   } else {
     console.error("Element with id '" + id + "' not found.");
   }
-
-  ClearForm();
 }
 
 function ClearForm() {
   document.getElementById("student-form").reset();
-
-  let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.removeEventListener("click", saveEditListener);
-  confirmButton.removeEventListener("click", CreateAdd);
 }
