@@ -1,3 +1,18 @@
+window.onload = function () {
+  const table = document.getElementById("students_table");
+
+  let newStudent = {
+    id: studentId++,
+    group: "PZ-21",
+    fname: "Bohdan",
+    lname: "Kruk",
+    gender: "Male",
+    bdate: "2006-05-01"
+  };
+  studentList.push(newStudent);
+  addStudentToTable(newStudent, table);
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   // Завантажуємо хедер
   fetch("Parts/header.html")
@@ -58,70 +73,154 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// function GetFormInputFields()
-// {
-//   return {
-    
-//   };
-// }
+function addStudentButton() {
+  let editBlock = document.getElementById("edit-student-block");
+  editBlock.style.display = "flex";
+  let header = document.getElementById("edit-block-header");
+  header.textContent = "Add student";
 
-function addStudent() {
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.textContent = "Create";
+  confirmButton.addEventListener("click", CreateAdd);
+}
+
+function GetFormInputFields() {
+  return {
+    group: document.getElementById("group"),
+    fname: document.getElementById("fname"),
+    lname: document.getElementById("lname"),
+    gender: document.getElementById("gender"),
+    bdate: document.getElementById("bdate"),
+  };
+}
+
+function GetStudentTableFields(id) {
+  return {
+    studentGroup: document.getElementById(`${id}-group`),
+    studentName: document.getElementById(`${id}-name`),
+    studentGender: document.getElementById(`${id}-gender`),
+    studentBdate: document.getElementById(`${id}-bdate`),
+  };
+}
+
+let studentList = [];
+let studentId = 0;
+function CreateAdd() {
   const table = document.getElementById("students_table");
+  const inputFields = GetFormInputFields();
+
+  let newStudent = {
+    id: studentId++,
+    group: inputFields.group.value,
+    fname: inputFields.fname.value,
+    lname: inputFields.lname.value,
+    gender: inputFields.gender.value,
+    bdate: inputFields.bdate.value,
+  };
+  studentList.push(newStudent);
+  addStudentToTable(newStudent, table);
+
+  Close("edit-student-block");
+}
+
+function addStudentToTable(newStudent, table) {
+  const tr = document.createElement("tr");
+  tr.id = `student-${newStudent.id}`;
+  tr.innerHTML = `
+            <td>
+              <input
+                type="checkbox"
+                title="Select"
+                aria-label="Select student"
+                id="${newStudent.id}-checkbox"
+              />
+            </td>
+            <td id="${newStudent.id}-group">${newStudent.group}</td>
+            <td id="${newStudent.id}-name">${newStudent.fname} ${newStudent.lname}</td>
+            <td id="${newStudent.id}-gender">${newStudent.gender}</td>
+            <td id="${newStudent.id}-bdate">${newStudent.bdate}</td>
+            <td>
+              <div class="statusBar" style="background-color: lightgray" id="${newStudent.id}-status"></div>
+            </td>
+            <td>
+              <div class="option_cell">
+                <button aria-label="Edit" title="Edit" onclick="editStudentButton(${newStudent.id})">
+                  <img src="../Images/pencil.png" />
+                </button>
+                <button
+                  aria-label="Delete"
+                  title="Delete"
+                  onclick="deleteStudentButton(${newStudent.id})"
+                >
+                  <img src="../Images/bin.png" />
+                </button>
+              </div>
+            </td>
+  `;
+
+  table.appendChild(tr);
+}
+
+let saveEditListener;
+function editStudentButton(id) {
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";
 
-  // let newStudent;
-  // addStudentToTable(newStudent, table);
+  let header = document.getElementById("edit-block-header");
+  header.textContent = "Edit student";
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.textContent = "Save";
+
+  saveEditListener = () => {
+    SaveEdit(id);
+  };
+  confirmButton.addEventListener("click", saveEditListener);
+
+  let inputFields = GetFormInputFields();
+  let curStudent = studentList.find((s) => s.id === id);
+  if(!curStudent) {
+    console.log("Studen`t not in the list");
+    return;
+  }
+
+  inputFields.group.value = curStudent.group;
+  inputFields.fname.value = curStudent.fname;
+  inputFields.lname.value = curStudent.lname;
+  inputFields.gender.value = curStudent.gender;
+  inputFields.bdate.value = curStudent.bdate;
 }
 
-// let studentList = [];
-// let studentId = 0;
-// function addStudentToTable(newStudent, table) {
-//   const tr = document.createElement("tr");
-//   tr.id = `student-${studentId++}`;
-//   tr.innerHTML = `
-//             <td>
-//               <input
-//                 type="checkbox"
-//                 title="Select"
-//                 aria-label="Select student"
-//               />
-//             </td>
-//             <td>PZ-21</td>
-//             <td>Bohdan Kruk</td>
-//             <td>Male</td>
-//             <td>05.01.2006</td>
-//             <td>
-//               <div class="statusBar" style="background-color: green"></div>
-//             </td>
-//             <td>
-//               <div class="option_cell">
-//                 <button aria-label="Edit" title="Edit" onclick="editStudent('student-1')">
-//                   <img src="../Images/pencil.png" />
-//                 </button>
-//                 <button
-//                   aria-label="Delete"
-//                   title="Delete"
-//                   onclick="deleteStudent()"
-//                 >
-//                   <img src="../Images/bin.png" />
-//                 </button>
-//               </div>
-//             </td>
-//   `;
+function SaveEdit(id) {
+  let inputFields = GetFormInputFields();
+  let studentTableFields = GetStudentTableFields(id);
+  let curStudent = studentList.find((s) => s.id === id);
+  if(!curStudent) {
+    console.log("Studen`t not in the list");
+    return;
+  }
+  
+  curStudent.group = inputFields.group.value;
+  curStudent.fname = inputFields.fname.value;
+  curStudent.lname = inputFields.lname.value;
+  curStudent.gender = inputFields.gender.value;
+  curStudent.bdate = inputFields.bdate.value;
 
-//   table.appendChild(tr);
-// }
+  studentTableFields.studentGroup.textContent = curStudent.group;
+  studentTableFields.studentName.textContent =
+    curStudent.fname + " " + curStudent.lname;
+  studentTableFields.studentGender.textContent = curStudent.gender;
+  studentTableFields.studentBdate.textContent = curStudent.bdate;
 
-function editStudent(id) {
-  let editBlock = document.getElementById("edit-student-block");
-  editBlock.style.display = "flex";
+  Close("edit-student-block");
 }
 
-function deleteStudent() {
+function deleteStudentButton() {
   let deleteBlock = document.getElementById("del-student-block");
-
   deleteBlock.style.display = "flex";
+}
+
+function OkDelete(id) {
+  Close(id);
 }
 
 function Close(id) {
@@ -135,18 +234,10 @@ function Close(id) {
   ClearForm();
 }
 
-function SaveEdit(id) {
-  Close(id);
-
-  ClearForm();
-}
-
-function OkDelete(id) {
-  Close(id);
-
-  ClearForm();
-}
-
 function ClearForm() {
   document.getElementById("student-form").reset();
+
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.removeEventListener("click", saveEditListener);
+  confirmButton.removeEventListener("click", CreateAdd);
 }
