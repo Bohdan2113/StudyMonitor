@@ -234,16 +234,15 @@ section {
   overflow-x: auto;
 }
 
-table,
-th,
-td {
+#students_table,
+#students_table th,
+#students_table td {
   border: 1px solid black;
   border-collapse: collapse;
 }
-
-th,
-td {
-  height: 50px;
+#students_table th,
+#students_table td {
+  min-height: 50px;
   white-space: nowrap;
 
   font-family: Arial;
@@ -255,25 +254,27 @@ td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  padding: 15px 0;
+  line-height: 20px;
 }
 
-th,
-td:hover {
+#students_table td:hover {
   overflow: visible;
   white-space: normal;
 }
 
-th {
+#students_table th {
   font-weight: 600;
 }
 
-table {
+#students_table {
   width: 100%;
   margin: auto;
   table-layout: fixed;
 }
 
-.checkbox {
+#students_table input[type="checkbox"] {
   width: 20px;
   height: 20px;
 }
@@ -326,7 +327,137 @@ table {
   line-height: 25px;
 }
 
-@media (max-width: 1000px) {
+#del-student-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  height: 50vh;
+  min-width: 200px;
+  min-height: 150px;
+  background-color: white;
+  z-index: 2;
+
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+#edit-student-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  height: 60vh;
+  min-width: 200px;
+  min-height: 150px;
+  background-color: white;
+  z-index: 2;
+
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.newBlock-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3vh 2vw;
+
+  border-bottom: 1px solid black;
+}
+
+.newBlock-header h2 {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.close_button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.close_button div {
+  transform: rotate(45deg);
+}
+
+.block-data-container p {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  padding: 3vh 2vw;
+
+  border-top: 1px solid black;
+}
+
+.btn-container button {
+  padding: 5px 10px;
+  min-width: 70px;
+  font-size: 15px;
+}
+
+.block-data-container {
+  display: flex;
+  flex-direction: column;
+  /* padding: 0 2vw; */
+
+  max-height: 80vh; /* Обмеження по висоті */
+  overflow-y: auto;
+}
+.input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin: 10px;
+  /* margin-right: 100px; */
+}
+
+.input-group label {
+  width: 100px;
+  font-size: 16px;
+  /* line-height: 100%; */
+  font-weight: bold;
+}
+
+.input-group input,
+.input-group select {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.input-group input[type="date"] {
+  text-align: left;
+}
+
+@media (max-width: 940px) {
   nav {
     display: none;
   }
@@ -345,6 +476,46 @@ table {
   section {
     padding: 3vw;
   }
+
+  /* .newBlock-header h2 {
+    font-size: 25px;
+    line-height: 25px;
+  }
+  .close_button {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+    line-height: 25px;
+  }
+  .block-data-container p {
+    font-size: 20px;
+  }
+  .btn-container {
+    gap: 15px;
+    padding: 3vh 1.5vw;
+  }
+  .btn-container button {
+    min-width: 50px;
+    font-size: 12px;
+  }
+  .block-data-container {
+    align-items: start;
+    gap: 10px;
+  }
+  .input-group {
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 3px;
+  }
+  .input-group input,
+  .input-group select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+  } */
 }
 
 @media (max-width: 327px) {
@@ -361,4 +532,29 @@ table {
     font-size: 8.6vw;
     line-height: 10vw;
   }
+
+  /* .newBlock-header h2 {
+    font-size: 20px;
+    line-height: 20px;
+  }
+  .close_button {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+  .block-data-container p {
+    font-size: 15px;
+  }
+  .btn-container {
+    justify-content: space-evenly;
+    gap: 5px;
+    padding: 3vh 1vw;
+  }
+  .btn-container button {
+    min-width: 0;
+    font-size: 10px;
+    padding: 3px 5px;
+    overflow: hidden;
+  } */
 }
