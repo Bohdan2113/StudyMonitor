@@ -122,7 +122,7 @@ function CreateAdd() {
 
   CloseEdit("edit-student-block");
   let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.removeEventListener("click", saveEditListener);
+  confirmButton.removeEventListener("click", CreateAdd);
 }
 
 function addStudentToTable(newStudent, table) {
@@ -215,7 +215,7 @@ function SaveEdit(id) {
 
   CloseEdit("edit-student-block");
   let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.removeEventListener("click", CreateAdd);
+  confirmButton.removeEventListener("click", saveEditListener);
 }
 
 let saveDeleteListener;
@@ -243,7 +243,7 @@ function OkDelete(id) {
 }
 
 function CloseEdit(id) {
-  Close(id)
+  Close(id);
   ClearForm();
 }
 
