@@ -1,4 +1,3 @@
-
 function formatDate(dateString) {
   if (!dateString) return "";
 
@@ -125,7 +124,6 @@ function addStudentToTable(newStudent, table) {
   const profileName = document.getElementById("profile-name");
   const fullName = profileName ? profileName.textContent.trim() : "";
   const newFullName = newStudent.fname + " " + newStudent.lname;
-  console.log(profileName);
   let statusColor = "lightgray";
   if (newFullName.trim() === fullName) {
     statusColor = "green";

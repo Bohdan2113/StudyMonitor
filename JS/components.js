@@ -11,29 +11,12 @@ function includeHTML(file, elementId) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Завантажити header та nav, після чого викликати AddFirstStudents
   try {
-    await includeHTML("/Components/header.html", "header-placeholder");
     await includeHTML("/Components/nav.html", "nav-placeholder");
-
-    // Тепер викликаємо AddFirstStudents
+    await includeHTML("/Components/header.html", "header-placeholder");
     AddFirstStudents();
 
-    // Ваш код для MutationObserver
-    let currentPath = window.location.pathname.split("/").pop();
-    const observer = new MutationObserver(() => {
-      const navItems = document.querySelectorAll(".nav-item");
-
-      if (navItems.length > 0) {
-        navItems.forEach((link) => {
-          link.getAttribute("href") === "/Pages" + currentPath
-            ? link.classList.add("active")
-            : link.classList.remove("active");
-        });
-      }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    updateActiveLink();
   } catch (error) {
     console.error(error);
   }
@@ -41,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function AddFirstStudents() {
   const table = document.getElementById("students_table");
+  if (!table) return;
 
   let newStudent = {
     id: studentId++,
@@ -63,4 +47,19 @@ function AddFirstStudents() {
   };
   studentList.push(newStudent);
   addStudentToTable(newStudent, table);
+}
+
+
+function updateActiveLink() {
+  const navItems = document.querySelectorAll(".nav-item");
+  const currentPath = window.location.pathname;
+
+  navItems.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (href === currentPath) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
 }

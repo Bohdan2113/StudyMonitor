@@ -51,7 +51,7 @@ button:hover {
 }
 
 .clickable:hover {
-  transform: scale(1.001); /* Збільшення елементу при наведенні */
+  transform: scale(1.02); /* Збільшення елементу при наведенні */
 }
 
 header {
@@ -180,17 +180,29 @@ nav ul {
   list-style-type: none;
 }
 
-nav a {
-  color: black;
-  font-size: 20px;
-  padding: 10px;
+nav .menu-items li a {
   display: block;
+  font-size: 20px;
+  color: #333; /* Стандартний колір тексту */
+  padding: 10px; /* Відступи для кращого вигляду */
+  text-decoration: none; /* Видаляємо підкреслення */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 nav a:hover {
-  background-color: rgb(128, 128, 128);
-  color: white;
+  background-color: #f0f0f0; /* Світлий фон при наведенні */
+  color: #333; /* Темний текст */
+  transition: background-color 0.3s ease; 
+  border-bottom: 3px solid #164a1f;
 }
+
+/* Стиль для активного елемента меню */
+nav .menu-items li a.active {
+  color: #fff; /* Білий текст */
+  background-color: #7ab896; /* Блакитний фон */
+  font-weight: bold; /* Жирний шрифт */
+}
+
 
 nav.open {
   display: block;
