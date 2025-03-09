@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/Images/helloKitty.png");
+  background-size: 40vw auto;
+  background-repeat: no-repeat;
+  background-position: center 18vh;
+  opacity: 0.03; /* Напівпрозорість */
+  z-index: -1; /* Щоб фон був позаду контенту */
+}
+
+#shadow-wraper {
+  transition: opacity 0.1s ease;
+}
+
+.text_edit {
+  font-family: Arial;
+  text-decoration: none;
+  font-weight: normal;
+  font-style: normal;
+}
+
+button {
+  background: none;
+  border: 0.5px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Анімація переходу */
+  display: inline-block;
+}
+
+button:hover {
+  background-color: lightgrey;
+  transform: scale(1.05); /* Злегка збільшується при наведенні */
+}
+
+.clickable {
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease; /* Анімація переходу */
+}
+
+.clickable:hover {
+  transform: scale(1.02); /* Збільшення елементу при наведенні */
+}
