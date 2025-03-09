@@ -4,11 +4,19 @@
   padding: 0;
 }
 
-body {
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url("/Images/helloKitty.png");
-  background-size: 40vw auto; /* Задає конкретний розмір */
-  background-repeat: no-repeat; /* Забороняє повторення */
-  background-position: center 18vh; /* Розміщує в центрі */
+  background-size: 40vw auto;
+  background-repeat: no-repeat;
+  background-position: center 18vh;
+  opacity: 0.03; /* Напівпрозорість */
+  z-index: -1; /* Щоб фон був позаду контенту */
 }
 
 #shadow-wraper {
@@ -69,10 +77,17 @@ header {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.logo h1 {
   line-height: 50px;
   font-size: 20px;
   color: rgb(255, 255, 255);
   text-align: center;
+  font-weight: 100;
 }
 
 .headerItem {
