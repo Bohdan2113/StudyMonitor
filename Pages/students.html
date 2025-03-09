@@ -15,60 +15,62 @@
   </head>
 
   <body style="background-image: none">
-    <div id="header-placeholder"></div>
-    <div id="nav-placeholder"></div>
+    <div id="shadow-wraper">
+      <div id="header-placeholder"></div>
+      <div id="nav-placeholder"></div>
 
-    <section>
-      <div class="table_header">
-        <h2 class="text_edit tableName">Students</h2>
-        <button
-          class="add_student"
-          aria-label="Add student"
-          title="Add new student"
-          onclick="addStudentButton()"
-        >
-          +
-        </button>
-      </div>
+      <section>
+        <div class="table_header">
+          <h2 class="text_edit tableName">Students</h2>
+          <button
+            class="add_student"
+            aria-label="Add student"
+            title="Add new student"
+            onclick="addStudentButton()"
+          >
+            +
+          </button>
+        </div>
 
-      <div class="table-container">
-        <table id="students_table">
-          <tr>
-            <th style="width: 40px">
-              <img
-                src="../Images/select.png"
-                alt="checkboxHeader"
-                style="max-width: 40px"
-              />
-            </th>
-            <th style="width: 70px">Group</th>
-            <th style="width: 235px">Name</th>
-            <th style="width: 75px">Gender</th>
-            <th style="width: 100px">Birthday</th>
-            <th style="width: 70px">Status</th>
-            <th style="width: 90px">Options</th>
-          </tr>
-        </table>
-      </div>
+        <div class="table-container">
+          <table id="students_table">
+            <tr>
+              <th style="width: 40px">
+                <input
+                  type="checkbox"
+                  title="Select all"
+                  aria-label="Select all student"
+                />
+              </th>
+              <th style="width: 70px">Group</th>
+              <th style="width: 235px">Name</th>
+              <th style="width: 75px">Gender</th>
+              <th style="width: 100px">Birthday</th>
+              <th style="width: 70px">Status</th>
+              <th style="width: 90px">Options</th>
+            </tr>
+          </table>
+        </div>
 
-      <div class="tableNext">
-        <button
-          class="text_edit"
-          aria-label="Previous table page"
-          title="Previous page"
-        >
-          &lt
-        </button>
-        <button class="text_edit">1</button>
-        <button
-          class="text_edit"
-          aria-label="Next table page"
-          title="Next page"
-        >
-          &gt
-        </button>
-      </div>
-    </section>
+        <div class="tableNext">
+          <button
+            class="text_edit"
+            aria-label="Previous table page"
+            title="Previous page"
+          >
+            &lt
+          </button>
+          <button class="text_edit">1</button>
+          <button
+            class="text_edit"
+            aria-label="Next table page"
+            title="Next page"
+          >
+            &gt
+          </button>
+        </div>
+      </section>
+    </div>
 
     <div id="del-student-block">
       <div class="newBlock-header">
@@ -86,9 +88,7 @@
         <button class="cancel_button" onclick="Close('del-student-block')">
           Cancel
         </button>
-        <button id="ok_button">
-          Ok
-        </button>
+        <button id="ok_button">Ok</button>
       </div>
     </div>
 
@@ -116,11 +116,11 @@
           </div>
           <div class="input-group">
             <label for="fname">First name:</label>
-            <input type="text" id="fname" name="fname" required>
+            <input type="text" id="fname" name="fname" required />
           </div>
           <div class="input-group">
             <label for="lname">Last name:</label>
-            <input type="text" id="lname" name="lname" required>
+            <input type="text" id="lname" name="lname" required />
           </div>
           <div class="input-group">
             <label for="gender">Gender:</label>
@@ -134,7 +134,7 @@
           </div>
           <div class="input-group">
             <label for="bdate">Birthday:</label>
-            <input type="date" id="bdate" name="bdate" required>
+            <input type="date" id="bdate" name="bdate" required />
           </div>
         </form>
       </div>
@@ -143,9 +143,7 @@
         <button class="cancel_button" onclick="CloseEdit('edit-student-block')">
           Cancel
         </button>
-        <button id="confirm-edit-button">
-          Save
-        </button>
+        <button id="confirm-edit-button">Save</button>
       </div>
     </div>
   </body>

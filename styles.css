@@ -11,6 +11,10 @@ body {
   background-position: center 18vh; /* Розміщує в центрі */
 }
 
+#shadow-wraper {
+  transition: opacity 0.1s ease;
+}
+
 .text_edit {
   font-family: Arial;
   text-decoration: none;
@@ -376,7 +380,7 @@ section {
   align-items: center;
   padding: 3vh 2vw;
 
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid black;
 }
 
 .newBlock-header h2 {
@@ -411,7 +415,7 @@ section {
   gap: 20px;
   padding: 3vh 2vw;
 
-  border-top: 1px solid black;
+  border-top: 3px solid black;
 }
 
 .btn-container button {

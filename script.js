@@ -1,4 +1,23 @@
-window.onload = function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Завантажуємо навігацію
+  fetch("Parts/nav.html")
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("nav-placeholder").innerHTML = data;
+    });
+
+  // Завантажуємо хедер
+  await fetch("Parts/header.html")
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("header-placeholder").innerHTML = data;
+    });
+  // .then(() => AddFirstStudents());
+
+  AddFirstStudents();
+});
+
+function AddFirstStudents() {
   const table = document.getElementById("students_table");
 
   let newStudent = {
@@ -11,23 +30,29 @@ window.onload = function () {
   };
   studentList.push(newStudent);
   addStudentToTable(newStudent, table);
-};
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Завантажуємо хедер
-  fetch("Parts/header.html")
-    .then((response) => response.text())
-    .then((data) => {
-      document.getElementById("header-placeholder").innerHTML = data;
-    });
+  newStudent = {
+    id: studentId++,
+    group: "PZ-21",
+    fname: "Victor",
+    lname: "Piznak",
+    gender: "Other",
+    bdate: "2005-08-27",
+  };
+  studentList.push(newStudent);
+  addStudentToTable(newStudent, table);
+}
 
-  // Завантажуємо навігацію
-  fetch("Parts/nav.html")
-    .then((response) => response.text())
-    .then((data) => {
-      document.getElementById("nav-placeholder").innerHTML = data;
-    });
-});
+function formatDate(dateString) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString); // Перетворюємо рядок на об'єкт Date
+  const day = String(date.getDate()).padStart(2, "0"); // Додаємо нуль, якщо день однозначний
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
+  const year = date.getFullYear(); // Рік (повний)
+
+  return `${month}.${day}.${year}`;
+}
 
 function showMenu() {
   let nav = document.querySelector("nav");
@@ -73,9 +98,26 @@ document.addEventListener("click", function (event) {
   }
 });
 
+function ChangeBackgroundDisplay(blockId) {
+  let shadowWraper = document.getElementById(blockId);
+
+  if (
+    shadowWraper.style.pointerEvents === "auto" ||
+    shadowWraper.style.pointerEvents === ""
+  ) {
+    shadowWraper.style.opacity = 0.3;
+    shadowWraper.style.pointerEvents = "none";
+  } else {
+    shadowWraper.style.opacity = 1;
+    shadowWraper.style.pointerEvents = "auto";
+  }
+}
+
 function addStudentButton() {
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";
+  ChangeBackgroundDisplay("shadow-wraper");
+
   let header = document.getElementById("edit-block-header");
   header.textContent = "Add student";
 
@@ -121,11 +163,18 @@ function CreateAdd() {
   addStudentToTable(newStudent, table);
 
   CloseEdit("edit-student-block");
-  let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.removeEventListener("click", CreateAdd);
 }
 
 function addStudentToTable(newStudent, table) {
+  const profileName = document.getElementById("profile-name");
+  const fullName = profileName ? profileName.textContent.trim() : "";
+  const newFullName = newStudent.fname + " " + newStudent.lname;
+  console.log(profileName);
+  let statusColor = "lightgray";
+  if (newFullName.trim() === fullName) {
+    statusColor = "green";
+  }
+
   const tr = document.createElement("tr");
   tr.id = `student-${newStudent.id}`;
   tr.innerHTML = `
@@ -138,15 +187,21 @@ function addStudentToTable(newStudent, table) {
               />
             </td>
             <td id="${newStudent.id}-group">${newStudent.group}</td>
-            <td id="${newStudent.id}-name">${newStudent.fname} ${newStudent.lname}</td>
+            <td id="${newStudent.id}-name">${newStudent.fname} ${
+    newStudent.lname
+  }</td>
             <td id="${newStudent.id}-gender">${newStudent.gender}</td>
-            <td id="${newStudent.id}-bdate">${newStudent.bdate}</td>
+            <td id="${newStudent.id}-bdate">${formatDate(newStudent.bdate)}</td>
             <td>
-              <div class="statusBar" style="background-color: lightgray" id="${newStudent.id}-status"></div>
+              <div class="statusBar" style="background-color: ${statusColor}" id="${
+    newStudent.id
+  }-status"></div>
             </td>
             <td>
               <div class="option_cell">
-                <button aria-label="Edit" title="Edit" onclick="editStudentButton(${newStudent.id})">
+                <button aria-label="Edit" title="Edit" onclick="editStudentButton(${
+                  newStudent.id
+                })">
                   <img src="../Images/pencil.png" />
                 </button>
                 <button
@@ -167,6 +222,7 @@ let saveEditListener;
 function editStudentButton(id) {
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";
+  ChangeBackgroundDisplay("shadow-wraper");
 
   let header = document.getElementById("edit-block-header");
   header.textContent = "Edit student";
@@ -214,14 +270,13 @@ function SaveEdit(id) {
   studentTableFields.studentBdate.textContent = curStudent.bdate;
 
   CloseEdit("edit-student-block");
-  let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.removeEventListener("click", saveEditListener);
 }
 
 let saveDeleteListener;
 function deleteStudentButton(id) {
   let deleteBlock = document.getElementById("del-student-block");
   deleteBlock.style.display = "flex";
+  ChangeBackgroundDisplay("shadow-wraper");
 
   let confirmButton = document.getElementById("ok_button");
   saveDeleteListener = () => {
@@ -238,8 +293,6 @@ function OkDelete(id) {
   studentList = studentList.filter((s) => s.id !== id);
 
   Close("del-student-block");
-  let confirmButton = document.getElementById("ok_button");
-  confirmButton.removeEventListener("click", saveDeleteListener);
 }
 
 function CloseEdit(id) {
@@ -254,6 +307,15 @@ function Close(id) {
   } else {
     console.error("Element with id '" + id + "' not found.");
   }
+
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.removeEventListener("click", saveEditListener);
+  confirmButton.removeEventListener("click", CreateAdd);
+
+  confirmButton = document.getElementById("ok_button");
+  confirmButton.removeEventListener("click", saveDeleteListener);
+
+  ChangeBackgroundDisplay("shadow-wraper");
 }
 
 function ClearForm() {
