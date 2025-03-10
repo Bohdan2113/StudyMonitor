@@ -9,7 +9,7 @@ function formatDate(dateString) {
   return `${month}.${day}.${year}`;
 }
 
-function showMenu() {
+function burgerMenu() {
   let nav = document.querySelector("nav");
   let placeholder = document.querySelector("#nav-placeholder");
 
@@ -28,14 +28,14 @@ window.addEventListener("resize", function () {
   let nav = document.querySelector("nav");
   let placeholder = document.querySelector("#nav-placeholder");
 
-  if (window.innerWidth > 1000) {
-    // Якщо ширина екрану більша за 1000px, то меню повинно залишатися відкритим
+  if (window.innerWidth > 948) {
+    // Якщо ширина екрану більша за 948px, то меню повинно залишатися відкритим
     if (nav.classList.contains("open")) {
       nav.classList.add("open");
       placeholder.classList.add("open");
     }
   } else {
-    // Якщо ширина екрану менша за 1000px, закриваємо меню
+    // Якщо ширина екрану менша за 948px, закриваємо меню
     nav.classList.remove("open");
     placeholder.classList.remove("open");
   }
@@ -53,8 +53,8 @@ document.addEventListener("click", function (event) {
   }
 });
 
-function ChangeBackgroundDisplay(blockId) {
-  let shadowWraper = document.getElementById(blockId);
+function ChangeBackgroundDisplay(blockId_str) {
+  let shadowWraper = document.getElementById(blockId_str);
 
   if (
     shadowWraper.style.pointerEvents === "auto" ||
@@ -126,12 +126,12 @@ function GetFormInputFields() {
   };
 }
 
-function GetStudentTableFields(id) {
+function GetStudentTableFields(studentId_num) {
   return {
-    studentGroup: document.getElementById(`${id}-group`),
-    studentName: document.getElementById(`${id}-name`),
-    studentGender: document.getElementById(`${id}-gender`),
-    studentBdate: document.getElementById(`${id}-bdate`),
+    studentGroup: document.getElementById(`${studentId_num}-group`),
+    studentName: document.getElementById(`${studentId_num}-name`),
+    studentGender: document.getElementById(`${studentId_num}-gender`),
+    studentBdate: document.getElementById(`${studentId_num}-bdate`),
   };
 }
 
@@ -269,23 +269,27 @@ function toggleAllCheckbox(id_str) {
 }
 
 let saveEditListener;
-function editStudentButton(id) {
+function editStudentButton(studentId_num) {
+  //Show window
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";
   ChangeBackgroundDisplay("shadow-wraper");
 
+  // Change window info for edit block
   let header = document.getElementById("edit-block-header");
   header.textContent = "Edit student";
   let confirmButton = document.getElementById("confirm-edit-button");
   confirmButton.textContent = "Save";
 
+  // Chanel student id into save button
   saveEditListener = () => {
-    SaveEdit(id);
+    SaveEdit(studentId_num);
   };
   confirmButton.addEventListener("click", saveEditListener);
 
+  // Find choosen student and load theit data into form
   let inputFields = GetFormInputFields();
-  let curStudent = studentList.find((s) => s.id === id);
+  let curStudent = studentList.find((s) => s.id === studentId_num);
   if (!curStudent) {
     console.log("Studen`t not in the list");
     return;
@@ -298,21 +302,23 @@ function editStudentButton(id) {
   inputFields.bdate.value = curStudent.bdate;
 }
 
-function SaveEdit(id) {
+function SaveEdit(studentId_num) {
   let inputFields = GetFormInputFields();
-  let studentTableFields = GetStudentTableFields(id);
-  let curStudent = studentList.find((s) => s.id === id);
+  let studentTableFields = GetStudentTableFields(studentId_num);
+  let curStudent = studentList.find((s) => s.id === studentId_num);
   if (!curStudent) {
     console.log("Studen`t not in the list");
     return;
   }
 
+  // Update student data in the studentList
   curStudent.group = inputFields.group.value;
   curStudent.fname = inputFields.fname.value;
   curStudent.lname = inputFields.lname.value;
   curStudent.gender = inputFields.gender.value;
   curStudent.bdate = inputFields.bdate.value;
 
+  // Update data in table
   studentTableFields.studentGroup.textContent = curStudent.group;
   studentTableFields.studentName.textContent =
     curStudent.fname + " " + curStudent.lname;
@@ -323,22 +329,38 @@ function SaveEdit(id) {
 }
 
 let saveDeleteListener;
-function deleteStudentButton(id) {
-  let deleteBlock = document.getElementById("del-student-block");
-  deleteBlock.style.display = "flex";
-  ChangeBackgroundDisplay("shadow-wraper");
-
+function deleteStudentButton(studentId_num) {
+  // Put current sudent id into OK button
   let confirmButton = document.getElementById("ok_button");
   saveDeleteListener = () => {
-    OkDelete(id);
+    OkDelete(studentId_num);
   };
   confirmButton.addEventListener("click", saveDeleteListener);
+
+  // Write current student name into warning message
+  const paragraph = document.querySelector(
+    "#del-student-block .block-data-container p"
+  );
+  const curStudent = studentList.find((s) => s.id === studentId_num);
+  const paragraphText = (paragraph.textContent =
+    "Are you sure you want to delete user " +
+    curStudent.fname +
+    " " +
+    curStudent.lname);
+
+  // Show block
+  let deleteBlock = document.getElementById("del-student-block");
+  deleteBlock.style.display = "flex";
+
+  ChangeBackgroundDisplay("shadow-wraper");
 }
 
 function OkDelete(studentId_num) {
+  // Remove current student from table
   const tr = document.getElementById(`student-${studentId_num}`);
   if (tr) tr.remove();
 
+  // Remove all choosen students from table
   studentList.forEach((s) => {
     if (s.checkbox === true) {
       const tr = document.getElementById(`student-${s.id}`);
@@ -346,32 +368,38 @@ function OkDelete(studentId_num) {
     }
   });
 
+  // Remove all previous students from studentList
   studentList = studentList.filter(
     (s) => s.id !== studentId_num && s.checkbox !== true
   );
 
-  Close("del-student-block");
+  CloseDelete("del-student-block");
 }
 
-function CloseEdit(id) {
-  Close(id);
+// Close Edit block with form reset
+function CloseEdit(id_str) {
+  Close(id_str);
   ClearForm();
-}
-
-function Close(id) {
-  let element = document.getElementById(id);
-  if (element) {
-    element.style.display = "none"; // або будь-яка інша дія
-  } else {
-    console.error("Element with id '" + id + "' not found.");
-  }
 
   let confirmButton = document.getElementById("confirm-edit-button");
   confirmButton.removeEventListener("click", saveEditListener);
   confirmButton.removeEventListener("click", CreateAdd);
+}
+
+function CloseDelete(id_str) {
+  Close(id_str);
 
   confirmButton = document.getElementById("ok_button");
   confirmButton.removeEventListener("click", saveDeleteListener);
+}
+
+function Close(id_str) {
+  let element = document.getElementById(id_str);
+  if (element) {
+    element.style.display = "none";
+  } else {
+    console.error("Element with id '" + id_str + "' not found.");
+  }
 
   ChangeBackgroundDisplay("shadow-wraper");
 }
