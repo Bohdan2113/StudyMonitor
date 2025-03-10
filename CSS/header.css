@@ -81,10 +81,9 @@ header img {
   position: absolute;
   right: 0;
   top: 40px;
-  
+
   background-color: #f9f9f9;
-  width: 100%;
-  min-width: 200px;
+  width: auto;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border: 1px solid lightgray;
@@ -92,7 +91,7 @@ header img {
 }
 .notif-dropdown-block {
   right: -80px;
-  min-width: 300px;
+  /* min-width: 300px; */
 }
 
 .profile-dropdown-block a,
@@ -103,13 +102,16 @@ header img {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  text-wrap: nowrap;
+  min-width: 130px;
 }
 .notif-dropdown-block a {
-  margin:  12px 16px;
+  margin: 12px 16px;
   padding: 0;
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  min-width: 0;
 }
 
 .profile-dropdown-block a:hover,
@@ -146,14 +148,34 @@ header img {
 }
 
 .notif-dropdown-block .message-oversee {
-  width: 100%;
+  min-width: 200px;
   height: 50px;
   border-radius: 10px;
   background-color: rgb(178, 247, 224);
 }
 
+@media (max-width: 940px) {
+  .notif-dropdown-block .message-oversee {
+    min-width: 21vw;
+  }
+  .profile-dropdown-block a {
+    min-width: 14vw;
+  }
+}
+
 @media (max-width: 327px) {
   .profile .name {
     display: none;
+  }
+  .notif-dropdown-block .message-oversee {
+    display: none;
+    min-width: 0px;
+  }
+  .notif-dropdown-block {
+    left: 0;
+    right: auto;
+  }
+  .profile-dropdown-block a {
+    min-width: 0;
   }
 }
