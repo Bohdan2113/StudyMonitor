@@ -68,6 +68,41 @@ function ChangeBackgroundDisplay(blockId) {
   }
 }
 
+function HideNotifIndicator() {
+  const notifIndicator = document.getElementById("notif-indicator");
+  if (notifIndicator) {
+    notifIndicator.style.display = "none";
+    localStorage.setItem("notifHidden", "true"); // Запам'ятати стан
+  }
+}
+
+function ShowNotifIndicator() {
+  const activePage = window.location.pathname;
+  if (activePage === "/Pages/messages.html") return;
+
+  const notifImg = document.getElementById("notif-img");
+  notifImg.animate(
+    [
+      { transform: "rotate(0deg)" },
+      { transform: "rotate(-15deg)" },
+      { transform: "rotate(15deg)" },
+      { transform: "rotate(-10deg)" },
+      { transform: "rotate(10deg)" },
+      { transform: "rotate(0deg)" }
+    ],
+    {
+      duration: 500, // Час анімації (0.5 сек)
+      iterations: 1  // Виконати один раз
+    }
+  );
+
+  const notifIndicator = document.getElementById("notif-indicator");
+  if (notifIndicator) {
+    notifIndicator.style.display = "block";
+    localStorage.setItem("notifHidden", "false"); // Запам'ятати стан
+  }
+}
+
 function addStudentButton() {
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";

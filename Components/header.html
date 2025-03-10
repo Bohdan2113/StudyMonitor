@@ -10,8 +10,15 @@
   </a>
   <div class="headerItem">
     <div class="notif clickable notif-dropbtn">
-      <a href="/Pages/messages.html" aria-label="Notifications" tabindex="2">
-        <img src="/Images/notification.svg" alt="notification" />
+      <a
+        href="/Pages/messages.html"
+        aria-label="Notifications"
+        tabindex="2"
+        onclick="HideNotifIndicator()"
+        oncontextmenu="ShowNotifIndicator()"
+      >
+        <img src="/Images/notification.svg" alt="notification" id="notif-img" />
+        <span id="notif-indicator" id="notif-indicator"></span>
       </a>
 
       <div class="notif-dropdown-block">
@@ -27,10 +34,10 @@
           </li>
           <li>
             <a href="#" class="text_edit clickable">
-                <div class="sender-info">
-                  <img src="/Images/user.png" alt="User photo" />
-                  <p class="text_edit">Jhon D.</p>
-                </div>
+              <div class="sender-info">
+                <img src="/Images/user.png" alt="User photo" />
+                <p class="text_edit">Jhon D.</p>
+              </div>
               <div class="message-oversee"></div>
             </a>
           </li>
@@ -47,8 +54,8 @@
       <span class="text_edit name" id="profile-name">Bohdan Kruk</span>
 
       <div class="profile-dropdown-block">
-        <a href="#" class=" clickable"><p class="text_edit">Profile</p></a>
-        <a href="#" class=" clickable"><p class="text_edit">Log Out</p></a>
+        <a href="#" class="clickable"><p class="text_edit">Profile</p></a>
+        <a href="#" class="clickable"><p class="text_edit">Log Out</p></a>
       </div>
     </div>
   </div>

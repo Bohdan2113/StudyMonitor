@@ -1,3 +1,24 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await includeHTML("/Components/nav.html", "nav-placeholder");
+    await includeHTML("/Components/header.html", "header-placeholder");
+    AddFirstStudents();
+
+    updateActiveLink();
+  } catch (error) {
+    console.error(error);
+  }
+
+  const notifIndicator = document.getElementById("notif-indicator");
+
+  if (notifIndicator) {
+    // Відновлюємо стан індикатора з localStorage
+    const isHidden = localStorage.getItem("notifHidden");
+    if (isHidden === "true") notifIndicator.style.display = "none";
+    else notifIndicator.style.display = "block";
+  }
+});
+
 function includeHTML(file, elementId) {
   return new Promise((resolve, reject) => {
     fetch(file)
@@ -9,18 +30,6 @@ function includeHTML(file, elementId) {
       .catch((error) => reject(`Error loading ${file}: ${error}`));
   });
 }
-
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await includeHTML("/Components/nav.html", "nav-placeholder");
-    await includeHTML("/Components/header.html", "header-placeholder");
-    AddFirstStudents();
-
-    updateActiveLink();
-  } catch (error) {
-    console.error(error);
-  }
-});
 
 function AddFirstStudents() {
   const table = document.getElementById("students_table");
@@ -49,7 +58,6 @@ function AddFirstStudents() {
   addStudentToTable(newStudent, table);
 }
 
-
 function updateActiveLink() {
   const navItems = document.querySelectorAll(".nav-item");
   const currentPath = window.location.pathname;
@@ -57,6 +65,7 @@ function updateActiveLink() {
   navItems.forEach((link) => {
     const href = link.getAttribute("href");
     if (href === currentPath) {
+    sessionStorage.setItem("activPage", currentPath); // Запам'ятати стан
       link.classList.add("active");
     } else {
       link.classList.remove("active");

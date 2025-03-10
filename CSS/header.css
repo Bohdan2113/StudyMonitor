@@ -53,6 +53,20 @@ header img {
 
   padding-top: 6px;
   height: 100%;
+
+  position: relative;
+  /* display: inline-block; */
+}
+
+#notif-indicator {
+  position: absolute;
+  top: 12px;
+  right: 3px;
+  background-color: red;
+  padding: 5px;
+  border-radius: 100%;
+  text-align: center;
+  display: block;
 }
 
 .profile {
