@@ -101,11 +101,8 @@ section {
 .option_cell {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
-
-  max-width: 70px;
-  margin: auto;
 }
 
 .option_cell button {

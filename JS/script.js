@@ -88,11 +88,11 @@ function ShowNotifIndicator() {
       { transform: "rotate(15deg)" },
       { transform: "rotate(-10deg)" },
       { transform: "rotate(10deg)" },
-      { transform: "rotate(0deg)" }
+      { transform: "rotate(0deg)" },
     ],
     {
       duration: 500, // Час анімації (0.5 сек)
-      iterations: 1  // Виконати один раз
+      iterations: 1, // Виконати один раз
     }
   );
 
@@ -167,45 +167,78 @@ function addStudentToTable(newStudent, table) {
 
   const tr = document.createElement("tr");
   tr.id = `student-${newStudent.id}`;
-  tr.innerHTML = `
-            <td>
-              <input
-                type="checkbox"
-                title="Select"
-                aria-label="Select student"
-                id="${newStudent.id}-checkbox"
-                onchange="toggleStudentCheckbox(${newStudent.id})"
-              />
-            </td>
-            <td id="${newStudent.id}-group">${newStudent.group}</td>
-            <td id="${newStudent.id}-name">${newStudent.fname} ${
-    newStudent.lname
-  }</td>
-            <td id="${newStudent.id}-gender">${newStudent.gender}</td>
-            <td id="${newStudent.id}-bdate">${formatDate(newStudent.bdate)}</td>
-            <td>
-              <div class="statusBar" style="background-color: ${statusColor}" id="${
-    newStudent.id
-  }-status"></div>
-            </td>
-            <td>
-              <div class="option_cell">
-                <button aria-label="Edit" title="Edit" onclick="editStudentButton(${
-                  newStudent.id
-                })">
-                  <img src="../Images/pencil.png" />
-                </button>
-                <button
-                  aria-label="Delete"
-                  title="Delete"
-                  onclick="deleteStudentButton(${newStudent.id})"
-                >
-                  <img src="../Images/bin.png" />
-                </button>
-              </div>
-            </td>
-  `;
 
+  // Чекбокс
+  const tdCheckbox = document.createElement("td");
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.title = "Select";
+  checkbox.ariaLabel = "Select student";
+  checkbox.id = `${newStudent.id}-checkbox`;
+  checkbox.onchange = () => toggleStudentCheckbox(newStudent.id);
+  tdCheckbox.appendChild(checkbox);
+
+  // Група
+  const tdGroup = document.createElement("td");
+  tdGroup.id = `${newStudent.id}-group`;
+  tdGroup.textContent = newStudent.group;
+
+  // Ім'я
+  const tdName = document.createElement("td");
+  tdName.id = `${newStudent.id}-name`;
+  tdName.textContent = `${newStudent.fname} ${newStudent.lname}`;
+
+  // Стать
+  const tdGender = document.createElement("td");
+  tdGender.id = `${newStudent.id}-gender`;
+  tdGender.textContent = newStudent.gender;
+
+  // Дата народження
+  const tdBdate = document.createElement("td");
+  tdBdate.id = `${newStudent.id}-bdate`;
+  tdBdate.textContent = formatDate(newStudent.bdate);
+
+  // Статус
+  const tdStatus = document.createElement("td");
+  const statusBar = document.createElement("div");
+  statusBar.className = "statusBar";
+  statusBar.id = `${newStudent.id}-status`;
+  statusBar.style.backgroundColor = statusColor;
+  tdStatus.appendChild(statusBar);
+
+  // Опції (Редагування/Видалення)
+  const tdOptions = document.createElement("td");
+  tdOptions.className = "option_cell";
+
+  const editButton = document.createElement("button");
+  editButton.title = "Edit";
+  editButton.ariaLabel = "Edit";
+  editButton.onclick = () => editStudentButton(newStudent.id);
+  const editImg = document.createElement("img");
+  editImg.src = "../Images/pencil.png";
+  editButton.appendChild(editImg);
+
+  const deleteButton = document.createElement("button");
+  deleteButton.title = "Delete";
+  deleteButton.ariaLabel = "Delete";
+  deleteButton.onclick = () => deleteStudentButton(newStudent.id);
+  const deleteImg = document.createElement("img");
+  deleteImg.src = "../Images/bin.png";
+  deleteButton.appendChild(deleteImg);
+
+  tdOptions.appendChild(editButton);
+  tdOptions.appendChild(deleteButton);
+
+  // Додаємо всі елементи в рядок
+  tr.appendChild(tdCheckbox);
+  tr.appendChild(tdGroup);
+  tr.appendChild(tdName);
+  tr.appendChild(tdGender);
+  tr.appendChild(tdBdate);
+  tr.appendChild(tdStatus);
+  tr.appendChild(tdOptions);
+
+  // Додаємо рядок у таблицю
   table.appendChild(tr);
 }
 
