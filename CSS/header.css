@@ -1,6 +1,6 @@
 header {
   height: 50px;
-  background-color: rgb(98, 98, 98);
+  background-color: rgb(32, 58, 48);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -39,6 +39,7 @@ header img {
 .headerItem {
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
   gap: 20px;
 
@@ -68,6 +69,7 @@ header img {
   font-size: 13px;
   color: rgb(255, 255, 255);
   text-align: center;
+  text-wrap: nowrap;
 }
 
 .profile-dropbtn,
@@ -112,6 +114,8 @@ header img {
   justify-content: space-between;
   gap: 10px;
   min-width: 0;
+  /* background-color: #e1f6e4; */
+  border-radius: 10px;
 }
 
 .profile-dropdown-block a:hover,
@@ -133,10 +137,10 @@ header img {
 .notif-dropdown-block .sender-info {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   gap: 5px;
   align-items: center;
-  /* background-color: aquamarine; */
+
   min-width: 50px;
   max-width: 50px;
 }
@@ -148,10 +152,11 @@ header img {
 }
 
 .notif-dropdown-block .message-oversee {
+  margin: 5px;
   min-width: 200px;
   height: 50px;
   border-radius: 10px;
-  background-color: rgb(178, 247, 224);
+  background-color: rgb(201, 248, 224);
 }
 
 @media (max-width: 940px) {

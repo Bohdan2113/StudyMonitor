@@ -1,6 +1,6 @@
 #nav-placeholder {
     width: 200px;
-    background-color: lightgrey;
+    background-color: rgb(203, 212, 208);
     height: 100%;
     position: fixed;
     top: 50px;
@@ -15,8 +15,10 @@
     border-bottom: 1px solid black;
   }
   .hamburger-icon:hover {
-    background-color: rgb(128, 128, 128);
-    color: white;
+    background-color: #f0f0f0; /* Світлий фон при наведенні */
+    /* color: #333; Темний текст */
+    transition: background-color 0.3s ease;
+    border-bottom: 3px solid #164a1f;
   }
   
   .hamburger-icon img {
