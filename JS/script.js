@@ -108,6 +108,7 @@ function CreateAdd() {
 
   let newStudent = {
     id: studentId++,
+    checkbox: false,
     group: inputFields.group.value,
     fname: inputFields.fname.value,
     lname: inputFields.lname.value,
@@ -138,6 +139,7 @@ function addStudentToTable(newStudent, table) {
                 title="Select"
                 aria-label="Select student"
                 id="${newStudent.id}-checkbox"
+                onchange="toggleStudentCheckbox(${newStudent.id})"
               />
             </td>
             <td id="${newStudent.id}-group">${newStudent.group}</td>
@@ -170,6 +172,32 @@ function addStudentToTable(newStudent, table) {
   `;
 
   table.appendChild(tr);
+}
+
+function toggleStudentCheckbox(studentId_num) {
+  let curStudent = studentList.find((s) => s.id === studentId_num);
+  curStudent.checkbox = curStudent.checkbox ? false : true;
+}
+
+function toggleAllCheckbox(id_str) {
+  let final = document.getElementById(id_str).checked;
+  studentList.forEach((s) => {
+    if (s.checkbox !== final) {
+      s.checkbox = final;
+      toggleTableCheckBox(`${s.id}-checkbox`, final);
+    }
+  });
+
+  function toggleTableCheckBox(id_str, final) {
+    let checkbox = document.getElementById(id_str);
+
+    if (final !== undefined) {
+      checkbox.checked = final;
+    } else {
+      checkbox.checked = !checkbox.checked;
+    }
+    return checkbox.checked;
+  }
 }
 
 let saveEditListener;
@@ -239,12 +267,20 @@ function deleteStudentButton(id) {
   confirmButton.addEventListener("click", saveDeleteListener);
 }
 
-function OkDelete(id) {
-  const tr = document.getElementById(`student-${id}`);
-  if (tr) {
-    tr.remove();
-  }
-  studentList = studentList.filter((s) => s.id !== id);
+function OkDelete(studentId_num) {
+  const tr = document.getElementById(`student-${studentId_num}`);
+  if (tr) tr.remove();
+
+  studentList.forEach((s) => {
+    if (s.checkbox === true) {
+      const tr = document.getElementById(`student-${s.id}`);
+      if (tr) tr.remove();
+    }
+  });
+
+  studentList = studentList.filter(
+    (s) => s.id !== studentId_num && s.checkbox !== true
+  );
 
   Close("del-student-block");
 }
