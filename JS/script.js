@@ -221,7 +221,7 @@ function SaveEdit(id) {
   studentTableFields.studentName.textContent =
     curStudent.fname + " " + curStudent.lname;
   studentTableFields.studentGender.textContent = curStudent.gender;
-  studentTableFields.studentBdate.textContent = curStudent.bdate;
+  studentTableFields.studentBdate.textContent = formatDate(curStudent.bdate);
 
   CloseEdit("edit-student-block");
 }

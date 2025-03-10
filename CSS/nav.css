@@ -48,7 +48,7 @@
   /* Стиль для активного елемента меню */
   nav .menu-items li a.active {
     color: #fff; /* Білий текст */
-    background-color: #7ab896; /* Блакитний фон */
+    background-color: rgb(92, 148, 129);
     font-weight: bold; /* Жирний шрифт */
   }
   
