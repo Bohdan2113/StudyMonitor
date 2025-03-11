@@ -16,7 +16,7 @@
     <div id="shadow-wraper">
       <div id="header-placeholder"></div>
       <div id="nav-placeholder"></div>
-      
+
       <section>
         <div class="table_header">
           <h2 class="text_edit tableName">Students</h2>
@@ -42,24 +42,27 @@
 
         <div class="table-container">
           <table id="students_table">
-            <tr>
-              <th style="width: 40px">
-                <div class="checkbox-text">All</div>
-                <input
-                  type="checkbox"
-                  title="Select all"
-                  aria-label="Select all student"
-                  id="header-checkbox"
-                  onchange="toggleAllCheckbox('header-checkbox')"
-                />
-              </th>
-              <th class="group">Group</th>
-              <th class="name">Name</th>
-              <th class="gender">Gender</th>
-              <th class="birthday">Birthday</th>
-              <th class="status">Status</th>
-              <th class="options">Options</th>
-            </tr>
+            <thead>
+              <tr>
+                <th class="checkAll" scope="col">
+                  <div class="checkbox-text">All</div>
+                  <input
+                    type="checkbox"
+                    title="Select all"
+                    aria-label="Select all student"
+                    id="header-checkbox"
+                    onchange="toggleAllCheckbox('header-checkbox')"
+                  />
+                </th>
+                <th scope="col" class="group">Group</th>
+                <th scope="col" class="name">Name</th>
+                <th scope="col" class="gender">Gender</th>
+                <th scope="col" class="birthday">Birthday</th>
+                <th scope="col" class="status">Status</th>
+                <th scope="col" class="options">Options</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
           </table>
         </div>
 
