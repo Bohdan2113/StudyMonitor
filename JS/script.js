@@ -6,7 +6,7 @@ function formatDate(dateString) {
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
   const year = date.getFullYear(); // Рік (повний)
 
-  return `${month}.${day}.${year}`;
+  return `${day}.${month}.${year}`;
 }
 
 function burgerMenu() {
@@ -136,7 +136,6 @@ function GetStudentTableFields(studentId_num) {
 }
 
 function CreateAdd() {
-  const table = document.getElementById("students_table");
   const inputFields = GetFormInputFields();
 
   let newStudent = {
@@ -149,12 +148,12 @@ function CreateAdd() {
     bdate: inputFields.bdate.value,
   };
   studentList.push(newStudent);
-  addStudentToTable(newStudent, table);
+  addStudentToTable(newStudent);
 
   CloseEdit("edit-student-block");
 }
 
-function addStudentToTable(newStudent, table) {
+function addStudentToTable(newStudent) {
   const profileName = document.getElementById("profile-name");
   const fullName = profileName ? profileName.textContent.trim() : "";
   const newFullName = newStudent.fname + " " + newStudent.lname;
@@ -163,8 +162,10 @@ function addStudentToTable(newStudent, table) {
     statusColor = "green";
   }
 
+  const table = document.querySelector("#students_table tbody");
   const tr = document.createElement("tr");
   tr.id = `student-${newStudent.id}`;
+  tr.scope = "row";
 
   // Чекбокс
   const tdCheckbox = document.createElement("td");
@@ -175,38 +176,51 @@ function addStudentToTable(newStudent, table) {
   checkbox.id = `${newStudent.id}-checkbox`;
   checkbox.onchange = () => toggleStudentCheckbox(newStudent.id);
   tdCheckbox.appendChild(checkbox);
+  tdCheckbox.setAttribute("data-label", "Select");
 
   // Група
   const tdGroup = document.createElement("td");
   tdGroup.id = `${newStudent.id}-group`;
   tdGroup.textContent = newStudent.group;
+  tdGroup.setAttribute("data-label", "Group");
 
   // Ім'я
   const tdName = document.createElement("td");
   tdName.id = `${newStudent.id}-name`;
   tdName.textContent = `${newStudent.fname} ${newStudent.lname}`;
+  tdName.setAttribute("data-label", "Name");
 
   // Стать
   const tdGender = document.createElement("td");
   tdGender.id = `${newStudent.id}-gender`;
   tdGender.textContent = newStudent.gender;
+  tdGender.setAttribute("data-label", "Gender");
 
   // Дата народження
   const tdBdate = document.createElement("td");
   tdBdate.id = `${newStudent.id}-bdate`;
   tdBdate.textContent = formatDate(newStudent.bdate);
+  tdBdate.setAttribute("data-label", "Birthday");
 
   // Статус
+  const divStatusBtn = document.createElement("div");
+  divStatusBtn.className = "status_cell";
+
   const tdStatus = document.createElement("td");
   const statusBar = document.createElement("div");
   statusBar.className = "statusBar";
   statusBar.id = `${newStudent.id}-status`;
   statusBar.style.backgroundColor = statusColor;
-  tdStatus.appendChild(statusBar);
+  divStatusBtn.appendChild(statusBar);
+  tdStatus.appendChild(divStatusBtn);
+  tdStatus.setAttribute("data-label", "Status");
 
   // Опції (Редагування/Видалення)
+  const divOptionBtn = document.createElement("div");
+  divOptionBtn.className = "option_cell";
+
   const tdOptions = document.createElement("td");
-  tdOptions.className = "option_cell";
+  tdOptions.setAttribute("data-label", "Options");
 
   const editButton = document.createElement("button");
   editButton.title = "Edit";
@@ -226,8 +240,9 @@ function addStudentToTable(newStudent, table) {
   deleteImg.alt = "delete";
   deleteButton.appendChild(deleteImg);
 
-  tdOptions.appendChild(editButton);
-  tdOptions.appendChild(deleteButton);
+  divOptionBtn.appendChild(editButton);
+  divOptionBtn.appendChild(deleteButton);
+  tdOptions.appendChild(divOptionBtn);
 
   // Додаємо всі елементи в рядок
   tr.appendChild(tdCheckbox);

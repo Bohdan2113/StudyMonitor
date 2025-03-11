@@ -36,8 +36,7 @@ function ShowAllStudents(stList) {
   const curPage = window.location.pathname;
   if (curPage !== "/Pages/students.html") return;
 
-  const table = document.getElementById("students_table");
-  stList.forEach((s) => addStudentToTable(s, table));
+  stList.forEach((s) => addStudentToTable(s));
 }
 
 function updateActiveLink() {
