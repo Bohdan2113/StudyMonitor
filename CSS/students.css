@@ -26,12 +26,28 @@ section {
   line-height: 40px;
 }
 
-.add_student {
+#th_control_wreper {
+  display:flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.table_header button {
   width: 40px;
   height: 40px;
   font-size: 30px;
   line-height: 40px;
   text-align: center;
+}
+
+#del_all_btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#del_all_btn img {
+  width: 30px;
+  height: 30px;
 }
 
 .table-container {
@@ -42,12 +58,12 @@ section {
 #students_table {
   border-collapse: separate;
   border-spacing: 0;
-  border: 2px solid #164a1f;
+  border: 2px solid black;
   border-radius: 6px;
 }
 #students_table th,
 #students_table td {
-  border: 1px solid #164a1f;
+  border: 1px solid black;
 }
 #students_table th,
 #students_table td {
@@ -76,6 +92,13 @@ section {
 #students_table th {
   font-weight: 600;
   font-size: 18px;
+  color: white;
+  background-color:rgb(36, 58, 51);
+}
+
+#students_table th .checkbox-text{
+  font-weight: 600;
+  font-size: 14px;
 }
 
 #students_table {
@@ -319,11 +342,20 @@ section {
     font-size: 8.6vw;
     line-height: 11.5vw;
   }
-  .add_student {
+  #th_control_wreper {
+    gap: 5vw;
+
+  }
+
+  .table_header button {
     width: 11.5vw;
     height: 11.5vw;
     font-size: 8.6vw;
     line-height: 10vw;
+  }
+  #del_all_btn img {
+    width: 10vw;
+    height: 10vw;
   }
 
   .newBlock-header h2 {
