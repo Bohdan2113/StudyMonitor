@@ -395,7 +395,7 @@ function OkDelete(stToDelList, addFunction) {
     );
   });
 
-  addFunction();
+  if (addFunction !== undefined) addFunction();
   CloseDelete("del-student-block");
 }
 
