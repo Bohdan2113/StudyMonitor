@@ -27,7 +27,7 @@ section {
 }
 
 #th_control_wreper {
-  display:flex;
+  display: flex;
   justify-content: center;
   gap: 20px;
 }
@@ -79,8 +79,9 @@ section {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  word-wrap: break-word;
 
-  padding: 15px 0;
+  padding: 15px 5px;
   line-height: 20px;
 }
 
@@ -93,10 +94,34 @@ section {
   font-weight: 600;
   font-size: 18px;
   color: white;
-  background-color:rgb(36, 58, 51);
+  background-color: rgb(36, 58, 51);
 }
 
-#students_table th .checkbox-text{
+#students_table th.group {
+  width: 70px;
+}
+
+#students_table th.name {
+  width: 235px;
+}
+
+#students_table th.gender {
+  width: 75px;
+}
+
+#students_table th.birthday {
+  width: 100px;
+}
+
+#students_table th.status {
+  width: 70px;
+}
+
+#students_table th.options {
+  width: 90px;
+}
+
+#students_table th .checkbox-text {
   font-weight: 600;
   font-size: 14px;
 }
@@ -290,10 +315,11 @@ section {
 @media (max-width: 940px) {
   section {
     margin-left: 48px;
+    padding: 3vw;
   }
 
-  section {
-    padding: 3vw;
+  #students_table th.name {
+    width: 80px;
   }
 
   .newBlock-header h2 {
@@ -344,7 +370,6 @@ section {
   }
   #th_control_wreper {
     gap: 5vw;
-
   }
 
   .table_header button {
