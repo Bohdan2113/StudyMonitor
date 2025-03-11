@@ -135,8 +135,6 @@ function GetStudentTableFields(studentId_num) {
   };
 }
 
-let studentList = [];
-let studentId = 0;
 function CreateAdd() {
   const table = document.getElementById("students_table");
   const inputFields = GetFormInputFields();
@@ -216,6 +214,7 @@ function addStudentToTable(newStudent, table) {
   editButton.onclick = () => editStudentButton(newStudent.id);
   const editImg = document.createElement("img");
   editImg.src = "../Images/pencil.png";
+  editImg.alt = "edit";
   editButton.appendChild(editImg);
 
   const deleteButton = document.createElement("button");
@@ -224,6 +223,7 @@ function addStudentToTable(newStudent, table) {
   deleteButton.onclick = () => deleteStudentButton(newStudent.id);
   const deleteImg = document.createElement("img");
   deleteImg.src = "../Images/bin.png";
+  deleteImg.alt = "delete";
   deleteButton.appendChild(deleteImg);
 
   tdOptions.appendChild(editButton);
@@ -244,27 +244,38 @@ function addStudentToTable(newStudent, table) {
 
 function toggleStudentCheckbox(studentId_num) {
   let curStudent = studentList.find((s) => s.id === studentId_num);
-  curStudent.checkbox = curStudent.checkbox ? false : true;
+
+  // Перемикаємо стан чекбокса для поточного студента
+  curStudent.checkbox = !curStudent.checkbox;
+
+  // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
+  let deleteAllBtn = document.getElementById("del_all_btn");
+  let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
+
+  // Якщо хоча б один чекбокс обраний, показуємо кнопку
+  if (isChoosen) {
+    deleteAllBtn.style.display = "flex";
+  } else {
+    deleteAllBtn.style.display = "none";
+    let hCheckbox = document.getElementById("header-checkbox");
+    hCheckbox.checked = false;
+  }
 }
 
 function toggleAllCheckbox(id_str) {
   let final = document.getElementById(id_str).checked;
   studentList.forEach((s) => {
     if (s.checkbox !== final) {
-      s.checkbox = final;
-      toggleTableCheckBox(`${s.id}-checkbox`, final);
+      let checkbox = document.getElementById(`${s.id}-checkbox`);
+      if (checkbox.checked !== final) {
+        toggleTableCheckBox(checkbox);
+        checkbox.dispatchEvent(new Event("change"));
+      }
     }
   });
 
-  function toggleTableCheckBox(id_str, final) {
-    let checkbox = document.getElementById(id_str);
-
-    if (final !== undefined) {
-      checkbox.checked = final;
-    } else {
-      checkbox.checked = !checkbox.checked;
-    }
-    return checkbox.checked;
+  function toggleTableCheckBox(checkbox) {
+    checkbox.checked = checkbox.checked ? false : true;
   }
 }
 
@@ -330,10 +341,27 @@ function SaveEdit(studentId_num) {
 
 let saveDeleteListener;
 function deleteStudentButton(studentId_num) {
-  // Put current sudent id into OK button
+  let stToDelList = studentList.filter((s) => s.id === studentId_num);
+  // let idTodeleteList = [studentId_num];
+
+  LoadInfoToDeleteModal(stToDelList);
+}
+
+function DeleteAllChoosen() {
+  let stToDelList = studentList.filter((s) => s.checkbox === true);
+
+  let addFunction = () => {
+    let hCheckbox = document.getElementById("header-checkbox");
+    hCheckbox.checked = false;
+  };
+
+  LoadInfoToDeleteModal(stToDelList, addFunction);
+}
+
+function LoadInfoToDeleteModal(stToDelList, addFunction) {
   let confirmButton = document.getElementById("ok_button");
   saveDeleteListener = () => {
-    OkDelete(studentId_num);
+    OkDelete(stToDelList, addFunction);
   };
   confirmButton.addEventListener("click", saveDeleteListener);
 
@@ -341,13 +369,19 @@ function deleteStudentButton(studentId_num) {
   const paragraph = document.querySelector(
     "#del-student-block .block-data-container p"
   );
-  const curStudent = studentList.find((s) => s.id === studentId_num);
-  const paragraphText = (paragraph.textContent =
-    "Are you sure you want to delete user " +
-    curStudent.fname +
-    " " +
-    curStudent.lname);
+  let paragraphText = `Are you sure you want to delete user${
+    stToDelList.length > 1 ? "s" : ""
+  }: `;
+  let length = stToDelList.length;
+  for (let i = 0; i < length - 1; i++)
+    paragraphText += stToDelList[i].fname + " " + stToDelList[i].lname + ", ";
+  paragraphText +=
+    stToDelList[length - 1].fname + " " + stToDelList[length - 1].lname;
+  paragraph.textContent = paragraphText;
 
+  console.log(
+    stToDelList[length - 1].fname + " " + stToDelList[length - 1].lname
+  );
   // Show block
   let deleteBlock = document.getElementById("del-student-block");
   deleteBlock.style.display = "flex";
@@ -355,24 +389,19 @@ function deleteStudentButton(studentId_num) {
   ChangeBackgroundDisplay("shadow-wraper");
 }
 
-function OkDelete(studentId_num) {
+function OkDelete(stToDelList, addFunction) {
   // Remove current student from table
-  const tr = document.getElementById(`student-${studentId_num}`);
-  if (tr) tr.remove();
+  stToDelList.forEach((s) => {
+    const tr = document.getElementById(`student-${s.id}`);
+    if (tr) tr.remove();
 
-  // Remove all choosen students from table
-  studentList.forEach((s) => {
-    if (s.checkbox === true) {
-      const tr = document.getElementById(`student-${s.id}`);
-      if (tr) tr.remove();
-    }
+    // Remove all previous students from studentList
+    studentList = studentList.filter(
+      (student) => !stToDelList.includes(student)
+    );
   });
 
-  // Remove all previous students from studentList
-  studentList = studentList.filter(
-    (s) => s.id !== studentId_num && s.checkbox !== true
-  );
-
+  addFunction();
   CloseDelete("del-student-block");
 }
 

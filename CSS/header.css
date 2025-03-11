@@ -1,6 +1,6 @@
 header {
   height: 50px;
-  background-color: rgb(32, 58, 48);
+  background-color: rgb(28, 43, 37);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -83,7 +83,7 @@ header img {
   font-size: 13px;
   color: rgb(255, 255, 255);
   text-align: center;
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .profile-dropbtn,
@@ -118,7 +118,7 @@ header img {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  text-wrap: nowrap;
+  white-space: nowrap;
   min-width: 130px;
 }
 .notif-dropdown-block a {
@@ -162,7 +162,7 @@ header img {
 .notif-dropdown-block .sender-info p {
   font-size: 12px;
   text-align: center;
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .notif-dropdown-block .message-oversee {

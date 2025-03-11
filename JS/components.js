@@ -2,9 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     await includeHTML("/Components/nav.html", "nav-placeholder");
     await includeHTML("/Components/header.html", "header-placeholder");
-    AddFirstStudents();
 
+    studentList = LoadStudents();
     updateActiveLink();
+    ShowAllStudents(studentList);
   } catch (error) {
     console.error(error);
   }
@@ -31,31 +32,12 @@ function includeHTML(file, elementId) {
   });
 }
 
-function AddFirstStudents() {
+function ShowAllStudents(stList) {
+  const curPage = window.location.pathname;
+  if (curPage !== "/Pages/students.html") return;
+
   const table = document.getElementById("students_table");
-  if (!table) return;
-
-  let newStudent = {
-    id: studentId++,
-    group: "PZ-21",
-    fname: "Bohdan",
-    lname: "Kruk",
-    gender: "Male",
-    bdate: "2006-05-01",
-  };
-  studentList.push(newStudent);
-  addStudentToTable(newStudent, table);
-
-  newStudent = {
-    id: studentId++,
-    group: "PZ-21",
-    fname: "Victor",
-    lname: "Piznak",
-    gender: "Other",
-    bdate: "2005-08-27",
-  };
-  studentList.push(newStudent);
-  addStudentToTable(newStudent, table);
+  stList.forEach((s) => addStudentToTable(s, table));
 }
 
 function updateActiveLink() {
@@ -65,10 +47,45 @@ function updateActiveLink() {
   navItems.forEach((link) => {
     const href = link.getAttribute("href");
     if (href === currentPath) {
-    sessionStorage.setItem("activPage", currentPath); // Запам'ятати стан
+      sessionStorage.setItem("activPage", currentPath); // Запам'ятати стан
       link.classList.add("active");
     } else {
       link.classList.remove("active");
     }
   });
 }
+
+function LoadStudents() {
+  return [
+    {
+      id: studentId++,
+      checkbox: false,
+      group: "PZ-21",
+      fname: "Bohdan",
+      lname: "Kruk",
+      gender: "Male",
+      bdate: "2006-05-01",
+    },
+    {
+      id: studentId++,
+      checkbox: false,
+      group: "PZ-21",
+      fname: "Victor",
+      lname: "Piznak",
+      gender: "Male",
+      bdate: "2005-08-27",
+    },
+    {
+      id: studentId++,
+      checkbox: false,
+      group: "PZ-21",
+      fname: "Liza",
+      lname: "Zapisotska",
+      gender: "Female",
+      bdate: "2006-01-25",
+    },
+  ];
+}
+
+let studentId = 0;
+let studentList = [];

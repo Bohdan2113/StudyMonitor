@@ -10,31 +10,41 @@
     <link rel="stylesheet" , href="/CSS/general.css" />
     <link rel="stylesheet" , href="/CSS/header.css" />
     <link rel="stylesheet" , href="/CSS/nav.css" />
-
   </head>
 
   <body>
     <div id="shadow-wraper">
       <div id="header-placeholder"></div>
       <div id="nav-placeholder"></div>
-
+      
       <section>
         <div class="table_header">
           <h2 class="text_edit tableName">Students</h2>
-          <button
-            class="add_student"
-            aria-label="Add student"
-            title="Add new student"
-            onclick="addStudentButton()"
-          >
-            +
-          </button>
+          <div id="th_control_wreper">
+            <button
+              id="add_student_btn"
+              aria-label="Add new student"
+              title="Add new student"
+              onclick="addStudentButton()"
+            >
+              +
+            </button>
+            <button
+              id="del_all_btn"
+              aria-label="Delete all choosen students"
+              title="Delete all choosen students"
+              onclick="DeleteAllChoosen()"
+            >
+              <img src="../Images/bin.png" alt="bucket" />
+            </button>
+          </div>
         </div>
 
         <div class="table-container">
           <table id="students_table">
             <tr>
               <th style="width: 40px">
+                <div class="checkbox-text">All</div>
                 <input
                   type="checkbox"
                   title="Select all"
@@ -61,7 +71,7 @@
           >
             &lt
           </button>
-          <button class="text_edit">1</button>
+          <button class="text_edit" aria-label="1 page">1</button>
           <button
             class="text_edit"
             aria-label="Next table page"
@@ -86,7 +96,10 @@
       </div>
 
       <div class="btn-container">
-        <button class="cancel_button" onclick="CloseDelete('del-student-block')">
+        <button
+          class="cancel_button"
+          onclick="CloseDelete('del-student-block')"
+        >
           Cancel
         </button>
         <button id="ok_button">Ok</button>
