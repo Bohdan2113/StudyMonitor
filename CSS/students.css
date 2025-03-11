@@ -315,10 +315,11 @@ section {
 @media (max-width: 940px) {
   section {
     margin-left: 48px;
+    padding: 3vw;
   }
 
-  section {
-    padding: 3vw;
+  #students_table th.name {
+    width: 80px;
   }
 
   .newBlock-header h2 {

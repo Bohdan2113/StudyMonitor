@@ -369,12 +369,18 @@ function LoadInfoToDeleteModal(stToDelList, addFunction) {
   const paragraph = document.querySelector(
     "#del-student-block .block-data-container p"
   );
-  const curStudent = studentList.find((s) => s.id === studentId_num);
-  const paragraphText = (paragraph.textContent =
-    "Are you sure you want to delete user " +
-    curStudent.fname +
-    " " +
-    curStudent.lname);
+  let paragraphText = `Are you sure you want to delete user${
+    stToDelList.length > 1 ? "s" : ""
+  }: `;
+
+  let length = stToDelList.length;
+  for (let i = 0; i < length; i++) {
+    const fname = stToDelList[i].fname || "--"; // Використовуємо --, якщо ім'я відсутнє
+    const lname = stToDelList[i].lname || "--"; // Використовуємо --, якщо прізвище відсутнє
+    paragraphText += `${fname} ${lname}, `;
+  }
+  paragraphText = paragraphText.substring(0, paragraphText.length - 2); // видаляємо кому з останнього рядка
+  paragraph.textContent = paragraphText;
 
   // Show block
   let deleteBlock = document.getElementById("del-student-block");
@@ -395,7 +401,7 @@ function OkDelete(stToDelList, addFunction) {
     );
   });
 
-  addFunction();
+  if (addFunction !== undefined) addFunction();
   CloseDelete("del-student-block");
 }
 
