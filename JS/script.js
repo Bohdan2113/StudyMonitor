@@ -28,6 +28,8 @@ window.addEventListener("resize", function () {
   let nav = document.querySelector("nav");
   let placeholder = document.querySelector("#nav-placeholder");
 
+  if (!nav) return;
+
   if (window.innerWidth > 948) {
     // Якщо ширина екрану більша за 948px, то меню повинно залишатися відкритим
     if (nav.classList.contains("open")) {
@@ -274,6 +276,7 @@ function toggleStudentCheckbox(studentId_num) {
     deleteAllBtn.style.display = "none";
     let hCheckbox = document.getElementById("header-checkbox");
     hCheckbox.checked = false;
+    hCheckbox.dispatchEvent(new Event("change"));
   }
 }
 
@@ -291,6 +294,24 @@ function toggleAllCheckbox(id_str) {
 
   function toggleTableCheckBox(checkbox) {
     checkbox.checked = checkbox.checked ? false : true;
+  }
+}
+
+function syncCheckboxes(sourceId, targetId) {
+  let source = document.getElementById(sourceId);
+  let target = document.getElementById(targetId);
+
+  if (source && target) {
+    source.addEventListener("change", function () {
+      target.checked = source.checked;
+      // target.dispatchEvent(new Event("change"));
+    });
+
+    target.addEventListener("change", function () {
+      if (source.checked === target.checked) return;
+      source.checked = target.checked;
+      source.dispatchEvent(new Event("change"));
+    });
   }
 }
 
@@ -357,7 +378,6 @@ function SaveEdit(studentId_num) {
 let saveDeleteListener;
 function deleteStudentButton(studentId_num) {
   let stToDelList = studentList.filter((s) => s.id === studentId_num);
-  // let idTodeleteList = [studentId_num];
 
   LoadInfoToDeleteModal(stToDelList);
 }
@@ -365,18 +385,14 @@ function deleteStudentButton(studentId_num) {
 function DeleteAllChoosen() {
   let stToDelList = studentList.filter((s) => s.checkbox === true);
 
-  let addFunction = () => {
-    let hCheckbox = document.getElementById("header-checkbox");
-    hCheckbox.checked = false;
-  };
-
-  LoadInfoToDeleteModal(stToDelList, addFunction);
+  LoadInfoToDeleteModal(stToDelList);
 }
 
-function LoadInfoToDeleteModal(stToDelList, addFunction) {
+function LoadInfoToDeleteModal(stToDelList) {
+  // Load students to OKdel event
   let confirmButton = document.getElementById("ok_button");
   saveDeleteListener = () => {
-    OkDelete(stToDelList, addFunction);
+    OkDelete(stToDelList);
   };
   confirmButton.addEventListener("click", saveDeleteListener);
 
@@ -404,7 +420,7 @@ function LoadInfoToDeleteModal(stToDelList, addFunction) {
   ChangeBackgroundDisplay("shadow-wraper");
 }
 
-function OkDelete(stToDelList, addFunction) {
+function OkDelete(stToDelList) {
   // Remove current student from table
   stToDelList.forEach((s) => {
     const tr = document.getElementById(`student-${s.id}`);
@@ -416,6 +432,21 @@ function OkDelete(stToDelList, addFunction) {
     );
   });
 
+  let addFunction = () => {
+    // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
+    let deleteAllBtn = document.getElementById("del_all_btn");
+    let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
+
+    // Якщо хоча б один чекбокс обраний, показуємо кнопку
+    if (isChoosen) {
+      deleteAllBtn.style.display = "flex";
+    } else {
+      deleteAllBtn.style.display = "none";
+      let hCheckbox = document.getElementById("header-checkbox");
+      hCheckbox.checked = false;
+      hCheckbox.dispatchEvent(new Event("change"));
+    }
+  };
   if (addFunction !== undefined) addFunction();
   CloseDelete("del-student-block");
 }

@@ -3,9 +3,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     await includeHTML("/Components/nav.html", "nav-placeholder");
     await includeHTML("/Components/header.html", "header-placeholder");
 
-    studentList = LoadStudents();
     updateActiveLink();
-    ShowAllStudents(studentList);
+
+    const curPage = window.location.pathname;
+    if (curPage === "/Pages/students.html") {
+      studentList = LoadStudents();
+      ShowAllStudents(studentList);
+      syncCheckboxes("header-checkbox", "header-checkbox-ref");
+    }
   } catch (error) {
     console.error(error);
   }
@@ -33,9 +38,6 @@ function includeHTML(file, elementId) {
 }
 
 function ShowAllStudents(stList) {
-  const curPage = window.location.pathname;
-  if (curPage !== "/Pages/students.html") return;
-
   stList.forEach((s) => addStudentToTable(s));
 }
 

@@ -188,6 +188,7 @@ table th {
     display: block;
     font-size: 0.8em;
     text-align: right;
+    min-height: 25px;
   }
   table td::before {
     content: attr(data-label);
