@@ -42,7 +42,9 @@
 
         <div class="table-container">
           <div id="media-select-all">
-            <label for="header-checkbox-ref" class="checkbox-text">Select all</label>
+            <label for="header-checkbox-ref" class="checkbox-text"
+              >Select all</label
+            >
             <input
               type="checkbox"
               title="Select all"
@@ -176,5 +178,12 @@
 
     <script src="/JS/script.js"></script>
     <script src="/JS/components.js"></script>
+    <script>
+      window.onload = function () {
+        studentList = LoadStudents();
+        ShowAllStudents(studentList);
+        syncCheckboxes("header-checkbox", "header-checkbox-ref");
+      };
+    </script>
   </body>
 </html>

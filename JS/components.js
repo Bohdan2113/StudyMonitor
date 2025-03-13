@@ -4,13 +4,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await includeHTML("/Components/header.html", "header-placeholder");
 
     updateActiveLink();
-
-    const curPage = window.location.pathname.split("/").pop();
-    if (curPage === "index.html") {
-      studentList = LoadStudents();
-      ShowAllStudents(studentList);
-      syncCheckboxes("header-checkbox", "header-checkbox-ref");
-    }
   } catch (error) {
     console.error(error);
   }
