@@ -163,11 +163,9 @@ table th {
   table {
     border: 0;
   }
-
   #media-select-all {
     display: block;
   }
-
   table thead {
     border: none;
     clip: rect(0 0 0 0);
@@ -191,14 +189,12 @@ table th {
     font-size: 0.8em;
     text-align: right;
   }
-
   table td::before {
     content: attr(data-label);
     float: left;
     font-weight: bold;
     text-transform: uppercase;
   }
-
   table td:last-child {
     border-bottom: 0;
   }
@@ -210,19 +206,16 @@ table th {
     width: 15px;
     height: 15px;
   }
-
   .option_cell {
     justify-content: end;
   }
   .status_cell {
     justify-content: end;
   }
-
   .option_cell button {
     width: 20px;
     height: 20px;
   }
-
   .option_cell button img {
     margin: auto;
     width: 15px;
