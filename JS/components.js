@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateActiveLink();
 
     const curPage = window.location.pathname;
-    if (curPage === "/Pages/students.html") {
+    if (curPage === "/students.html") {
       studentList = LoadStudents();
       ShowAllStudents(studentList);
       syncCheckboxes("header-checkbox", "header-checkbox-ref");
