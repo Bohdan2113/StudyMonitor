@@ -1,15 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    await includeHTML("/Components/nav.html", "nav-placeholder");
     await includeHTML("/Components/header.html", "header-placeholder");
+    await includeHTML("/Components/nav.html", "nav-placeholder");
 
-    updateActiveLink();
   } catch (error) {
     console.error(error);
   }
-
+  
+  updateActiveLink();
   const notifIndicator = document.getElementById("notif-indicator");
-
   if (notifIndicator) {
     // Відновлюємо стан індикатора з localStorage
     const isHidden = localStorage.getItem("notifHidden");
