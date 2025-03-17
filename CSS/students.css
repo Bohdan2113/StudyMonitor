@@ -346,7 +346,7 @@ table th {
   border-bottom: 3px solid #164a1f;
 }
 
-.newBlock-header h2 {
+.newBlock-header h3 {
   font-size: 30px;
   line-height: 30px;
 }
@@ -434,7 +434,7 @@ table th {
     width: 100px;
   }
 
-  .newBlock-header h2 {
+  .newBlock-header h3 {
     font-size: 25px;
     line-height: 25px;
   }
@@ -499,7 +499,7 @@ table th {
     height: 10vw;
   }
 
-  .newBlock-header h2 {
+  .newBlock-header h3 {
     font-size: 20px;
     line-height: 20px;
   }
