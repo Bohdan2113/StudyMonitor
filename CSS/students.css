@@ -140,7 +140,7 @@ table th {
 }
 
 #students_table th.name {
-  width: 235px;
+  width: 200px;
 }
 
 #students_table th.gender {
@@ -474,7 +474,7 @@ table th {
   }
 }
 
-@media (max-width: 327px) {
+@media (max-width: 390px) {
   section {
     padding: 5vw;
   }
