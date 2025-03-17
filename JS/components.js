@@ -2,11 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     await includeHTML("/Components/header.html", "header-placeholder");
     await includeHTML("/Components/nav.html", "nav-placeholder");
-
   } catch (error) {
     console.error(error);
   }
-  
+
   updateActiveLink();
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
@@ -15,7 +14,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isHidden === "true") notifIndicator.style.display = "none";
     else notifIndicator.style.display = "block";
   }
+
+  if (window.location.pathname.includes("index")) {
+    OnlyIndex();
+  }
 });
+
+function OnlyIndex() {
+  studentList = LoadStudents();
+  ShowAllStudents(studentList);
+  syncCheckboxes("header-checkbox", "header-checkbox-ref");
+}
 
 function includeHTML(file, elementId) {
   return new Promise((resolve, reject) => {
@@ -50,35 +59,10 @@ function updateActiveLink() {
 
 function LoadStudents() {
   return [
-    {
-      id: studentId++,
-      checkbox: false,
-      group: "PZ-21",
-      fname: "Bohdan",
-      lname: "Kruk",
-      gender: "Male",
-      bdate: "2006-05-01",
-    },
-    {
-      id: studentId++,
-      checkbox: false,
-      group: "PZ-21",
-      fname: "Victor",
-      lname: "Piznak",
-      gender: "Male",
-      bdate: "2005-08-27",
-    },
-    {
-      id: studentId++,
-      checkbox: false,
-      group: "PZ-21",
-      fname: "Liza",
-      lname: "Zapisotska",
-      gender: "Female",
-      bdate: "2006-01-25",
-    },
+    new Student(false, "PZ-21", "Bohdan", "Kruk", "Male", "2006-05-01"),
+    new Student(false, "PZ-21", "Victor", "Piznak", "Male", "2005-08-27"),
+    new Student(false, "PZ-21", "Liza", "Zapisotska", "Female", "2006-01-25"),
   ];
 }
 
-let studentId = 0;
 let studentList = [];

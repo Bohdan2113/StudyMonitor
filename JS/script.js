@@ -1,12 +1,37 @@
-function formatDate(dateString) {
-  if (!dateString) return "";
+class Student {
+  static studentId = 0;
+  constructor(isChecked, group, fname, lname, gender, bdate) {
+    this.id = Student.studentId++;
+    this.checkbox = isChecked;
+    this.group = group;
+    this.fname = fname;
+    this.lname = lname;
+    this.gender = gender;
+    this.bdate = bdate;
+    this.status = "lightgray";
+  }
 
-  const date = new Date(dateString); // Перетворюємо рядок на об'єкт Date
-  const day = String(date.getDate()).padStart(2, "0"); // Додаємо нуль, якщо день однозначний
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
-  const year = date.getFullYear(); // Рік (повний)
+  get name() {
+    return this.fname + " " + this.lname;
+  }
+  formatDate() {
+    const date = new Date(this.bdate); // Перетворюємо рядок на об'єкт Date
+    const day = String(date.getDate()).padStart(2, "0"); // Додаємо нуль, якщо день однозначний
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
+    const year = date.getFullYear(); // Рік (повний)
 
-  return `${day}.${month}.${year}`;
+    return `${day}.${month}.${year}`;
+  }
+
+  defineStatusColor() {
+    const profileName = document.getElementById("profile-name");
+    const fullName = profileName ? profileName.textContent.trim() : "";
+
+    if (fullName !== null && this.name.trim() === fullName) this.status = "green";
+    else this.status = "lightgray";
+
+    return this.status;
+  }
 }
 
 function burgerMenu() {
@@ -134,21 +159,21 @@ function GetStudentTableFields(studentId_num) {
     studentName: document.getElementById(`${studentId_num}-name`),
     studentGender: document.getElementById(`${studentId_num}-gender`),
     studentBdate: document.getElementById(`${studentId_num}-bdate`),
+    studentStatus: document.getElementById(`${studentId_num}-status`),
   };
 }
 
 function CreateAdd() {
   const inputFields = GetFormInputFields();
 
-  let newStudent = {
-    id: studentId++,
-    checkbox: false,
-    group: inputFields.group.value,
-    fname: inputFields.fname.value.trim(),
-    lname: inputFields.lname.value.trim(),
-    gender: inputFields.gender.value,
-    bdate: inputFields.bdate.value,
-  };
+  let newStudent = new Student(
+    false,
+    inputFields.group.value,
+    inputFields.fname.value.trim(),
+    inputFields.lname.value.trim(),
+    inputFields.gender.value,
+    inputFields.bdate.value
+  );
   studentList.push(newStudent);
   addStudentToTable(newStudent);
 
@@ -156,14 +181,6 @@ function CreateAdd() {
 }
 
 function addStudentToTable(newStudent) {
-  const profileName = document.getElementById("profile-name");
-  const fullName = profileName ? profileName.textContent.trim() : "";
-  const newFullName = newStudent.fname + " " + newStudent.lname;
-  let statusColor = "lightgray";
-  if (newFullName.trim() === fullName) {
-    statusColor = "green";
-  }
-
   const table = document.querySelector("#students_table tbody");
   const tr = document.createElement("tr");
   tr.id = `student-${newStudent.id}`;
@@ -201,7 +218,7 @@ function addStudentToTable(newStudent) {
   // Дата народження
   const tdBdate = document.createElement("td");
   tdBdate.id = `${newStudent.id}-bdate`;
-  tdBdate.textContent = formatDate(newStudent.bdate);
+  tdBdate.textContent = newStudent.formatDate();
   tdBdate.setAttribute("data-label", "Birthday");
 
   // Статус
@@ -212,7 +229,7 @@ function addStudentToTable(newStudent) {
   const statusBar = document.createElement("div");
   statusBar.className = "statusBar";
   statusBar.id = `${newStudent.id}-status`;
-  statusBar.style.backgroundColor = statusColor;
+  statusBar.style.backgroundColor = newStudent.defineStatusColor();
   divStatusBtn.appendChild(statusBar);
   tdStatus.appendChild(divStatusBtn);
   tdStatus.setAttribute("data-label", "Status");
@@ -367,10 +384,11 @@ function SaveEdit(studentId_num) {
 
   // Update data in table
   studentTableFields.studentGroup.textContent = curStudent.group;
-  studentTableFields.studentName.textContent =
-    curStudent.fname + " " + curStudent.lname;
+  studentTableFields.studentName.textContent = curStudent.name;
   studentTableFields.studentGender.textContent = curStudent.gender;
-  studentTableFields.studentBdate.textContent = formatDate(curStudent.bdate);
+  studentTableFields.studentBdate.textContent = curStudent.formatDate();
+  studentTableFields.studentStatus.style.backgroundColor =
+    curStudent.defineStatusColor();
 
   CloseEdit("edit-student-block");
 }
