@@ -15,7 +15,7 @@ body::before {
   background-size: 40vw auto;
   background-repeat: no-repeat;
   background-position: center 18vh;
-  opacity: 0.03; /* Напівпрозорість */
+  opacity: 0.05; /* Напівпрозорість */
   z-index: -1; /* Щоб фон був позаду контенту */
 }
 

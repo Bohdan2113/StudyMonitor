@@ -15,6 +15,8 @@ class Student {
     return this.fname + " " + this.lname;
   }
   formatDate() {
+    if (!this.bdate) return "";
+
     const date = new Date(this.bdate); // Перетворюємо рядок на об'єкт Date
     const day = String(date.getDate()).padStart(2, "0"); // Додаємо нуль, якщо день однозначний
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
@@ -27,7 +29,8 @@ class Student {
     const profileName = document.getElementById("profile-name");
     const fullName = profileName ? profileName.textContent.trim() : "";
 
-    if (fullName !== null && this.name.trim() === fullName) this.status = "green";
+    if (fullName !== null && this.name.trim() === fullName)
+      this.status = "green";
     else this.status = "lightgray";
 
     return this.status;

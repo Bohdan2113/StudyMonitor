@@ -6,17 +6,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(error);
   }
 
-  updateActiveLink();
+  let curHref = updateActiveLink();
+  console.log(curHref);
+  if (curHref === "/index.html") OnlyIndex();
+
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
     // Відновлюємо стан індикатора з localStorage
     const isHidden = localStorage.getItem("notifHidden");
     if (isHidden === "true") notifIndicator.style.display = "none";
     else notifIndicator.style.display = "block";
-  }
-
-  if (window.location.pathname.includes("index")) {
-    OnlyIndex();
   }
 });
 
@@ -46,15 +45,18 @@ function updateActiveLink() {
   const navItems = document.querySelectorAll(".nav-item");
   const currentPath = window.location.pathname;
 
+  let neededHref;
   navItems.forEach((link) => {
     const href = link.getAttribute("href");
     if (href === currentPath) {
       sessionStorage.setItem("activPage", currentPath); // Запам'ятати стан
       link.classList.add("active");
+      neededHref = href;
     } else {
       link.classList.remove("active");
     }
   });
+  return neededHref;
 }
 
 function LoadStudents() {
