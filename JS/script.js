@@ -107,9 +107,6 @@ function HideNotifIndicator() {
 }
 
 function ShowNotifIndicator() {
-  const activePage = window.location.pathname;
-  if (activePage === "/messages.html") return;
-
   const notifImg = document.getElementById("notif-img");
   notifImg.animate(
     [

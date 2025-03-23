@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let curHref = updateActiveLink();
   console.log(curHref);
-  if (curHref === "/index.html") OnlyIndex();
+  if (curHref === "/index.html" || curHref === "/") OnlyIndex();
 
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
