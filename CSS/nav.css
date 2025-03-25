@@ -1,80 +1,76 @@
 #nav-placeholder {
-    width: 200px;
-    background-color: rgb(203, 212, 208);
-    height: 100%;
-    position: fixed;
-    top: 50px;
-    overflow-y: auto;
-  
-    transition: width 0.3s ease;
-  }
-  
-  .hamburger-icon {
+  width: 200px;
+  background-color: rgb(203, 212, 208);
+  height: 100%;
+  position: fixed;
+  top: 50px;
+  overflow-y: auto;
+
+  transition: width 0.3s ease;
+}
+
+.hamburger-icon {
+  display: none;
+  height: 45px;
+  border-bottom: 1px solid black;
+}
+.hamburger-icon:hover {
+  background-color: #f0f0f0; /* Світлий фон при наведенні */
+  /* color: #333; Темний текст */
+  transition: background-color 0.3s ease;
+  border-bottom: 3px solid #164a1f;
+}
+
+.hamburger-icon img {
+  width: 25px;
+  height: 25px;
+  margin: auto;
+}
+
+nav ul {
+  list-style-type: none;
+}
+
+nav .menu-items li a {
+  display: block;
+  font-size: 20px;
+  color: #333; /* Стандартний колір тексту */
+  padding: 10px; /* Відступи для кращого вигляду */
+  text-decoration: none; /* Видаляємо підкреслення */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+nav a:hover {
+  background-color: #f0f0f0; /* Світлий фон при наведенні */
+  color: #333; /* Темний текст */
+  transition: background-color 0.3s ease;
+  border-bottom: 3px solid #164a1f;
+}
+
+/* Стиль для активного елемента меню */
+nav .menu-items li a.active {
+  color: #fff; /* Білий текст */
+  background-color: rgb(92, 148, 129);
+  font-weight: bold; /* Жирний шрифт */
+}
+
+#nav-holder.open {
+  display: block;
+}
+
+#nav-placeholder.open {
+  width: 200px;
+}
+
+@media (max-width: 940px) {
+  #nav-holder {
     display: none;
-    height: 45px;
-    border-bottom: 1px solid black;
   }
-  .hamburger-icon:hover {
-    background-color: #f0f0f0; /* Світлий фон при наведенні */
-    /* color: #333; Темний текст */
-    transition: background-color 0.3s ease;
-    border-bottom: 3px solid #164a1f;
+  #nav-placeholder {
+    width: 48px;
   }
-  
-  .hamburger-icon img {
-    width: 25px;
-    height: 25px;
-    margin: auto;
+  .hamburger-icon {
+    display: flex;
+    align-items: center;
   }
-  
-  nav ul {
-    list-style-type: none;
-  }
-  
-  nav .menu-items li a {
-    display: block;
-    font-size: 20px;
-    color: #333; /* Стандартний колір тексту */
-    padding: 10px; /* Відступи для кращого вигляду */
-    text-decoration: none; /* Видаляємо підкреслення */
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  nav a:hover {
-    background-color: #f0f0f0; /* Світлий фон при наведенні */
-    color: #333; /* Темний текст */
-    transition: background-color 0.3s ease;
-    border-bottom: 3px solid #164a1f;
-  }
-  
-  /* Стиль для активного елемента меню */
-  nav .menu-items li a.active {
-    color: #fff; /* Білий текст */
-    background-color: rgb(92, 148, 129);
-    font-weight: bold; /* Жирний шрифт */
-  }
-  
-  nav.open {
-    display: block;
-  }
-  
-  #nav-placeholder.open {
-    width: 200px;
-  }
-
-
-
-
-
-  @media (max-width: 940px) {
-    nav {
-      display: none;
-    }
-    #nav-placeholder {
-      width: 48px;
-    }
-    .hamburger-icon {
-      display: flex;
-      align-items: center;
-    }
 }

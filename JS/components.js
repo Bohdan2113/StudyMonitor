@@ -15,9 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(error);
   }
 
-  let curHref = updateActiveLink();
-  console.log(curHref);
-  if (curHref === "/index.html" || curHref === "/") OnlyIndex();
+  const curpage = updateActiveLink();
+  console.log(
+    "Cur page: " + (curpage !== undefined ? curpage : "noNavigationPage")
+  );
 
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
@@ -27,12 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     else notifIndicator.style.display = "block";
   }
 });
-
-function OnlyIndex() {
-  studentList = LoadStudents();
-  ShowAllStudents(studentList);
-  syncCheckboxes("header-checkbox", "header-checkbox-ref");
-}
 
 function includeHTML(file, elementId) {
   return new Promise((resolve, reject) => {
@@ -46,19 +41,15 @@ function includeHTML(file, elementId) {
   });
 }
 
-function ShowAllStudents(stList) {
-  stList.forEach((s) => addStudentToTable(s));
-}
-
 function updateActiveLink() {
   const navItems = document.querySelectorAll(".nav-item");
-  const currentPath = window.location.pathname;
+  let currentPath = window.location.pathname;
+  if (currentPath === "/") currentPath += "index.html";
 
   let neededHref;
   navItems.forEach((link) => {
     const href = link.getAttribute("href");
     if (href === currentPath) {
-      sessionStorage.setItem("activPage", currentPath); // Запам'ятати стан
       link.classList.add("active");
       neededHref = href;
     } else {
@@ -67,13 +58,3 @@ function updateActiveLink() {
   });
   return neededHref;
 }
-
-function LoadStudents() {
-  return [
-    new Student(false, "PZ-21", "Bohdan", "Kruk", "Male", "2006-05-01"),
-    new Student(false, "PZ-21", "Victor", "Piznak", "Male", "2005-08-27"),
-    new Student(false, "PZ-21", "Liza", "Zapisotska", "Female", "2006-01-25"),
-  ];
-}
-
-let studentList = [];

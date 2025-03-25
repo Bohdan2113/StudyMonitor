@@ -1,44 +1,5 @@
-class Student {
-  static studentId = 0;
-  constructor(isChecked, group, fname, lname, gender, bdate) {
-    this.id = Student.studentId++;
-    this.checkbox = isChecked;
-    this.group = group;
-    this.fname = fname;
-    this.lname = lname;
-    this.gender = gender;
-    this.bdate = bdate;
-    this.status = "lightgray";
-  }
-
-  get name() {
-    return this.fname + " " + this.lname;
-  }
-  formatDate() {
-    if (!this.bdate) return "";
-
-    const date = new Date(this.bdate); // Перетворюємо рядок на об'єкт Date
-    const day = String(date.getDate()).padStart(2, "0"); // Додаємо нуль, якщо день однозначний
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Місяць (1-12), додаємо нуль
-    const year = date.getFullYear(); // Рік (повний)
-
-    return `${day}.${month}.${year}`;
-  }
-
-  defineStatusColor() {
-    const profileName = document.getElementById("profile-name");
-    const fullName = profileName ? profileName.textContent.trim() : "";
-
-    if (fullName !== null && this.name.trim() === fullName)
-      this.status = "green";
-    else this.status = "lightgray";
-
-    return this.status;
-  }
-}
-
 function burgerMenu() {
-  let nav = document.querySelector("nav");
+  let nav = document.querySelector("#nav-holder");
   let placeholder = document.querySelector("#nav-placeholder");
 
   if (nav.classList.contains("open")) {
@@ -53,7 +14,7 @@ function burgerMenu() {
 }
 
 window.addEventListener("resize", function () {
-  let nav = document.querySelector("nav");
+  let nav = document.querySelector("#nav-holder");
   let placeholder = document.querySelector("#nav-placeholder");
 
   if (!nav) return;
@@ -73,7 +34,7 @@ window.addEventListener("resize", function () {
 
 // Закриття меню при кліку поза ним
 document.addEventListener("click", function (event) {
-  let nav = document.querySelector("nav");
+  let nav = document.querySelector("#nav-holder");
   let placeholder = document.querySelector("#nav-placeholder");
 
   // Перевіряємо, чи клік був поза меню або кнопкою для його відкриття
@@ -311,24 +272,6 @@ function toggleAllCheckbox(id_str) {
 
   function toggleTableCheckBox(checkbox) {
     checkbox.checked = checkbox.checked ? false : true;
-  }
-}
-
-function syncCheckboxes(sourceId, targetId) {
-  let source = document.getElementById(sourceId);
-  let target = document.getElementById(targetId);
-
-  if (source && target) {
-    source.addEventListener("change", function () {
-      target.checked = source.checked;
-      // target.dispatchEvent(new Event("change"));
-    });
-
-    target.addEventListener("change", function () {
-      if (source.checked === target.checked) return;
-      source.checked = target.checked;
-      source.dispatchEvent(new Event("change"));
-    });
   }
 }
 

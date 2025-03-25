@@ -1,17 +1,43 @@
 // Ім'я кешу, який використовуватиметься для збереження ресурсів
 const CACHE_NAME = "pwa-cache-v1";
 
-// Масив ресурсів, які будуть кешовані при встановленні Service Worker 
+// Масив ресурсів, які будуть кешовані при встановленні Service Worker
 // ви кешуєте всі свої файли
 const ASSETS = [
-  "/",                      // Головна сторінка
-  "/index.html",            // HTML-файл
-  "/style.css",             // CSS-стилі
-  "/script.js",             // Головний JavaScript-файл
-  "/icons",                 // ❌ Некоректно: "icons" - це папка, її не можна кешувати напряму
-// загалом так, але у мене не хотіло кешувати без цієї папки, якщо у вас кешує без додаткового вказування, то не додавайте її
-  "/icons/icons.128.png",   // Іконка 128px
-  "/icons/icons.512.png",   // Іконка 512px
+  "/", // Головна сторінка
+  "/index.html", // HTML-файл
+  "/dashboard.html", // HTML-файл
+  "/tasks.html", // HTML-файл
+  "/messages.html", // HTML-файл
+
+  "/Components",
+  "/Components/header.html", // Component HTML-файл
+  "/Components//nav.html", // Component HTML-файл
+
+  "/CSS",
+  "/CSS/genaral.css", // CSS-стилі
+  "/CSS/header.css", // CSS-стилі
+  "/CSS/nav.css", // CSS-стилі
+  "/CSS/students.css", // CSS-стилі
+
+  "/JS",
+  "/JS/script.js", // Головний JavaScript-файл
+  "/JS/components.js", // Підключення компонент JavaScript-файл
+  "/JS/students.js", // Завантаження студентів JavaScript-файл
+
+  "/Images", // ❌ Некоректно: "icons" - це папка, її не можна кешувати напряму
+  "/Images/bin.png", // Іконка 128px
+  "/Images/hamburger.png", // Іконка 512px
+  "/Images/helloKitty.png", // Іконка 512px
+  "/Images/notification.svg", // Іконка 512px
+  "/Images/pencil.png", // Іконка 512px
+  "/Images/user.png", // Іконка 512px
+
+  "/icons", // ❌ Некоректно: "icons" - це папка, її не можна кешувати напряму
+  "/icons/icon.128.png", // Іконка 128px
+  "/icons/icon.192.png", // Іконка 192px
+  "/icons/icon.256.png", // Іконка 256px
+  "/icons/icon.512.png", // Іконка 512px
 ];
 
 // Подія встановлення Service Worker
@@ -19,7 +45,7 @@ const ASSETS = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("Кешування ресурсів...");// логування не обовязкове
+      console.log("Кешування ресурсів..."); // логування не обовязкове
       // Додаємо файли до кешу, якщо якийсь файл не вдасться завантажити, обробляємо помилку
       return cache.addAll(ASSETS).catch(console.error);
     })
@@ -50,15 +76,18 @@ self.addEventListener("fetch", (event) => {
 // Видаляє старі кеші, які більше не використовуються
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME) // Знаходимо старі кеші
-          .map((key) => caches.delete(key))   // Видаляємо їх
-      );
-    }).then(() => {
-      console.log("Новий Service Worker активовано.");
-      return self.clients.claim(); // Переключаємо новий SW для всіх вкладок
-    })
+    caches
+      .keys()
+      .then((keys) => {
+        return Promise.all(
+          keys
+            .filter((key) => key !== CACHE_NAME) // Знаходимо старі кеші
+            .map((key) => caches.delete(key)) // Видаляємо їх
+        );
+      })
+      .then(() => {
+        console.log("Новий Service Worker активовано.");
+        return self.clients.claim(); // Переключаємо новий SW для всіх вкладок
+      })
   );
 });
