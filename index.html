@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A site with students table">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A site with students table" />
 
     <title>Students</title>
-
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="/CSS/students.css">
-    <link rel="stylesheet" href="/CSS/general.css">
-    <link rel="stylesheet" href="/CSS/header.css">
-    <link rel="stylesheet" href="/CSS/nav.css">
+    
+    <link rel="stylesheet" href="/CSS/students.css" />
+    <link rel="stylesheet" href="/CSS/general.css" />
+    <link rel="stylesheet" href="/CSS/header.css" />
+    <link rel="stylesheet" href="/CSS/nav.css" />
+    
     <script src="/JS/components.js"></script>
+    <link rel="manifest" href="/manifest.json" />
   </head>
 
   <body>
     <div id="shadow-wraper">
-      <div id="header-placeholder"></div>
-      <div id="nav-placeholder"></div>
+      <header id="header-placeholder"></header>
+      <nav id="nav-placeholder"></nav>
 
       <section>
         <div class="table_header">
@@ -38,7 +39,7 @@
               title="Delete all choosen students"
               onclick="DeleteAllChoosen()"
             >
-              <img src="../Images/bin.png" alt="bucket">
+              <img src="../Images/bin.png" alt="bucket" />
             </button>
           </div>
         </div>
@@ -53,7 +54,7 @@
               title="Select all"
               aria-label="Select all student"
               id="header-checkbox-ref"
-            >
+            />
           </div>
 
           <table id="students_table">
@@ -67,7 +68,7 @@
                     aria-label="Select all student"
                     id="header-checkbox"
                     onchange="toggleAllCheckbox('header-checkbox')"
-                  >
+                  />
                 </th>
                 <th scope="col" class="group">Group</th>
                 <th scope="col" class="name">Name</th>
@@ -148,11 +149,11 @@
           </div>
           <div class="input-group">
             <label for="fname">First name:</label>
-            <input type="text" id="fname" name="fname" required>
+            <input type="text" id="fname" name="fname" required />
           </div>
           <div class="input-group">
             <label for="lname">Last name:</label>
-            <input type="text" id="lname" name="lname" required>
+            <input type="text" id="lname" name="lname" required />
           </div>
           <div class="input-group">
             <label for="gender">Gender:</label>
@@ -166,7 +167,7 @@
           </div>
           <div class="input-group">
             <label for="bdate">Birthday:</label>
-            <input type="date" id="bdate" name="bdate" required>
+            <input type="date" id="bdate" name="bdate" required />
           </div>
         </form>
       </div>
@@ -179,6 +180,7 @@
       </div>
     </div>
 
-    <script src="/JS/script.js"></script>
+    <script src="/JS/script.js" defer></script>
+    <script src="/JS/students.js" defer></script>
   </body>
 </html>
