@@ -44,6 +44,7 @@ function includeHTML(file, elementId) {
 function updateActiveLink() {
   const navItems = document.querySelectorAll(".nav-item");
   let currentPath = window.location.pathname;
+  console.log("Path " + currentPath);
   if (currentPath === "/") currentPath += "index.html";
 
   let neededHref;

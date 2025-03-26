@@ -10,7 +10,7 @@ function LoadStudents() {
     new Student(false, "PZ-21", "Bohdan", "Kruk", "Male", "2006-05-01"),
     new Student(false, "PZ-21", "Victor", "Piznak", "Male", "2005-08-27"),
     new Student(false, "PZ-21", "Liza", "Zapisotska", "Female", "2006-01-25"),
-    new Student(false, "PZ-21", "Ivanna", "Pavlushyn", "Female", "2006-01-25"),
+    // new Student(false, "PZ-21", "Ivanna", "Pavlushyn", "Female", "2006-01-25"),
   ];
 }
 
