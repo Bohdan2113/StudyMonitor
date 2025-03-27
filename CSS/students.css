@@ -92,7 +92,6 @@ table th {
   text-transform: uppercase;
   border-bottom: 2px solid #ddd;
   border-top: 2px solid #ddd;
-  /* background-color: #bdd8c7 */
 }
 
 .statusBar {
@@ -175,7 +174,7 @@ table th {
     padding: 0;
     position: absolute;
     width: 1px;
-}
+  }
 
   table tr {
     border-bottom: 3px solid #ddd;
@@ -203,7 +202,6 @@ table th {
 
 @media screen and (max-width: 500px) {
   .statusBar {
-    /* margin-left: 97%; */
     width: 15px;
     height: 15px;
   }
@@ -223,60 +221,6 @@ table th {
     height: 15px;
   }
 }
-/* #students_table {
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 2px solid black;
-  border-radius: 6px;
-  width: 100%;
-  margin: auto;
-  table-layout: fixed;
-}
-#students_table th,
-#students_table td {
-  border: 1px solid black;
-}
-#students_table th,
-#students_table td {
-  min-height: 50px;
-  white-space: nowrap;
-
-  font-family: Arial;
-  text-decoration: none;
-  font-weight: normal;
-  font-style: normal;
-  text-align: center;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: break-word;
-
-  padding: 15px 5px;
-  line-height: 20px;
-}
-
-#students_table td:hover {
-  overflow: visible;
-  white-space: normal;
-}
-
-#students_table th {
-  font-weight: 600;
-  font-size: 18px;
-  color: white;
-  background-color: rgb(36, 58, 51);
-} */
-
-/* #students_table th .checkbox-text {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-#students_table input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-}*/
 
 .tableNext {
   display: flex;
@@ -306,7 +250,7 @@ table th {
   transform: translate(-50%, -50%);
   width: 50vw;
   height: 50vh;
-  min-width: 200px;
+  min-width: 250px;
   min-height: 150px;
   background-color: white;
   z-index: 2;
@@ -327,7 +271,7 @@ table th {
   transform: translate(-50%, -50%);
   width: 50vw;
   height: 60vh;
-  min-width: 200px;
+  min-width: 250px;
   min-height: 150px;
   background-color: white;
   z-index: 2;
@@ -365,7 +309,7 @@ table th {
   transform: rotate(45deg);
 }
 
-.block-data-container p {
+.block-data-container .warningdel-message {
   text-align: center;
   font-size: 25px;
   font-weight: bold;
@@ -391,38 +335,48 @@ table th {
 .block-data-container {
   display: flex;
   flex-direction: column;
-  /* padding: 0 2vw; */
+  padding: 0 10px;
 
-  max-height: 80vh; /* Обмеження по висоті */
   overflow-y: auto;
+}
+#student-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .input-group {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 50px;
-  margin: 10px;
-  /* margin-right: 100px; */
+  margin: 7px;
 }
 
 .input-group label {
   width: 100px;
   font-size: 16px;
-  /* line-height: 100%; */
   font-weight: bold;
 }
 
 .input-group input,
 .input-group select {
-  width: 200px;
+  width: 300px;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #000000;
   border-radius: 3px;
   font-size: 14px;
 }
 
 .input-group input[type="date"] {
   text-align: left;
+}
+
+.erinput-message {
+  color: red;
+  font-size: 12px !important;
+  display: none;
+  padding: 0 5px;
 }
 
 @media (max-width: 940px) {
@@ -444,7 +398,7 @@ table th {
     font-size: 25px;
     line-height: 25px;
   }
-  .block-data-container p {
+  .block-data-container .warningdel-message {
     font-size: 20px;
   }
   .btn-container {
@@ -456,20 +410,26 @@ table th {
     font-size: 12px;
   }
   .block-data-container {
-    align-items: start;
+    align-items: center;
     gap: 10px;
+  }
+  .input-error-group {
+    max-width: 300px;
+    width: 100%;
+    justify-content: center;
   }
   .input-group {
     flex-direction: column;
-    justify-content: center;
     align-items: start;
     gap: 3px;
+    max-width: 300px;
+    width: 100%;
+    margin: 5px;
   }
   .input-group input,
   .input-group select {
     width: 100%;
     padding: 5px;
-    border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 14px;
   }
@@ -509,18 +469,15 @@ table th {
     font-size: 20px;
     line-height: 20px;
   }
-  .block-data-container p {
+  .block-data-container .warningdel-message {
     font-size: 15px;
   }
   .btn-container {
-    justify-content: space-evenly;
-    gap: 5px;
+    gap: 10px;
     padding: 3vh 1vw;
   }
   .btn-container button {
-    min-width: 0;
     font-size: 10px;
-    padding: 3px 5px;
     overflow: hidden;
   }
 }

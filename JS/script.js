@@ -1,3 +1,18 @@
+// Additional function holders
+let saveDeleteListener;
+let saveEditListener;
+const $ = document.querySelector.bind(document);
+
+// Add input events to the form fields
+{
+  const inputFields = GetFormInputFields();
+  for (const key in inputFields) {
+    if (key !== "id")
+      inputFields[key].addEventListener("input", HideErrorMessage);
+  }
+}
+
+// burger menu open and close
 function burgerMenu() {
   let nav = document.querySelector("#nav-holder");
   let placeholder = document.querySelector("#nav-placeholder");
@@ -12,7 +27,7 @@ function burgerMenu() {
     placeholder.classList.add("open");
   }
 }
-
+// Close menu when resizing window
 window.addEventListener("resize", function () {
   let nav = document.querySelector("#nav-holder");
   let placeholder = document.querySelector("#nav-placeholder");
@@ -31,7 +46,6 @@ window.addEventListener("resize", function () {
     placeholder.classList.remove("open");
   }
 });
-
 // Закриття меню при кліку поза ним
 document.addEventListener("click", function (event) {
   let nav = document.querySelector("#nav-holder");
@@ -44,53 +58,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
-function ChangeBackgroundDisplay(blockId_str) {
-  let shadowWraper = document.getElementById(blockId_str);
-
-  if (
-    shadowWraper.style.pointerEvents === "auto" ||
-    shadowWraper.style.pointerEvents === ""
-  ) {
-    shadowWraper.style.opacity = 0.3;
-    shadowWraper.style.pointerEvents = "none";
-  } else {
-    shadowWraper.style.opacity = 1;
-    shadowWraper.style.pointerEvents = "auto";
-  }
-}
-
-function HideNotifIndicator() {
-  const notifIndicator = document.getElementById("notif-indicator");
-  if (notifIndicator) {
-    notifIndicator.style.display = "none";
-    localStorage.setItem("notifHidden", "true"); // Запам'ятати стан
-  }
-}
-
-function ShowNotifIndicator() {
-  const notifImg = document.getElementById("notif-img");
-  notifImg.animate(
-    [
-      { transform: "rotate(0deg)" },
-      { transform: "rotate(-15deg)" },
-      { transform: "rotate(15deg)" },
-      { transform: "rotate(-10deg)" },
-      { transform: "rotate(10deg)" },
-      { transform: "rotate(0deg)" },
-    ],
-    {
-      duration: 500, // Час анімації (0.5 сек)
-      iterations: 1, // Виконати один раз
-    }
-  );
-
-  const notifIndicator = document.getElementById("notif-indicator");
-  if (notifIndicator) {
-    notifIndicator.style.display = "block";
-    localStorage.setItem("notifHidden", "false"); // Запам'ятати стан
-  }
-}
-
+// Interface buttons evants
 function addStudentButton() {
   //Show window
   let editBlock = document.getElementById("edit-student-block");
@@ -111,7 +79,51 @@ function addStudentButton() {
   const lastStudentID = studentList?.length ? studentList.at(-1).id : 0;
   inputFields.id.value = lastStudentID + 1;
 }
+function editStudentButton(studentId_num) {
+  //Show window
+  let editBlock = document.getElementById("edit-student-block");
+  editBlock.style.display = "flex";
+  ChangeBackgroundDisplay("shadow-wraper");
 
+  // Change window info for edit block
+  let header = document.getElementById("edit-block-header");
+  header.textContent = "Edit student";
+  let confirmButton = document.getElementById("confirm-edit-button");
+  confirmButton.textContent = "Save";
+
+  // Chanel student id into save button
+  saveEditListener = () => {
+    SaveEdit(studentId_num);
+  };
+  confirmButton.addEventListener("click", saveEditListener);
+
+  // Find choosen student and load theit data into form
+  let inputFields = GetFormInputFields();
+  let curStudent = studentList.find((s) => s.id === studentId_num);
+  if (!curStudent) {
+    console.log("Studen`t not in the list");
+    return;
+  }
+
+  inputFields.id.value = curStudent.id;
+  inputFields.group.value = curStudent.group;
+  inputFields.fname.value = curStudent.fname;
+  inputFields.lname.value = curStudent.lname;
+  inputFields.gender.value = curStudent.gender;
+  inputFields.bdate.value = curStudent.bdate;
+}
+function deleteStudentButton(studentId_num) {
+  let stToDelList = studentList.filter((s) => s.id === studentId_num);
+
+  LoadInfoToDeleteModal(stToDelList);
+}
+function DeleteAllChoosen() {
+  let stToDelList = studentList.filter((s) => s.checkbox === true);
+
+  LoadInfoToDeleteModal(stToDelList);
+}
+
+// Fields getting
 function GetFormInputFields() {
   return {
     id: document.getElementById("id"),
@@ -122,7 +134,6 @@ function GetFormInputFields() {
     bdate: document.getElementById("bdate"),
   };
 }
-
 function GetStudentTableFields(studentId_num) {
   return {
     studentGroup: document.getElementById(`${studentId_num}-group`),
@@ -133,32 +144,211 @@ function GetStudentTableFields(studentId_num) {
   };
 }
 
+// Student options confirmation
 function CreateAdd() {
   const inputFields = GetFormInputFields();
+  if (!ValidateStudentFormInput(inputFields)) return;
+
   const lastStudentID = studentList?.length ? studentList.at(-1).id : 0;
 
   let newStudent = new Student(
     parseInt(inputFields.id.value),
     false,
     inputFields.group.value,
-    inputFields.fname.value.trim(),
-    inputFields.lname.value.trim(),
+    inputFields.fname.value.replace(/\s+/g, " ").trim(),
+    inputFields.lname.value.replace(/\s+/g, " ").trim(),
     inputFields.gender.value,
     inputFields.bdate.value
   );
   studentList.push(newStudent);
   addStudentToTable(newStudent);
-  // output JSON to console
-  const myJSON = JSON.stringify(newStudent);
-  console.log(myJSON);
-  // Sava into storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  students.push(newStudent);
-  localStorage.setItem("students", JSON.stringify(students));
+  ToLocalStorage(newStudent);
 
   CloseEdit("edit-student-block");
+
+  function ToLocalStorage(newS) {
+    // output JSON to console
+    const myJSON = JSON.stringify(newS);
+    console.log(myJSON);
+    // Sava into storage
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    students.push(newS);
+    localStorage.setItem("students", JSON.stringify(students));
+  }
+}
+function SaveEdit(studentId_num) {
+  let inputFields = GetFormInputFields();
+  if (!ValidateStudentFormInput(inputFields)) return;
+
+  let studentTableFields = GetStudentTableFields(studentId_num);
+  let curStudent = studentList.find((s) => s.id === studentId_num);
+  if (!curStudent) {
+    console.log("Studen`t not in the list");
+    return;
+  }
+
+  // Update student data in the studentList
+  curStudent.id = parseInt(inputFields.id.value);
+  curStudent.group = inputFields.group.value;
+  curStudent.fname = inputFields.fname.value.replace(/\s+/g, " ").trim();
+  curStudent.lname = inputFields.lname.value.replace(/\s+/g, " ").trim();
+  curStudent.gender = inputFields.gender.value;
+  curStudent.bdate = inputFields.bdate.value;
+  UpdateInLocalStorage(curStudent);
+
+  // Update data in table
+  studentTableFields.studentGroup.textContent = curStudent.group;
+  studentTableFields.studentName.textContent = curStudent.name;
+  studentTableFields.studentGender.textContent = curStudent.gender;
+  studentTableFields.studentBdate.textContent = curStudent.formatDate();
+  studentTableFields.studentStatus.style.backgroundColor =
+    curStudent.defineStatusColor();
+
+  CloseEdit("edit-student-block");
+
+  function UpdateInLocalStorage(student) {
+    // output JSON to console
+    const myJSON = JSON.stringify(student);
+    console.log(myJSON);
+    // Save into storage
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let index = students.findIndex((s) => s.id === student.id);
+    if (index !== -1) {
+      students[index] = student; // Оновлюємо знайденого студента
+      localStorage.setItem("students", JSON.stringify(students));
+    } else {
+      console.warn("Student not found!");
+    }
+    localStorage.setItem("students", JSON.stringify(students));
+  }
+}
+function OkDelete(stToDelList) {
+  // Remove current student from table
+  stToDelList.forEach((s) => {
+    const tr = document.getElementById(`student-${s.id}`);
+    if (tr) tr.remove();
+
+    // Remove all previous students from studentList
+    studentList = studentList.filter(
+      (student) => !stToDelList.includes(student)
+    );
+  });
+
+  DeleteFromStorage(stToDelList);
+
+  let addFunction = () => {
+    // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
+    let deleteAllBtn = document.getElementById("del_all_btn");
+    let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
+
+    // Якщо хоча б один чекбокс обраний, показуємо кнопку
+    if (isChoosen) {
+      deleteAllBtn.style.display = "flex";
+    } else {
+      deleteAllBtn.style.display = "none";
+      let hCheckbox = document.getElementById("header-checkbox");
+      hCheckbox.checked = false;
+      hCheckbox.dispatchEvent(new Event("change"));
+    }
+  };
+  if (addFunction !== undefined) addFunction();
+  CloseDelete("del-student-block");
+
+  function DeleteFromStorage(listToDel) {
+    // Delete from storage
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    students = students.filter(
+      (student) => !listToDel.some((sD) => sD.id === student.id)
+    );
+    localStorage.setItem("students", JSON.stringify(students));
+  }
 }
 
+// Student form validation
+function ValidateStudentFormInput(inputFields) {
+  let isValid = true;
+
+  // Перевіряєм групу на присутність
+  ValidateField(
+    inputFields.group,
+    inputFields.group.value,
+    "group-erinput",
+    "Fill this field"
+  );
+
+  // Перевіряєм ім'я на присутність та коректність
+  ValidateField(
+    inputFields.fname,
+    IsValidName(inputFields.fname.value),
+    "fname-erinput"
+  );
+
+  // Перевіряєм прізвище на присутність та коректність
+  ValidateField(
+    inputFields.lname,
+    IsValidName(inputFields.lname.value),
+    "lname-erinput"
+  );
+
+  // Перевіряєм гендер на присутність
+  ValidateField(
+    inputFields.gender,
+    inputFields.bdate.value,
+    "gender-erinput",
+    "Fill this field"
+  );
+
+  // Перевіряєм вік на присутність та коректність в межах [16; 80]
+  ValidateField(
+    inputFields.bdate,
+    IsValidBDate(inputFields.bdate.value),
+    "bdate-erinput"
+  );
+
+  return isValid;
+
+  function ValidateField(field, predicat, messageId, message = "Error input") {
+    const errOutput = document.getElementById(messageId);
+    if (!predicat) {
+      field.style.borderColor = "red";
+      errOutput.style.display = "block";
+      errOutput.textContent = message;
+
+      isValid = false;
+    } else {
+      field.style.borderColor = "black";
+      errOutput.style.display = "none";
+    }
+  }
+
+  function IsValidName(text) {
+    const pattern = /^\s*([A-Z][a-z]+(-[A-Za-z][a-z]+)*\s*)+$/;
+    return pattern.test(text);
+  }
+  function IsValidBDate(input, minAge = 16, maxAge = 80) {
+    if (!input) return false;
+    const today = new Date();
+    const birthDate = new Date(input);
+
+    let yearsAge = today.getFullYear() - birthDate.getFullYear();
+    // Перевірка, чи вже був день народження цього року
+    const hasHadBirthday =
+      today.getMonth() > birthDate.getMonth() ||
+      (today.getMonth() === birthDate.getMonth() &&
+        today.getDate() >= birthDate.getDate());
+    if (!hasHadBirthday) yearsAge--; // Якщо день народження ще не настав, зменшуємо вік на 1
+
+    if (yearsAge < minAge || yearsAge > maxAge) return false;
+    else return true;
+  }
+}
+function HideErrorMessage(event) {
+  const message = $(`#${event.target.id}-erinput`);
+  message.style.display = "none";
+  event.target.style.borderColor = "black";
+}
+
+// Additional functions
 function addStudentToTable(newStudent) {
   const table = document.querySelector("#students_table tbody");
   const tr = document.createElement("tr");
@@ -254,134 +444,6 @@ function addStudentToTable(newStudent) {
   // Додаємо рядок у таблицю
   table.appendChild(tr);
 }
-
-function toggleStudentCheckbox(studentId_num) {
-  let curStudent = studentList.find((s) => s.id === studentId_num);
-
-  // Перемикаємо стан чекбокса для поточного студента
-  curStudent.checkbox = !curStudent.checkbox;
-
-  // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
-  let deleteAllBtn = document.getElementById("del_all_btn");
-  let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
-
-  // Якщо хоча б один чекбокс обраний, показуємо кнопку
-  if (isChoosen) {
-    deleteAllBtn.style.display = "flex";
-  } else {
-    deleteAllBtn.style.display = "none";
-    let hCheckbox = document.getElementById("header-checkbox");
-    hCheckbox.checked = false;
-    hCheckbox.dispatchEvent(new Event("change"));
-  }
-}
-
-function toggleAllCheckbox(id_str) {
-  let final = document.getElementById(id_str).checked;
-  studentList.forEach((s) => {
-    if (s.checkbox !== final) {
-      let checkbox = document.getElementById(`${s.id}-checkbox`);
-      if (checkbox.checked !== final) {
-        toggleTableCheckBox(checkbox);
-        checkbox.dispatchEvent(new Event("change"));
-      }
-    }
-  });
-
-  function toggleTableCheckBox(checkbox) {
-    checkbox.checked = checkbox.checked ? false : true;
-  }
-}
-
-let saveEditListener;
-function editStudentButton(studentId_num) {
-  //Show window
-  let editBlock = document.getElementById("edit-student-block");
-  editBlock.style.display = "flex";
-  ChangeBackgroundDisplay("shadow-wraper");
-
-  // Change window info for edit block
-  let header = document.getElementById("edit-block-header");
-  header.textContent = "Edit student";
-  let confirmButton = document.getElementById("confirm-edit-button");
-  confirmButton.textContent = "Save";
-
-  // Chanel student id into save button
-  saveEditListener = () => {
-    SaveEdit(studentId_num);
-  };
-  confirmButton.addEventListener("click", saveEditListener);
-
-  // Find choosen student and load theit data into form
-  let inputFields = GetFormInputFields();
-  let curStudent = studentList.find((s) => s.id === studentId_num);
-  if (!curStudent) {
-    console.log("Studen`t not in the list");
-    return;
-  }
-
-  inputFields.id.value = curStudent.id;
-  inputFields.group.value = curStudent.group;
-  inputFields.fname.value = curStudent.fname;
-  inputFields.lname.value = curStudent.lname;
-  inputFields.gender.value = curStudent.gender;
-  inputFields.bdate.value = curStudent.bdate;
-}
-
-function SaveEdit(studentId_num) {
-  let inputFields = GetFormInputFields();
-  let studentTableFields = GetStudentTableFields(studentId_num);
-  let curStudent = studentList.find((s) => s.id === studentId_num);
-  if (!curStudent) {
-    console.log("Studen`t not in the list");
-    return;
-  }
-
-  // Update student data in the studentList
-  curStudent.id = parseInt(inputFields.id.value);
-  curStudent.group = inputFields.group.value;
-  curStudent.fname = inputFields.fname.value;
-  curStudent.lname = inputFields.lname.value;
-  curStudent.gender = inputFields.gender.value;
-  curStudent.bdate = inputFields.bdate.value;
-  // output JSON to console
-  const myJSON = JSON.stringify(curStudent);
-  console.log(myJSON);
-  // Save into storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  let index = students.findIndex(s => s.id === curStudent.id);
-  if (index !== -1) {
-    students[index] = curStudent; // Оновлюємо знайденого студента
-    localStorage.setItem("students", JSON.stringify(students));
-  } else {
-    console.warn("Student not found!");
-  }  
-  localStorage.setItem("students", JSON.stringify(students));
-
-  // Update data in table
-  studentTableFields.studentGroup.textContent = curStudent.group;
-  studentTableFields.studentName.textContent = curStudent.name;
-  studentTableFields.studentGender.textContent = curStudent.gender;
-  studentTableFields.studentBdate.textContent = curStudent.formatDate();
-  studentTableFields.studentStatus.style.backgroundColor =
-    curStudent.defineStatusColor();
-
-  CloseEdit("edit-student-block");
-}
-
-let saveDeleteListener;
-function deleteStudentButton(studentId_num) {
-  let stToDelList = studentList.filter((s) => s.id === studentId_num);
-
-  LoadInfoToDeleteModal(stToDelList);
-}
-
-function DeleteAllChoosen() {
-  let stToDelList = studentList.filter((s) => s.checkbox === true);
-
-  LoadInfoToDeleteModal(stToDelList);
-}
-
 function LoadInfoToDeleteModal(stToDelList) {
   // Load students to OKdel event
   let confirmButton = document.getElementById("ok_button");
@@ -413,46 +475,90 @@ function LoadInfoToDeleteModal(stToDelList) {
 
   ChangeBackgroundDisplay("shadow-wraper");
 }
+function ChangeBackgroundDisplay(blockId_str) {
+  let shadowWraper = document.getElementById(blockId_str);
 
-function OkDelete(stToDelList) {
-  // Remove current student from table
-  stToDelList.forEach((s) => {
-    const tr = document.getElementById(`student-${s.id}`);
-    if (tr) tr.remove();
+  if (
+    shadowWraper.style.pointerEvents === "auto" ||
+    shadowWraper.style.pointerEvents === ""
+  ) {
+    shadowWraper.style.opacity = 0.3;
+    shadowWraper.style.pointerEvents = "none";
+  } else {
+    shadowWraper.style.opacity = 1;
+    shadowWraper.style.pointerEvents = "auto";
+  }
+}
+function toggleStudentCheckbox(studentId_num) {
+  let curStudent = studentList.find((s) => s.id === studentId_num);
 
-    // Remove all previous students from studentList
-    studentList = studentList.filter(
-      (student) => !stToDelList.includes(student)
-    );
+  // Перемикаємо стан чекбокса для поточного студента
+  curStudent.checkbox = !curStudent.checkbox;
+
+  // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
+  let deleteAllBtn = document.getElementById("del_all_btn");
+  let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
+
+  // Якщо хоча б один чекбокс обраний, показуємо кнопку
+  if (isChoosen) {
+    deleteAllBtn.style.display = "flex";
+  } else {
+    deleteAllBtn.style.display = "none";
+    let hCheckbox = document.getElementById("header-checkbox");
+    hCheckbox.checked = false;
+    hCheckbox.dispatchEvent(new Event("change"));
+  }
+}
+function toggleAllCheckbox(id_str) {
+  let final = document.getElementById(id_str).checked;
+  studentList.forEach((s) => {
+    if (s.checkbox !== final) {
+      let checkbox = document.getElementById(`${s.id}-checkbox`);
+      if (checkbox.checked !== final) {
+        toggleTableCheckBox(checkbox);
+        checkbox.dispatchEvent(new Event("change"));
+      }
+    }
   });
 
-  // Delete from storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  students = students.filter(
-    (student) => !stToDelList.some((sD) => sD.id === student.id)
-  );
-  localStorage.setItem("students", JSON.stringify(students));
-
-  let addFunction = () => {
-    // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
-    let deleteAllBtn = document.getElementById("del_all_btn");
-    let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
-
-    // Якщо хоча б один чекбокс обраний, показуємо кнопку
-    if (isChoosen) {
-      deleteAllBtn.style.display = "flex";
-    } else {
-      deleteAllBtn.style.display = "none";
-      let hCheckbox = document.getElementById("header-checkbox");
-      hCheckbox.checked = false;
-      hCheckbox.dispatchEvent(new Event("change"));
-    }
-  };
-  if (addFunction !== undefined) addFunction();
-  CloseDelete("del-student-block");
+  function toggleTableCheckBox(checkbox) {
+    checkbox.checked = checkbox.checked ? false : true;
+  }
 }
 
-// Close Edit block with form reset
+// Notifacator indicator
+function HideNotifIndicator() {
+  const notifIndicator = document.getElementById("notif-indicator");
+  if (notifIndicator) {
+    notifIndicator.style.display = "none";
+    localStorage.setItem("notifHidden", "true"); // Запам'ятати стан
+  }
+}
+function ShowNotifIndicator() {
+  const notifImg = document.getElementById("notif-img");
+  notifImg.animate(
+    [
+      { transform: "rotate(0deg)" },
+      { transform: "rotate(-15deg)" },
+      { transform: "rotate(15deg)" },
+      { transform: "rotate(-10deg)" },
+      { transform: "rotate(10deg)" },
+      { transform: "rotate(0deg)" },
+    ],
+    {
+      duration: 500, // Час анімації (0.5 сек)
+      iterations: 1, // Виконати один раз
+    }
+  );
+
+  const notifIndicator = document.getElementById("notif-indicator");
+  if (notifIndicator) {
+    notifIndicator.style.display = "block";
+    localStorage.setItem("notifHidden", "false"); // Запам'ятати стан
+  }
+}
+
+// Close and clear
 function CloseEdit(id_str) {
   Close(id_str);
   ClearForm();
@@ -461,14 +567,12 @@ function CloseEdit(id_str) {
   confirmButton.removeEventListener("click", saveEditListener);
   confirmButton.removeEventListener("click", CreateAdd);
 }
-
 function CloseDelete(id_str) {
   Close(id_str);
 
   confirmButton = document.getElementById("ok_button");
   confirmButton.removeEventListener("click", saveDeleteListener);
 }
-
 function Close(id_str) {
   let element = document.getElementById(id_str);
   if (element) {
@@ -479,7 +583,19 @@ function Close(id_str) {
 
   ChangeBackgroundDisplay("shadow-wraper");
 }
-
 function ClearForm() {
   document.getElementById("student-form").reset();
+
+  document.getElementById("group-erinput").style.display = "none";
+  document.getElementById("fname-erinput").style.display = "none";
+  document.getElementById("lname-erinput").style.display = "none";
+  document.getElementById("gender-erinput").style.display = "none";
+  document.getElementById("bdate-erinput").style.display = "none";
+
+  const inputFields = GetFormInputFields();
+  inputFields.group.style.borderColor = "black";
+  inputFields.fname.style.borderColor = "black";
+  inputFields.lname.style.borderColor = "black";
+  inputFields.gender.style.borderColor = "black";
+  inputFields.bdate.style.borderColor = "black";
 }

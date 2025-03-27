@@ -6,12 +6,12 @@
     <meta name="description" content="A site with students table" />
 
     <title>Students</title>
-    
+
     <link rel="stylesheet" href="/CSS/students.css" />
     <link rel="stylesheet" href="/CSS/general.css" />
     <link rel="stylesheet" href="/CSS/header.css" />
     <link rel="stylesheet" href="/CSS/nav.css" />
-    
+
     <script src="/JS/components.js"></script>
     <link rel="manifest" href="/manifest.json" />
   </head>
@@ -111,7 +111,7 @@
       </div>
 
       <div class="block-data-container">
-        <p class="text_edit"></p>
+        <p class="text_edit warningdel-message"></p>
       </div>
 
       <div class="btn-container">
@@ -135,40 +135,65 @@
 
       <div class="block-data-container">
         <form id="student-form">
-          <input type="hidden" id="id" name="id">
+          <input type="hidden" id="id" name="id" />
           <div class="input-group">
             <label for="group">Group:</label>
-            <select id="group" name="group" required>
-              <option value="" hidden selected>Select group</option>
-              <option value="PZ-21">PZ-21</option>
-              <option value="PZ-22">PZ-22</option>
-              <option value="PZ-23">PZ-23</option>
-              <option value="PZ-24">PZ-24</option>
-              <option value="PZ-25">PZ-25</option>
-              <option value="PZ-26">PZ-26</option>
-            </select>
+            <div class="input-error-group">
+              <select id="group" name="group" required>
+                <option value="" hidden selected>Select group</option>
+                <option value="PZ-21">PZ-21</option>
+                <option value="PZ-22">PZ-22</option>
+                <option value="PZ-23">PZ-23</option>
+                <option value="PZ-24">PZ-24</option>
+                <option value="PZ-25">PZ-25</option>
+                <option value="PZ-26">PZ-26</option>
+              </select>
+              <p class="erinput-message text_edit" id="group-erinput">
+                Error input
+              </p>
+            </div>
           </div>
           <div class="input-group">
             <label for="fname">First name:</label>
-            <input type="text" id="fname" name="fname" required />
+            <div class="input-error-group">
+              <input type="text" id="fname" name="fname" required />
+              <p class="erinput-message text_edit" id="fname-erinput">
+                Error input
+              </p>
+            </div>
           </div>
           <div class="input-group">
             <label for="lname">Last name:</label>
-            <input type="text" id="lname" name="lname" required />
+            <div class="input-error-group">
+              <input type="text" id="lname" name="lname" required />
+              <p class="erinput-message text_edit" id="lname-erinput">
+                Error input
+              </p>
+            </div>
           </div>
           <div class="input-group">
             <label for="gender">Gender:</label>
-            <select id="gender" name="gender" required>
-              <option value="" hidden selected>Select gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-              <option value="Secret">Don`t want to specify</option>
-            </select>
+            <div class="input-error-group">
+              <select id="gender" name="gender" required>
+                <option value="" hidden selected>Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Secret">Don`t want to specify</option>
+              </select>
+              <p class="erinput-message text_edit" id="gender-erinput">
+                Error input
+              </p>
+            </div>
           </div>
           <div class="input-group">
             <label for="bdate">Birthday:</label>
-            <input type="date" id="bdate" name="bdate" required />
+            <div class="input-error-group">
+              <input type="date" id="bdate" name="bdate" required />
+              <p class="erinput-message text_edit" id="bdate-erinput">
+                Error input
+              </p>
+            </div>
           </div>
         </form>
       </div>
