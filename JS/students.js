@@ -6,12 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function LoadStudents() {
-  return [
-    new Student(false, "PZ-21", "Bohdan", "Kruk", "Male", "2006-05-01"),
-    new Student(false, "PZ-21", "Victor", "Piznak", "Male", "2005-08-27"),
-    new Student(false, "PZ-21", "Liza", "Zapisotska", "Female", "2006-01-25"),
-    // new Student(false, "PZ-21", "Ivanna", "Pavlushyn", "Female", "2006-01-25"),
-  ];
+  let id = 1;
+  return (JSON.parse(localStorage.getItem("students")) || []).map(
+    student => new Student(
+      student.id,
+      student.checkbox,  // Замініть на реальні поля
+      student.group,
+      student.fname,
+      student.lname,
+      student.gender,
+      student.bdate
+    )
+  );
 }
 
 function ShowAllStudents(stList) {
@@ -38,16 +44,17 @@ function syncCheckboxes(sourceId, targetId) {
 
 let studentList = [];
 class Student {
-  static studentId = 0;
-  constructor(isChecked, group, fname, lname, gender, bdate) {
-    this.id = Student.studentId++;
+  // static studentId = 0;
+  constructor(id, isChecked, group, fname, lname, gender, bdate, status = "lightgray") {
+    // this.id = Student.studentId++;
+    this.id = id;
     this.checkbox = isChecked;
     this.group = group;
     this.fname = fname;
     this.lname = lname;
     this.gender = gender;
     this.bdate = bdate;
-    this.status = "lightgray";
+    this.status = status;
   }
 
   get name() {
@@ -65,13 +72,7 @@ class Student {
   }
 
   defineStatusColor() {
-    const profileName = document.getElementById("profile-name");
-    const fullName = profileName
-      ? profileName.textContent.trim()
-      : "not loaded";
-    // console.log("Profile name: " + fullName);
-
-    if (fullName !== null && this.name.trim() === fullName)
+    if (this.name === "Bohdan Kruk")
       this.status = "green";
     else this.status = "lightgray";
 

@@ -92,20 +92,29 @@ function ShowNotifIndicator() {
 }
 
 function addStudentButton() {
+  //Show window
   let editBlock = document.getElementById("edit-student-block");
   editBlock.style.display = "flex";
   ChangeBackgroundDisplay("shadow-wraper");
 
+  // Change window info for edit block
   let header = document.getElementById("edit-block-header");
   header.textContent = "Add student";
-
   let confirmButton = document.getElementById("confirm-edit-button");
   confirmButton.textContent = "Create";
+
+  // Chanel student id into save button
   confirmButton.addEventListener("click", CreateAdd);
+
+  // Set value into a hidden idField
+  const inputFields = GetFormInputFields();
+  const lastStudentID = studentList?.length ? studentList.at(-1).id : 0;
+  inputFields.id.value = lastStudentID + 1;
 }
 
 function GetFormInputFields() {
   return {
+    id: document.getElementById("id"),
     group: document.getElementById("group"),
     fname: document.getElementById("fname"),
     lname: document.getElementById("lname"),
@@ -126,8 +135,10 @@ function GetStudentTableFields(studentId_num) {
 
 function CreateAdd() {
   const inputFields = GetFormInputFields();
+  const lastStudentID = studentList?.length ? studentList.at(-1).id : 0;
 
   let newStudent = new Student(
+    parseInt(inputFields.id.value),
     false,
     inputFields.group.value,
     inputFields.fname.value.trim(),
@@ -137,6 +148,13 @@ function CreateAdd() {
   );
   studentList.push(newStudent);
   addStudentToTable(newStudent);
+  // output JSON to console
+  const myJSON = JSON.stringify(newStudent);
+  console.log(myJSON);
+  // Sava into storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  students.push(newStudent);
+  localStorage.setItem("students", JSON.stringify(students));
 
   CloseEdit("edit-student-block");
 }
@@ -302,6 +320,7 @@ function editStudentButton(studentId_num) {
     return;
   }
 
+  inputFields.id.value = curStudent.id;
   inputFields.group.value = curStudent.group;
   inputFields.fname.value = curStudent.fname;
   inputFields.lname.value = curStudent.lname;
@@ -319,11 +338,25 @@ function SaveEdit(studentId_num) {
   }
 
   // Update student data in the studentList
+  curStudent.id = parseInt(inputFields.id.value);
   curStudent.group = inputFields.group.value;
   curStudent.fname = inputFields.fname.value;
   curStudent.lname = inputFields.lname.value;
   curStudent.gender = inputFields.gender.value;
   curStudent.bdate = inputFields.bdate.value;
+  // output JSON to console
+  const myJSON = JSON.stringify(curStudent);
+  console.log(myJSON);
+  // Save into storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  let index = students.findIndex(s => s.id === curStudent.id);
+  if (index !== -1) {
+    students[index] = curStudent; // Оновлюємо знайденого студента
+    localStorage.setItem("students", JSON.stringify(students));
+  } else {
+    console.warn("Student not found!");
+  }  
+  localStorage.setItem("students", JSON.stringify(students));
 
   // Update data in table
   studentTableFields.studentGroup.textContent = curStudent.group;
@@ -392,6 +425,13 @@ function OkDelete(stToDelList) {
       (student) => !stToDelList.includes(student)
     );
   });
+
+  // Delete from storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  students = students.filter(
+    (student) => !stToDelList.some((sD) => sD.id === student.id)
+  );
+  localStorage.setItem("students", JSON.stringify(students));
 
   let addFunction = () => {
     // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
