@@ -267,6 +267,7 @@ function OkDelete(stToDelList) {
 // Student form validation
 function ValidateStudentFormInput(inputFields) {
   let isValid = true;
+  let message = "Error input";
 
   // Перевіряєм групу на присутність
   ValidateField(
@@ -280,14 +281,16 @@ function ValidateStudentFormInput(inputFields) {
   ValidateField(
     inputFields.fname,
     IsValidName(inputFields.fname.value),
-    "fname-erinput"
+    "fname-erinput",
+    message
   );
 
   // Перевіряєм прізвище на присутність та коректність
   ValidateField(
     inputFields.lname,
     IsValidName(inputFields.lname.value),
-    "lname-erinput"
+    "lname-erinput",
+    message
   );
 
   // Перевіряєм гендер на присутність
@@ -302,7 +305,8 @@ function ValidateStudentFormInput(inputFields) {
   ValidateField(
     inputFields.bdate,
     IsValidBDate(inputFields.bdate.value),
-    "bdate-erinput"
+    "bdate-erinput",
+    message
   );
 
   return isValid;
@@ -322,11 +326,30 @@ function ValidateStudentFormInput(inputFields) {
   }
 
   function IsValidName(text) {
+    if (!text) {
+      message = "Fill this field";
+      return false;
+    }
+
+    const errPattern = /[^a-zA-Z\s-]+/;
+    if (errPattern.test(text)) {
+      message = "Wrong input. Alowed characters are: [a-z], [A-Z], -, whitespace.";
+      return false;
+    }
+
     const pattern = /^\s*([A-Z][a-z]+(-[A-Za-z][a-z]+)*\s*)+$/;
-    return pattern.test(text);
+    if (!pattern.test(text)) {
+      message = "Wrong input format.";
+      return false;
+    }
+    return true;
   }
   function IsValidBDate(input, minAge = 16, maxAge = 80) {
-    if (!input) return false;
+    if (!input) {
+      message = "Fill this field";
+      return false;
+    }
+
     const today = new Date();
     const birthDate = new Date(input);
 
@@ -338,8 +361,10 @@ function ValidateStudentFormInput(inputFields) {
         today.getDate() >= birthDate.getDate());
     if (!hasHadBirthday) yearsAge--; // Якщо день народження ще не настав, зменшуємо вік на 1
 
-    if (yearsAge < minAge || yearsAge > maxAge) return false;
-    else return true;
+    if (yearsAge < minAge || yearsAge > maxAge) {
+      message = `Age must be from ${minAge} to ${maxAge} years`;
+      return false;
+    } else return true;
   }
 }
 function HideErrorMessage(event) {

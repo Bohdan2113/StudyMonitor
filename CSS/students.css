@@ -346,6 +346,9 @@ table th {
   justify-content: center;
   align-items: center;
 }
+.input-error-group {
+  width: 300px;
+}
 .input-group {
   display: flex;
   justify-content: center;
@@ -377,6 +380,7 @@ table th {
   font-size: 12px !important;
   display: none;
   padding: 0 5px;
+  word-wrap: break-word;
 }
 
 @media (max-width: 940px) {
@@ -416,7 +420,7 @@ table th {
   .input-error-group {
     max-width: 300px;
     width: 100%;
-    justify-content: center;
+    /* justify-content: center; */
   }
   .input-group {
     flex-direction: column;
