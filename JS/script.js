@@ -333,7 +333,8 @@ function ValidateStudentFormInput(inputFields) {
 
     const errPattern = /[^a-zA-Z\s-]+/;
     if (errPattern.test(text)) {
-      message = "Wrong input. Alowed characters are: [a-z], [A-Z], -, whitespace.";
+      message =
+        "Wrong input. Alowed characters are: [a-z], [A-Z], -, whitespace.";
       return false;
     }
 
@@ -503,15 +504,12 @@ function LoadInfoToDeleteModal(stToDelList) {
 function ChangeBackgroundDisplay(blockId_str) {
   let shadowWraper = document.getElementById(blockId_str);
 
-  if (
-    shadowWraper.style.pointerEvents === "auto" ||
-    shadowWraper.style.pointerEvents === ""
-  ) {
-    shadowWraper.style.opacity = 0.3;
-    shadowWraper.style.pointerEvents = "none";
+  if (shadowWraper.style.display === "flex") {
+    shadowWraper.style.display = "none";
+    // shadowWraper.style.pointerEvents = "none";
   } else {
-    shadowWraper.style.opacity = 1;
-    shadowWraper.style.pointerEvents = "auto";
+    shadowWraper.style.display = "flex";
+    // shadowWraper.style.pointerEvents = "auto";
   }
 }
 function toggleStudentCheckbox(studentId_num) {
