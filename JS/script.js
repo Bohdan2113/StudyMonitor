@@ -4,13 +4,14 @@ let saveEditListener;
 const $ = document.querySelector.bind(document);
 
 // Add input events to the form fields
-{
+window.onload = function () {
   const inputFields = GetFormInputFields();
   for (const key in inputFields) {
-    if (inputFields["key"] !== undefined && key !== "id")
+    if (inputFields[key] !== undefined && key !== "id") {
       inputFields[key].addEventListener("input", HideErrorMessage);
+    }
   }
-}
+};
 
 // burger menu open and close
 function burgerMenu() {
@@ -331,6 +332,13 @@ function ValidateStudentFormInput(inputFields) {
       return false;
     }
 
+    const testPettern = /SELECT/;
+    if (testPettern.test(text)) {
+      message = "Ви зловмисник";
+      alert("Ви зловмисник");
+      return false;
+    }
+
     const errPattern = /[^a-zA-Z\s-]+/;
     if (errPattern.test(text)) {
       message =
@@ -338,7 +346,7 @@ function ValidateStudentFormInput(inputFields) {
       return false;
     }
 
-    const pattern = /^\s*([A-Z][a-z]+(-[A-Za-z][a-z]+)*\s*)+$/;
+    const pattern = /^\s*([A-Za-z]+(-[A-Za-z]+)*\s*)+$/;
     if (!pattern.test(text)) {
       message = "Wrong input format.";
       return false;
@@ -372,6 +380,7 @@ function HideErrorMessage(event) {
   const message = $(`#${event.target.id}-erinput`);
   message.style.display = "none";
   event.target.style.borderColor = "black";
+  console.log("Hide " + `${event.target.id}-erinput`);
 }
 
 // Additional functions
