@@ -7,7 +7,7 @@ const $ = document.querySelector.bind(document);
 {
   const inputFields = GetFormInputFields();
   for (const key in inputFields) {
-    if (key !== "id")
+    if (inputFields["key"] !== undefined && key !== "id")
       inputFields[key].addEventListener("input", HideErrorMessage);
   }
 }
@@ -169,7 +169,7 @@ function CreateAdd() {
   function ToLocalStorage(newS) {
     // output JSON to console
     const myJSON = JSON.stringify(newS);
-    console.log(myJSON);
+    console.log("Added: " + myJSON);
     // Sava into storage
     let students = JSON.parse(localStorage.getItem("students")) || [];
     students.push(newS);
@@ -209,7 +209,7 @@ function SaveEdit(studentId_num) {
   function UpdateInLocalStorage(student) {
     // output JSON to console
     const myJSON = JSON.stringify(student);
-    console.log(myJSON);
+    console.log("Edited: " + myJSON);
     // Save into storage
     let students = JSON.parse(localStorage.getItem("students")) || [];
     let index = students.findIndex((s) => s.id === student.id);
@@ -550,7 +550,9 @@ function toggleAllCheckbox(id_str) {
 }
 
 // Notifacator indicator
-function HideNotifIndicator() {
+function HideNotifIndicator(event) {
+  updateActiveLink(event);
+
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
     notifIndicator.style.display = "none";

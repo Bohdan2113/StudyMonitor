@@ -1,8 +1,6 @@
-// Ім'я кешу, який використовуватиметься для збереження ресурсів
 const CACHE_NAME = "pwa-cache-v1";
 
-// Масив ресурсів, які будуть кешовані при встановленні Service Worker
-// ви кешуєте всі свої файли
+// Масив ресурсів, які будуть кешовані
 const ASSETS = [
   "/", // Головна сторінка
   "/index.html", // HTML-файл
@@ -10,22 +8,21 @@ const ASSETS = [
   "/tasks.html", // HTML-файл
   "/messages.html", // HTML-файл
 
-  "/Components",
-  "/Components/header.html", // Component HTML-файл
-  "/Components//nav.html", // Component HTML-файл
+  "/sw.js", // ✅ Service Worker файл
+  "/manifest.json", // ✅ Файл маніфеста
 
-  "/CSS",
+  "/Components/header.html", // Component HTML-файл
+  "/Components/nav.html", // Component HTML-файл
+
   "/CSS/genaral.css", // CSS-стилі
   "/CSS/header.css", // CSS-стилі
   "/CSS/nav.css", // CSS-стилі
   "/CSS/students.css", // CSS-стилі
 
-  "/JS",
   "/JS/script.js", // Головний JavaScript-файл
   "/JS/components.js", // Підключення компонент JavaScript-файл
   "/JS/students.js", // Завантаження студентів JavaScript-файл
 
-  "/Images", // ❌ Некоректно: "icons" - це папка, її не можна кешувати напряму
   "/Images/bin.png", // Іконка 128px
   "/Images/hamburger.png", // Іконка 512px
   "/Images/helloKitty.png", // Іконка 512px
@@ -33,7 +30,6 @@ const ASSETS = [
   "/Images/pencil.png", // Іконка 512px
   "/Images/user.png", // Іконка 512px
 
-  "/icons", // ❌ Некоректно: "icons" - це папка, її не можна кешувати напряму
   "/icons/icon.128.png", // Іконка 128px
   "/icons/icon.192.png", // Іконка 192px
   "/icons/icon.256.png", // Іконка 256px

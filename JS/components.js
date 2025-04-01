@@ -15,10 +15,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(error);
   }
 
-  const curpage = updateActiveLink();
-  console.log(
-    "Cur page: " + (curpage !== undefined ? curpage : "noNavigationPage")
-  );
+  let activePath = sessionStorage.getItem("activeLink");
+  if (!activePath) {
+    activePath = "/index.html";
+    localStorage.setItem("activeLink", activePath);
+  }
+  if (activePath) {
+    const activeLink = document.querySelector(
+      `.nav-item[href='${activePath}']`
+    );
+    if (activeLink) {
+      activeLink.classList.add("active");
+    }
+  }
+  console.log("Cur page: " + (activePath ? activePath : "noNavigationPage"));
 
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
@@ -41,20 +51,26 @@ function includeHTML(file, elementId) {
   });
 }
 
-function updateActiveLink() {
-  const navItems = document.querySelectorAll(".nav-item");
-  let currentPath = window.location.pathname;
-  if (currentPath === "/") currentPath += "index.html";
+function updateActiveLink(event) {
+  event.preventDefault(); // Запобігає миттєвому переходу
 
-  let neededHref;
-  navItems.forEach((link) => {
-    const href = link.getAttribute("href");
-    if (href === currentPath) {
-      link.classList.add("active");
-      neededHref = href;
-    } else {
-      link.classList.remove("active");
-    }
-  });
-  return neededHref;
+  let clickedLink = event.target.closest("a");
+  if (!clickedLink) return;
+
+  // Перевіряємо, чи це лого (не змінюємо active)
+  if (clickedLink.classList.contains("logo"))
+    clickedLink = document.getElementById("main-paige");
+
+  window.location.href = clickedLink.getAttribute("href");
+
+  removeActiveLink();
+  clickedLink.classList.add("active");
+  sessionStorage.setItem("activeLink", clickedLink.getAttribute("href"));
+}
+
+function removeActiveLink() {
+  document
+    .querySelectorAll(".nav-item")
+    .forEach((link) => link.classList.remove("active"));
+  sessionStorage.removeItem("activeLink");
 }
