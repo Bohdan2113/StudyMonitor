@@ -15,15 +15,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(error);
   }
 
+  // Update active page
   let activePath = sessionStorage.getItem("activeLink");
   if (!activePath) {
     activePath = "/index.html";
     localStorage.setItem("activeLink", activePath);
   }
   if (activePath) {
-    const activeLink = document.querySelector(
-      `.nav-item[href='${activePath}']`
-    );
+    let activeLink = document.querySelector(`.nav-item[href='${activePath}']`);
+    if (activePath === "/index.html")
+      activeLink = document.querySelector("#main-paige");
     if (activeLink) {
       activeLink.classList.add("active");
     }
@@ -52,16 +53,12 @@ function includeHTML(file, elementId) {
 }
 
 function updateActiveLink(event) {
-  event.preventDefault(); // Запобігає миттєвому переходу
-
   let clickedLink = event.target.closest("a");
   if (!clickedLink) return;
 
   // Перевіряємо, чи це лого (не змінюємо active)
   if (clickedLink.classList.contains("logo"))
     clickedLink = document.getElementById("main-paige");
-
-  window.location.href = clickedLink.getAttribute("href");
 
   removeActiveLink();
   clickedLink.classList.add("active");
