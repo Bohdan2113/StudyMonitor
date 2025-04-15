@@ -97,7 +97,7 @@ function editStudentButton(studentId_num) {
   }
 
   inputFields.id.value = curStudent.id;
-  inputFields.group.value = curStudent.group;
+  inputFields.group.value = curStudent.group_name;
   inputFields.fname.value = curStudent.fname;
   inputFields.lname.value = curStudent.lname;
   inputFields.gender.value = curStudent.gender;
@@ -151,7 +151,7 @@ function CreateAdd() {
   );
   studentList.push(newStudent);
   addStudentToTable(newStudent);
-  ToLocalStorage(newStudent);
+  AddStToDatabase(newStudent);
 
   CloseEdit("edit-student-block");
 }
@@ -168,15 +168,15 @@ function SaveEdit(studentId_num) {
 
   // Update student data in the studentList
   curStudent.id = parseInt(inputFields.id.value);
-  curStudent.group = inputFields.group.value;
+  curStudent.group_name = inputFields.group.value;
   curStudent.fname = inputFields.fname.value.replace(/\s+/g, " ").trim();
   curStudent.lname = inputFields.lname.value.replace(/\s+/g, " ").trim();
   curStudent.gender = inputFields.gender.value;
   curStudent.bdate = inputFields.bdate.value;
-  UpdateInLocalStorage(curStudent);
+  UpdateStInDatabase(curStudent);
 
   // Update data in table
-  studentTableFields.studentGroup.textContent = curStudent.group;
+  studentTableFields.studentGroup.textContent = curStudent.group_name;
   studentTableFields.studentName.textContent = curStudent.name;
   studentTableFields.studentGender.textContent = curStudent.gender;
   studentTableFields.studentBdate.textContent = curStudent.formatDate();
@@ -197,7 +197,7 @@ function OkDelete(stToDelList) {
     );
   });
 
-  DeleteFromStorage(stToDelList);
+  DeleteFromDataBase(stToDelList);
 
   let addFunction = () => {
     // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
@@ -250,7 +250,7 @@ function ValidateStudentFormInput(inputFields) {
   // Перевіряєм гендер на присутність
   ValidateField(
     inputFields.gender,
-    inputFields.bdate.value,
+    inputFields.gender.value,
     "gender-erinput",
     "Fill this field"
   );
@@ -306,7 +306,7 @@ function ValidateStudentFormInput(inputFields) {
     }
     return true;
   }
-  function IsValidBDate(input, minAge = 16, maxAge = 80) {
+  function IsValidBDate(input, minAge = 0, maxAge = 80) {
     if (!input) {
       message = "Fill this field";
       return false;
@@ -333,7 +333,6 @@ function HideErrorMessage(event) {
   const message = $(`#${event.target.id}-erinput`);
   message.style.display = "none";
   event.target.style.borderColor = "black";
-  console.log("Hide " + `${event.target.id}-erinput`);
 }
 
 // Additional functions
@@ -357,7 +356,7 @@ function addStudentToTable(newStudent) {
   // Група
   const tdGroup = document.createElement("td");
   tdGroup.id = `${newStudent.id}-group`;
-  tdGroup.textContent = newStudent.group;
+  tdGroup.textContent = newStudent.group_name;
   tdGroup.setAttribute("data-label", "Group");
 
   // Ім'я

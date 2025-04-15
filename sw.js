@@ -2,11 +2,16 @@ const CACHE_NAME = "pwa-cache-v1";
 
 // Масив ресурсів, які будуть кешовані
 const ASSETS = [
-  "./", // Головна сторінка
+  "./StudyMonitor", // Головна сторінка
   "index.php", // php-файл
   "dashboard.php", // php-файл
   "tasks.php", // php-файл
   "messages.php", // php-файл
+  "BackEnd/db.php",
+  "BackEnd/get_students.php",
+  "BackEnd/add_student.php",
+  "BackEnd/update_student.php",
+  "BackEnd/delete_student.php",
   "sw.js", // ✅ Service Worker файл
   "manifest.json", // ✅ Файл маніфеста
   "Components/header.php", // Component php-файл
@@ -45,23 +50,40 @@ self.addEventListener("install", (event) => {
 // Подія обробки запитів від клієнта (браузера)
 // Якщо файл є в кеші – повертаємо його, інакше робимо запит до мережі
 self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((cachedResponse) => {
-        const networkFetch = fetch(event.request)
-          .then((networkResponse) => {
+  // Перевіряємо метод запиту
+  if (event.request.method === "POST") {
+    // Обробляємо POST запит окремо
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Зберігаємо відповідь на POST запит в кеш, якщо це можливо
+          if (response.ok) {
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, response.clone());
+            });
+          }
+          return response;
+        })
+        .catch((error) => {
+          // Обробка помилки, наприклад, якщо немає доступу до мережі
+          return new Response("Network error", { status: 500 });
+        })
+    );
+  } else {
+    // Обробка GET запитів
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((cachedResponse) => {
+          const networkFetch = fetch(event.request).then((networkResponse) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
-          })
-          .catch(() => {
-            // Фолбек, якщо мережа недоступна
-            return cachedResponse || caches.match("/offline.html");
           });
 
-        return cachedResponse || networkFetch;
-      });
-    })
-  );
+          return cachedResponse || networkFetch;
+        });
+      })
+    );
+  }
 });
 
 // Подія активації Service Worker
