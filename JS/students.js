@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-  studentList = LoadStudents();
+document.addEventListener("DOMContentLoaded", async () => {
+  studentList = await LoadStudentsFromServer();
   ShowAllStudents(studentList);
   syncCheckboxes("header-checkbox", "header-checkbox-ref");
   console.log("Students loaded");
@@ -14,27 +14,9 @@ window.onload = function () {
     }
   }
 };
-
-function LoadStudents() {
-  let id = 1;
-  return (JSON.parse(localStorage.getItem("students")) || []).map(
-    (student) =>
-      new Student(
-        student.id,
-        student.checkbox, // Замініть на реальні поля
-        student.group,
-        student.fname,
-        student.lname,
-        student.gender,
-        student.bdate
-      )
-  );
-}
-
 function ShowAllStudents(stList) {
   stList.forEach((s) => addStudentToTable(s));
 }
-
 function syncCheckboxes(sourceId, targetId) {
   let source = document.getElementById(sourceId);
   let target = document.getElementById(targetId);
@@ -52,24 +34,22 @@ function syncCheckboxes(sourceId, targetId) {
     });
   }
 }
-
 let studentList = [];
 class Student {
   // static studentId = 0;
   constructor(
     id,
     isChecked,
-    group,
+    group_name,
     fname,
     lname,
     gender,
     bdate,
     status = "lightgray"
   ) {
-    // this.id = Student.studentId++;
     this.id = id;
     this.checkbox = isChecked;
-    this.group = group;
+    this.group_name = group_name;
     this.fname = fname;
     this.lname = lname;
     this.gender = gender;
@@ -99,35 +79,108 @@ class Student {
   }
 }
 
-function ToLocalStorage(newS) {
-  // output JSON to console
-  const myJSON = JSON.stringify(newS);
-  console.log("Added: " + myJSON);
-  // Sava into storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  students.push(newS);
-  localStorage.setItem("students", JSON.stringify(students));
-}
-function UpdateInLocalStorage(student) {
-  // output JSON to console
-  const myJSON = JSON.stringify(student);
-  console.log("Edited: " + myJSON);
-  // Save into storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  let index = students.findIndex((s) => s.id === student.id);
-  if (index !== -1) {
-    students[index] = student; // Оновлюємо знайденого студента
-    localStorage.setItem("students", JSON.stringify(students));
-  } else {
-    console.warn("Student not found!");
+async function LoadStudentsFromServer() {
+  try {
+    const response = await fetch("./BackEnd/get_students.php");
+    const data = await response.json();
+    return data.map(
+      (student) =>
+        new Student(
+          student.id,
+          student.checkbox,
+          student.group_name,
+          student.fname,
+          student.lname,
+          student.gender,
+          student.bdate,
+          student.status
+        )
+    );
+  } catch (error) {
+    console.error("Помилка завантаження студентів:", error);
+    return [];
   }
-  localStorage.setItem("students", JSON.stringify(students));
 }
-function DeleteFromStorage(listToDel) {
-  // Delete from storage
-  let students = JSON.parse(localStorage.getItem("students")) || [];
-  students = students.filter(
-    (student) => !listToDel.some((sD) => sD.id === student.id)
-  );
-  localStorage.setItem("students", JSON.stringify(students));
+async function AddStToDatabase(newStudent) {
+  try {
+    const studentData = {
+      id: newStudent.id,
+      checkbox: newStudent.checkbox,
+      group_name: newStudent.group_name,
+      fname: newStudent.fname,
+      lname: newStudent.lname,
+      gender: newStudent.gender,
+      bdate: newStudent.bdate,
+      status: newStudent.status,
+    };
+
+    const response = await fetch("./BackEnd/add_student.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    const result = await response.json();
+    if (response.ok && result.success) {
+      console.log("✅ Student added to DB:", result.message);
+    } else {
+      console.error("❌ Error from server:", result.error);
+    }
+  } catch (error) {
+    console.error("❌ Network error:", error);
+  }
+}
+async function UpdateStInDatabase(student) {
+  try {
+    const studentData = {
+      id: student.id,
+      checkbox: student.checkbox,
+      group_name: student.group_name,
+      fname: student.fname,
+      lname: student.lname,
+      gender: student.gender,
+      bdate: student.bdate,
+      status: student.status,
+    };
+
+    const response = await fetch("./BackEnd/update_student.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    const result = await response.json();
+    if (response.ok && result.success) {
+      console.log("✅ Student updated in DB:", result.message);
+    } else {
+      console.error("❌ Error from server:", result.error);
+    }
+  } catch (error) {
+    console.error("❌ Network error:", error);
+  }
+}
+async function DeleteFromDataBase(listToDel) {
+  try {
+    const idsToDel = listToDel.map((s) => s.id);
+    const response = await fetch("./BackEnd/delete_student.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: idsToDel }),
+    });
+
+    const result = await response.json();
+    if (response.ok && result.success) {
+      console.log("✅ Student removed from DB:", result.message);
+    } else {
+      console.error("❌ Error from server:", result.error);
+    }
+  } catch (error) {
+    console.error("❌ Network error:", error);
+  }
 }
