@@ -3,16 +3,6 @@ let saveDeleteListener;
 let saveEditListener;
 const $ = document.querySelector.bind(document);
 
-// Add input events to the form fields
-window.onload = function () {
-  const inputFields = GetFormInputFields();
-  for (const key in inputFields) {
-    if (inputFields[key] !== undefined && key !== "id") {
-      inputFields[key].addEventListener("input", HideErrorMessage);
-    }
-  }
-};
-
 // burger menu open and close
 function burgerMenu() {
   let nav = document.querySelector("#nav-holder");
@@ -150,8 +140,6 @@ function CreateAdd() {
   const inputFields = GetFormInputFields();
   if (!ValidateStudentFormInput(inputFields)) return;
 
-  const lastStudentID = studentList?.length ? studentList.at(-1).id : 0;
-
   let newStudent = new Student(
     parseInt(inputFields.id.value),
     false,
@@ -166,16 +154,6 @@ function CreateAdd() {
   ToLocalStorage(newStudent);
 
   CloseEdit("edit-student-block");
-
-  function ToLocalStorage(newS) {
-    // output JSON to console
-    const myJSON = JSON.stringify(newS);
-    console.log("Added: " + myJSON);
-    // Sava into storage
-    let students = JSON.parse(localStorage.getItem("students")) || [];
-    students.push(newS);
-    localStorage.setItem("students", JSON.stringify(students));
-  }
 }
 function SaveEdit(studentId_num) {
   let inputFields = GetFormInputFields();
@@ -206,22 +184,6 @@ function SaveEdit(studentId_num) {
     curStudent.defineStatusColor();
 
   CloseEdit("edit-student-block");
-
-  function UpdateInLocalStorage(student) {
-    // output JSON to console
-    const myJSON = JSON.stringify(student);
-    console.log("Edited: " + myJSON);
-    // Save into storage
-    let students = JSON.parse(localStorage.getItem("students")) || [];
-    let index = students.findIndex((s) => s.id === student.id);
-    if (index !== -1) {
-      students[index] = student; // Оновлюємо знайденого студента
-      localStorage.setItem("students", JSON.stringify(students));
-    } else {
-      console.warn("Student not found!");
-    }
-    localStorage.setItem("students", JSON.stringify(students));
-  }
 }
 function OkDelete(stToDelList) {
   // Remove current student from table
@@ -254,15 +216,6 @@ function OkDelete(stToDelList) {
   };
   if (addFunction !== undefined) addFunction();
   CloseDelete("del-student-block");
-
-  function DeleteFromStorage(listToDel) {
-    // Delete from storage
-    let students = JSON.parse(localStorage.getItem("students")) || [];
-    students = students.filter(
-      (student) => !listToDel.some((sD) => sD.id === student.id)
-    );
-    localStorage.setItem("students", JSON.stringify(students));
-  }
 }
 
 // Student form validation
@@ -450,7 +403,7 @@ function addStudentToTable(newStudent) {
   editButton.ariaLabel = "Edit";
   editButton.onclick = () => editStudentButton(newStudent.id);
   const editImg = document.createElement("img");
-  editImg.src = "../Images/pencil.png";
+  editImg.src = "./Images/pencil.png";
   editImg.alt = "edit";
   editButton.appendChild(editImg);
 
@@ -459,7 +412,7 @@ function addStudentToTable(newStudent) {
   deleteButton.ariaLabel = "Delete";
   deleteButton.onclick = () => deleteStudentButton(newStudent.id);
   const deleteImg = document.createElement("img");
-  deleteImg.src = "../Images/bin.png";
+  deleteImg.src = "./Images/bin.png";
   deleteImg.alt = "delete";
   deleteButton.appendChild(deleteImg);
 

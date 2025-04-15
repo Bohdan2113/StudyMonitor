@@ -1,12 +1,12 @@
 <div class="hamburger-icon clickable" onclick="burgerMenu()">
-  <img src="/Images/hamburger.png" alt="Hamburger" />
+  <img src="./Images/hamburger.png" alt="Hamburger" />
 </div>
 
 <div id="nav-holder">
   <ul class="menu-items">
     <li>
       <a
-        href="/dashboard.html"
+        href="./dashboard.php"
         class="text_edit nav-item clickable"
         aria-label="Dashboard"
         onclick="updateActiveLink(event)"
@@ -15,7 +15,7 @@
     </li>
     <li>
       <a
-        href="/index.html"
+        href="./index.php"
         class="text_edit nav-item clickable"
         id="main-paige"
         aria-label="Students"
@@ -25,7 +25,7 @@
     </li>
     <li>
       <a
-        href="/tasks.html"
+        href="./tasks.php"
         class="text_edit nav-item clickable"
         aria-label="Tasks"
         onclick="updateActiveLink(event)"

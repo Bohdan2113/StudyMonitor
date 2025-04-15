@@ -1,6 +1,6 @@
 <div id="header-holder">
   <a
-    href="/index.html"
+    href="./index.php"
     class="text_edit clickable logo"
     aria-label="Main page"
     onclick="updateActiveLink(event)"
@@ -10,12 +10,12 @@
   <div class="headerItem">
     <div class="notif clickable notif-dropbtn">
       <a
-        href="/messages.html"
+        href="./messages.php"
         aria-label="Notifications"
         onclick="HideNotifIndicator(event)"
         oncontextmenu="ShowNotifIndicator()"
       >
-        <img src="/Images/notification.svg" alt="notification" id="notif-img" />
+        <img src="./Images/notification.svg" alt="notification" id="notif-img" />
         <span id="notif-indicator" id="notif-indicator"></span>
       </a>
 
@@ -24,7 +24,7 @@
           <li>
             <a href="#" class="clickable" aria-label="New message shortcut">
               <div class="sender-info">
-                <img src="/Images/user.png" alt="User photo" />
+                <img src="./Images/user.png" alt="User photo" />
                 <p class="text_edit">Jhon D.</p>
               </div>
               <div class="message-oversee"></div>
@@ -33,7 +33,7 @@
           <li>
             <a href="#" class="clickable" aria-label="New message shortcut">
               <div class="sender-info">
-                <img src="/Images/user.png" alt="User photo" />
+                <img src="./Images/user.png" alt="User photo" />
                 <p class="text_edit">Jhon D.</p>
               </div>
               <div class="message-oversee"></div>
@@ -49,7 +49,7 @@
       ;
       aria-label="My account"
     >
-      <img src="/Images/user.png" alt="user" />
+      <img src="./Images/user.png" alt="user" />
       <span class="text_edit name" id="profile-name">Bohdan Kruk</span>
 
       <div class="profile-dropdown-block">

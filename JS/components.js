@@ -1,7 +1,7 @@
 window.onload = function () {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("./sw.js")
       .then(() => console.log("Service Worker registered"))
       .catch((err) => console.error("Service Worker registration failed", err));
   }
@@ -9,8 +9,8 @@ window.onload = function () {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    await includeHTML("/Components/header.html", "header-placeholder");
-    await includeHTML("/Components/nav.html", "nav-placeholder");
+    await includeHTML("./Components/header.php", "header-placeholder");
+    await includeHTML("./Components/nav.php", "nav-placeholder");
   } catch (error) {
     console.error(error);
   }
@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Update active page
   let activePath = sessionStorage.getItem("activeLink");
   if (!activePath) {
-    activePath = "/index.html";
+    activePath = "./index.php";
     localStorage.setItem("activeLink", activePath);
   }
   if (activePath) {
     let activeLink = document.querySelector(`.nav-item[href='${activePath}']`);
-    if (activePath === "/index.html")
+    if (activePath === "./index.php")
       activeLink = document.querySelector("#main-paige");
     if (activeLink) {
       activeLink.classList.add("active");

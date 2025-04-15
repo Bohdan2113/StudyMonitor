@@ -7,10 +7,10 @@
 
     <title>Tasks</title>
 
-    <link rel="stylesheet" href="/CSS/general.css" />
-    <link rel="stylesheet" href="/CSS/header.css" />
-    <link rel="stylesheet" href="/CSS/nav.css" />
-    <script src="/JS/components.js"></script>
+    <link rel="stylesheet" href="CSS/general.css" />
+    <link rel="stylesheet" href="CSS/header.css" />
+    <link rel="stylesheet" href="CSS/nav.css" />
+    <script src="JS/components.js"></script>
     <link rel="manifest" href="manifest.json" />
   </head>
 
@@ -22,6 +22,6 @@
       <section></section>
     </div>
 
-    <script src="/JS/script.js"></script>
+    <script src="JS/script.js"></script>
   </body>
 </html>

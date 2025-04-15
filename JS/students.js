@@ -5,18 +5,29 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("Students loaded");
 });
 
+// Add input events to the form fields
+window.onload = function () {
+  const inputFields = GetFormInputFields();
+  for (const key in inputFields) {
+    if (inputFields[key] !== undefined && key !== "id") {
+      inputFields[key].addEventListener("input", HideErrorMessage);
+    }
+  }
+};
+
 function LoadStudents() {
   let id = 1;
   return (JSON.parse(localStorage.getItem("students")) || []).map(
-    student => new Student(
-      student.id,
-      student.checkbox,  // Замініть на реальні поля
-      student.group,
-      student.fname,
-      student.lname,
-      student.gender,
-      student.bdate
-    )
+    (student) =>
+      new Student(
+        student.id,
+        student.checkbox, // Замініть на реальні поля
+        student.group,
+        student.fname,
+        student.lname,
+        student.gender,
+        student.bdate
+      )
   );
 }
 
@@ -45,7 +56,16 @@ function syncCheckboxes(sourceId, targetId) {
 let studentList = [];
 class Student {
   // static studentId = 0;
-  constructor(id, isChecked, group, fname, lname, gender, bdate, status = "lightgray") {
+  constructor(
+    id,
+    isChecked,
+    group,
+    fname,
+    lname,
+    gender,
+    bdate,
+    status = "lightgray"
+  ) {
     // this.id = Student.studentId++;
     this.id = id;
     this.checkbox = isChecked;
@@ -72,10 +92,42 @@ class Student {
   }
 
   defineStatusColor() {
-    if (this.name === "Bohdan Kruk")
-      this.status = "green";
+    if (this.name === "Bohdan Kruk") this.status = "green";
     else this.status = "lightgray";
 
     return this.status;
   }
+}
+
+function ToLocalStorage(newS) {
+  // output JSON to console
+  const myJSON = JSON.stringify(newS);
+  console.log("Added: " + myJSON);
+  // Sava into storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  students.push(newS);
+  localStorage.setItem("students", JSON.stringify(students));
+}
+function UpdateInLocalStorage(student) {
+  // output JSON to console
+  const myJSON = JSON.stringify(student);
+  console.log("Edited: " + myJSON);
+  // Save into storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  let index = students.findIndex((s) => s.id === student.id);
+  if (index !== -1) {
+    students[index] = student; // Оновлюємо знайденого студента
+    localStorage.setItem("students", JSON.stringify(students));
+  } else {
+    console.warn("Student not found!");
+  }
+  localStorage.setItem("students", JSON.stringify(students));
+}
+function DeleteFromStorage(listToDel) {
+  // Delete from storage
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  students = students.filter(
+    (student) => !listToDel.some((sD) => sD.id === student.id)
+  );
+  localStorage.setItem("students", JSON.stringify(students));
 }

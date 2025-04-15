@@ -7,13 +7,13 @@
 
     <title>Students</title>
 
-    <link rel="stylesheet" href="/CSS/students.css" />
-    <link rel="stylesheet" href="/CSS/general.css" />
-    <link rel="stylesheet" href="/CSS/header.css" />
-    <link rel="stylesheet" href="/CSS/nav.css" />
+    <link rel="stylesheet" href="CSS/students.css" />
+    <link rel="stylesheet" href="CSS/general.css" />
+    <link rel="stylesheet" href="CSS/header.css" />
+    <link rel="stylesheet" href="CSS/nav.css" />
 
-    <script src="/JS/components.js"></script>
-    <link rel="manifest" href="/manifest.json" />
+    <script src="JS/components.js"></script>
+    <link rel="manifest" href="manifest.json" />
   </head>
 
   <body>
@@ -38,7 +38,7 @@
             title="Delete all choosen students"
             onclick="DeleteAllChoosen()"
           >
-            <img src="../Images/bin.png" alt="bucket" />
+            <img src="./Images/bin.png" alt="bucket" />
           </button>
         </div>
       </div>
@@ -184,7 +184,6 @@
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
-                  <option value="Secret">Don`t want to specify</option>
                 </select>
                 <p class="erinput-message text_edit" id="gender-erinput">
                   Error input
@@ -215,7 +214,7 @@
       </div>
     </div>
 
-    <script src="/JS/script.js" defer></script>
-    <script src="/JS/students.js" defer></script>
+    <script src="JS/script.js" defer></script>
+    <script src="JS/students.js" defer></script>
   </body>
 </html>

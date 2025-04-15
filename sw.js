@@ -2,38 +2,32 @@ const CACHE_NAME = "pwa-cache-v1";
 
 // Масив ресурсів, які будуть кешовані
 const ASSETS = [
-  "/", // Головна сторінка
-  "/index.html", // HTML-файл
-  "/dashboard.html", // HTML-файл
-  "/tasks.html", // HTML-файл
-  "/messages.html", // HTML-файл
-
-  "/sw.js", // ✅ Service Worker файл
-  "/manifest.json", // ✅ Файл маніфеста
-
-  "/Components/header.html", // Component HTML-файл
-  "/Components/nav.html", // Component HTML-файл
-
-  "/CSS/genaral.css", // CSS-стилі
-  "/CSS/header.css", // CSS-стилі
-  "/CSS/nav.css", // CSS-стилі
-  "/CSS/students.css", // CSS-стилі
-
-  "/JS/script.js", // Головний JavaScript-файл
-  "/JS/components.js", // Підключення компонент JavaScript-файл
-  "/JS/students.js", // Завантаження студентів JavaScript-файл
-
-  "/Images/bin.png", // Іконка 128px
-  "/Images/hamburger.png", // Іконка 512px
-  "/Images/helloKitty.png", // Іконка 512px
-  "/Images/notification.svg", // Іконка 512px
-  "/Images/pencil.png", // Іконка 512px
-  "/Images/user.png", // Іконка 512px
-
-  "/icons/icon.128.png", // Іконка 128px
-  "/icons/icon.192.png", // Іконка 192px
-  "/icons/icon.256.png", // Іконка 256px
-  "/icons/icon.512.png", // Іконка 512px
+  "./", // Головна сторінка
+  "index.php", // php-файл
+  "dashboard.php", // php-файл
+  "tasks.php", // php-файл
+  "messages.php", // php-файл
+  "sw.js", // ✅ Service Worker файл
+  "manifest.json", // ✅ Файл маніфеста
+  "Components/header.php", // Component php-файл
+  "Components/nav.php", // Component php-файл
+  "CSS/genaral.css", // CSS-стилі
+  "CSS/header.css", // CSS-стилі
+  "CSS/nav.css", // CSS-стилі
+  "CSS/students.css", // CSS-стилі
+  "JS/script.js", // Головний JavaScript-файл
+  "JS/components.js", // Підключення компонент JavaScript-файл
+  "JS/students.js", // Завантаження студентів JavaScript-файл
+  "Images/bin.png", // Іконка 128px
+  "Images/hamburger.png", // Іконка 512px
+  "Images/helloKitty.png", // Іконка 512px
+  "Images/notification.svg", // Іконка 512px
+  "Images/pencil.png", // Іконка 512px
+  "Images/user.png", // Іконка 512px
+  "icons/icon.128.png", // Іконка 128px
+  "icons/icon.192.png", // Іконка 192px
+  "icons/icon.256.png", // Іконка 256px
+  "icons/icon.512.png", // Іконка 512px
 ];
 
 // Подія встановлення Service Worker
@@ -54,14 +48,16 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.match(event.request).then((cachedResponse) => {
-        // Запит до мережі, якщо ресурсу немає в кеші
-        const networkFetch = fetch(event.request).then((networkResponse) => {
-          // Зберігаємо отриманий файл у кеш для майбутніх запитів
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
+        const networkFetch = fetch(event.request)
+          .then((networkResponse) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          })
+          .catch(() => {
+            // Фолбек, якщо мережа недоступна
+            return cachedResponse || caches.match("/offline.html");
+          });
 
-        // Повертаємо кешовану версію, якщо вона є, інакше робимо запит до мережі
         return cachedResponse || networkFetch;
       });
     })
