@@ -1,9 +1,8 @@
 <div id="header-holder">
   <a
-    href="./index.php"
+    href="./students.php"
     class="text_edit clickable logo"
     aria-label="Main page"
-    onclick="updateActiveLink(event)"
   >
     <h1>CMS</h1>
   </a>
@@ -50,13 +49,13 @@
       aria-label="My account"
     >
       <img src="./Images/user.png" alt="user" />
-      <span class="text_edit name" id="profile-name">Bohdan Kruk</span>
+      <span class="text_edit name" id="profile-name"></span>
 
       <div class="profile-dropdown-block">
         <a href="#" class="clickable" aria-label="Profile"
           ><p class="text_edit">Profile</p></a
         >
-        <a href="#" class="clickable" aria-label="Log out"
+        <a href="#" class="clickable" aria-label="Log out" onclick="LogOutBut()"
           ><p class="text_edit">Log Out</p></a
         >
       </div>

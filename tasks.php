@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="CSS/general.css" />
     <link rel="stylesheet" href="CSS/header.css" />
     <link rel="stylesheet" href="CSS/nav.css" />
+    <script src="JS/cashe.js" defer></script>
     <script src="JS/components.js"></script>
     <link rel="manifest" href="manifest.json" />
   </head>

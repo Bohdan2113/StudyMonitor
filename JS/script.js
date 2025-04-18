@@ -3,6 +3,33 @@ let saveDeleteListener;
 let saveEditListener;
 const $ = document.querySelector.bind(document);
 
+// Add input events to the form fields
+window.onload = function () {
+  const inputFields = GetFormInputFields();
+  for (const key in inputFields) {
+    if (inputFields[key] !== undefined && key !== "id") {
+      inputFields[key].addEventListener("input", HideErrorMessage);
+    }
+  }
+};
+function syncCheckboxes(sourceId, targetId) {
+  let source = document.getElementById(sourceId);
+  let target = document.getElementById(targetId);
+
+  if (source && target) {
+    source.addEventListener("change", function () {
+      target.checked = source.checked;
+      // target.dispatchEvent(new Event("change"));
+    });
+
+    target.addEventListener("change", function () {
+      if (source.checked === target.checked) return;
+      source.checked = target.checked;
+      source.dispatchEvent(new Event("change"));
+    });
+  }
+}
+
 // burger menu open and close
 function burgerMenu() {
   let nav = document.querySelector("#nav-holder");
@@ -112,6 +139,11 @@ function DeleteAllChoosen() {
   let stToDelList = studentList.filter((s) => s.checkbox === true);
 
   LoadInfoToDeleteModal(stToDelList);
+}
+function LogOutBut() {
+  removeActiveLink();
+  ClearProfile();
+  window.location.href = "index.php";
 }
 
 // Fields getting
@@ -512,8 +544,6 @@ function toggleAllCheckbox(id_str) {
 
 // Notifacator indicator
 function HideNotifIndicator(event) {
-  updateActiveLink(event);
-
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
     notifIndicator.style.display = "none";
@@ -584,4 +614,7 @@ function ClearForm() {
   inputFields.lname.style.borderColor = "black";
   inputFields.gender.style.borderColor = "black";
   inputFields.bdate.style.borderColor = "black";
+}
+function ClearProfile() {
+  $("#profile-name").textContent = "";
 }

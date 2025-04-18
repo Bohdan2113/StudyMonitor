@@ -3,26 +3,37 @@ const CACHE_NAME = "pwa-cache-v1";
 // Масив ресурсів, які будуть кешовані
 const ASSETS = [
   "./StudyMonitor", // Головна сторінка
+
   "index.php", // php-файл
+  "student.php", // php-файл
   "dashboard.php", // php-файл
   "tasks.php", // php-файл
   "messages.php", // php-файл
+
   "BackEnd/db.php",
   "BackEnd/get_students.php",
   "BackEnd/add_student.php",
   "BackEnd/update_student.php",
   "BackEnd/delete_student.php",
+  "BackEnd/auth.php",
+
   "sw.js", // ✅ Service Worker файл
   "manifest.json", // ✅ Файл маніфеста
   "Components/header.php", // Component php-файл
   "Components/nav.php", // Component php-файл
+
   "CSS/genaral.css", // CSS-стилі
   "CSS/header.css", // CSS-стилі
   "CSS/nav.css", // CSS-стилі
   "CSS/students.css", // CSS-стилі
+  "CSS/auth.css", // CSS-стилі
+
+  "JS/cashe.js", // Головний JavaScript-файл
   "JS/script.js", // Головний JavaScript-файл
   "JS/components.js", // Підключення компонент JavaScript-файл
   "JS/students.js", // Завантаження студентів JavaScript-файл
+  "JS/auth.js", // Завантаження студентів JavaScript-
+
   "Images/bin.png", // Іконка 128px
   "Images/hamburger.png", // Іконка 512px
   "Images/helloKitty.png", // Іконка 512px
@@ -52,14 +63,16 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   // Перевіряємо метод запиту
   if (event.request.method === "POST") {
+    return;
     // Обробляємо POST запит окремо
     event.respondWith(
       fetch(event.request)
         .then((response) => {
           // Зберігаємо відповідь на POST запит в кеш, якщо це можливо
+          const responseClone = response.clone(); // клонуємо одразу
           if (response.ok) {
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, response.clone());
+              cache.put(event.request, responseClone);
             });
           }
           return response;

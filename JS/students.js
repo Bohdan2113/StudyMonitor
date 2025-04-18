@@ -5,35 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Students loaded");
 });
 
-// Add input events to the form fields
-window.onload = function () {
-  const inputFields = GetFormInputFields();
-  for (const key in inputFields) {
-    if (inputFields[key] !== undefined && key !== "id") {
-      inputFields[key].addEventListener("input", HideErrorMessage);
-    }
-  }
-};
-function ShowAllStudents(stList) {
-  stList.forEach((s) => addStudentToTable(s));
-}
-function syncCheckboxes(sourceId, targetId) {
-  let source = document.getElementById(sourceId);
-  let target = document.getElementById(targetId);
-
-  if (source && target) {
-    source.addEventListener("change", function () {
-      target.checked = source.checked;
-      // target.dispatchEvent(new Event("change"));
-    });
-
-    target.addEventListener("change", function () {
-      if (source.checked === target.checked) return;
-      source.checked = target.checked;
-      source.dispatchEvent(new Event("change"));
-    });
-  }
-}
 let studentList = [];
 class Student {
   // static studentId = 0;
@@ -77,6 +48,10 @@ class Student {
 
     return this.status;
   }
+}
+
+function ShowAllStudents(stList) {
+  stList.forEach((s) => addStudentToTable(s));
 }
 
 async function LoadStudentsFromServer() {

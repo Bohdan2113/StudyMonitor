@@ -9,17 +9,15 @@
         href="./dashboard.php"
         class="text_edit nav-item clickable"
         aria-label="Dashboard"
-        onclick="updateActiveLink(event)"
         >Dashboard</a
       >
     </li>
     <li>
       <a
-        href="./index.php"
+        href="./students.php"
         class="text_edit nav-item clickable"
         id="main-paige"
         aria-label="Students"
-        onclick="updateActiveLink(event)"
         >Students</a
       >
     </li>
@@ -28,7 +26,6 @@
         href="./tasks.php"
         class="text_edit nav-item clickable"
         aria-label="Tasks"
-        onclick="updateActiveLink(event)"
         >Tasks</a
       >
     </li>
