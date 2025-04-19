@@ -21,10 +21,49 @@ try {
     $bdate = $data['bdate'] ?? '';
     $status = $data['status'] ?? '';
 
-    // Валідація
-    if (!$id || empty($group_name) || empty($fname) || empty($lname) || empty($gender) || empty($bdate) || empty($status)) {
+    // Валідація на порожні значення
+    if (empty($id) || empty($group_name) || empty($fname) || empty($lname) || empty($gender) || empty($bdate) || empty($status)) {
         http_response_code(400);
-        echo json_encode(["error" => "All fields except checkbox and id are required"]);
+        echo json_encode(["error" => "Something went wrong? try again"]);
+        exit;
+    }
+    // Валідація на перевищення максимальної довжини
+    if (mb_strlen($group_name) > 50) {
+        http_response_code(400);
+        echo json_encode(["field" => "group", "max" => 50]);
+        exit;
+    }
+    if (mb_strlen($gender) > 50) {
+        http_response_code(400);
+        echo json_encode(["field" => "gender", "max" => 50]);
+        exit;
+    }
+    if (mb_strlen($fname) > 100) {
+        http_response_code(400);
+        echo json_encode(["field" => "fname", "max" => 100]);
+        exit;
+    }
+    if (mb_strlen($lname) > 100) {
+        http_response_code(400);
+        echo json_encode(["field" => "lname", "max" => 100]);
+        exit;
+    }
+    // Валідація на формат дати
+    $date = DateTime::createFromFormat('Y-m-d', $bdate);
+    if (!$date || $date->format('Y-m-d') !== $bdate) {
+        http_response_code(400);
+        echo json_encode(["field" => "bdate", "error" => "Invalid birthdate format"]);
+        exit;
+    }
+
+    // Перевірка на дублікат 
+    $checkQuery = "SELECT COUNT(*) FROM students WHERE group_name = ? AND fname = ? AND lname = ? AND gender = ? AND bdate = ?";
+    $checkStmt = $pdo->prepare($checkQuery);
+    $checkStmt->execute([$group_name, $fname, $lname, $gender, $bdate]);
+    $exists = $checkStmt->fetchColumn();
+    if ($exists > 0) {
+        http_response_code(409);
+        echo json_encode(["error" => "Such student already exists"]);
         exit;
     }
 

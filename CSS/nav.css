@@ -50,7 +50,7 @@ nav a:hover {
 /* Стиль для активного елемента меню */
 nav .menu-items li a.active {
   color: #fff; /* Білий текст */
-  background-color: rgb(92, 148, 129);
+  background-color: rgb(98, 143, 122);
   font-weight: bold; /* Жирний шрифт */
 }
 

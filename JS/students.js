@@ -72,7 +72,8 @@ async function LoadStudentsFromServer() {
         )
     );
   } catch (error) {
-    console.error("Помилка завантаження студентів:", error);
+    console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
     return [];
   }
 }
@@ -100,11 +101,26 @@ async function AddStToDatabase(newStudent) {
     const result = await response.json();
     if (response.ok && result.success) {
       console.log("✅ Student added to DB:", result.message);
+      return true;
     } else {
-      console.error("❌ Error from server:", result.error);
+      if (result.field) {
+        if (result.max) {
+          ShowErrMessage(
+            `${result.field}-erinput`,
+            `Length must be less then ${result.max} characters`
+          );
+        } else if (result.error) {
+          ShowErrMessage(`${result.field}-erinput`, result.error);
+        }
+      } else if (result.error) {
+        alert(result.error);
+      }
+      return false;
     }
   } catch (error) {
     console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
+    return false;
   }
 }
 async function UpdateStInDatabase(student) {
@@ -131,11 +147,26 @@ async function UpdateStInDatabase(student) {
     const result = await response.json();
     if (response.ok && result.success) {
       console.log("✅ Student updated in DB:", result.message);
+      return true;
     } else {
-      console.error("❌ Error from server:", result.error);
+      if (result.field) {
+        if (result.max) {
+          ShowErrMessage(
+            `${result.field}-erinput`,
+            `Length must be less then ${result.max} characters`
+          );
+        } else if (result.error) {
+          ShowErrMessage(`${result.field}-erinput`, result.error);
+        }
+      } else if (result.error) {
+        alert(result.error);
+      }
+      return false;
     }
   } catch (error) {
     console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
+    return false;
   }
 }
 async function DeleteFromDataBase(listToDel) {
@@ -152,10 +183,14 @@ async function DeleteFromDataBase(listToDel) {
     const result = await response.json();
     if (response.ok && result.success) {
       console.log("✅ Student removed from DB:", result.message);
+      return true;
     } else {
       console.error("❌ Error from server:", result.error);
+      return false;
     }
   } catch (error) {
     console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
+    return false;
   }
 }

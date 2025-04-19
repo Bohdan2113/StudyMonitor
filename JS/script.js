@@ -143,7 +143,8 @@ function DeleteAllChoosen() {
 function LogOutBut() {
   removeActiveLink();
   ClearProfile();
-  window.location.href = "index.php";
+  window.location.href = "index.html";
+  localStorage.removeItem("profileInfo");
 }
 
 // Fields getting
@@ -168,7 +169,7 @@ function GetStudentTableFields(studentId_num) {
 }
 
 // Student options confirmation
-function CreateAdd() {
+async function CreateAdd() {
   const inputFields = GetFormInputFields();
   if (!ValidateStudentFormInput(inputFields)) return;
 
@@ -181,13 +182,14 @@ function CreateAdd() {
     inputFields.gender.value,
     inputFields.bdate.value
   );
+
+  if (!(await AddStToDatabase(newStudent))) return;
+
   studentList.push(newStudent);
   addStudentToTable(newStudent);
-  AddStToDatabase(newStudent);
-
   CloseEdit("edit-student-block");
 }
-function SaveEdit(studentId_num) {
+async function SaveEdit(studentId_num) {
   let inputFields = GetFormInputFields();
   if (!ValidateStudentFormInput(inputFields)) return;
 
@@ -198,6 +200,8 @@ function SaveEdit(studentId_num) {
     return;
   }
 
+  if (!(await UpdateStInDatabase(curStudent))) return;
+
   // Update student data in the studentList
   curStudent.id = parseInt(inputFields.id.value);
   curStudent.group_name = inputFields.group.value;
@@ -205,7 +209,6 @@ function SaveEdit(studentId_num) {
   curStudent.lname = inputFields.lname.value.replace(/\s+/g, " ").trim();
   curStudent.gender = inputFields.gender.value;
   curStudent.bdate = inputFields.bdate.value;
-  UpdateStInDatabase(curStudent);
 
   // Update data in table
   studentTableFields.studentGroup.textContent = curStudent.group_name;
@@ -217,7 +220,9 @@ function SaveEdit(studentId_num) {
 
   CloseEdit("edit-student-block");
 }
-function OkDelete(stToDelList) {
+async function OkDelete(stToDelList) {
+  if (!(await DeleteFromDataBase(stToDelList))) return;
+
   // Remove current student from table
   stToDelList.forEach((s) => {
     const tr = document.getElementById(`student-${s.id}`);
@@ -228,8 +233,6 @@ function OkDelete(stToDelList) {
       (student) => !stToDelList.includes(student)
     );
   });
-
-  DeleteFromDataBase(stToDelList);
 
   let addFunction = () => {
     // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
@@ -359,6 +362,17 @@ function ValidateStudentFormInput(inputFields) {
       message = `Age must be from ${minAge} to ${maxAge} years`;
       return false;
     } else return true;
+  }
+}
+function ShowErrMessage(targetId, message) {
+  const target = $(`#${targetId}`);
+  target.style.display = "block";
+  target.textContent = message;
+
+  const siblingInput = target.previousElementSibling;
+  if (siblingInput.tagName !== "INPUT" || siblingInput.tagName !== "SELECT") {
+    console.log(siblingInput);
+    siblingInput.style.borderColor = "red";
   }
 }
 function HideErrorMessage(event) {

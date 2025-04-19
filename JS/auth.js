@@ -2,6 +2,11 @@ const getElement = document.querySelector.bind(document);
 
 document.addEventListener("DOMContentLoaded", function () {
   AddEvent();
+
+  const profileInfo = localStorage.getItem("profileInfo");
+  if (profileInfo) {
+    window.location.href = "students.php";
+  }
 });
 
 function AddEvent() {
@@ -44,6 +49,43 @@ async function LoginBut(event) {
 
   ClearForm(loginForm);
   ClearForm(getElement("#register-form"));
+
+  // Обробка логіну
+  async function LoginToDB(form) {
+    const formData = new FormData(form);
+    formData.append("action", "login");
+
+    try {
+      const response = await fetch("./Backend/auth.php", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      console.log(JSON.stringify(result, null, 2));
+      if (response.ok) {
+        if (result.success) {
+          console.log("✅ Sign in successfully:", result.message);
+          localStorage.setItem("profileInfo", JSON.stringify(result.profile));
+          return true;
+        } else if (result.badLogin) {
+          ShowErrMessage("usernameL-erinput", result.message);
+          return false;
+        } else if (result.badPassword) {
+          ShowErrMessage("passwordL-erinput", result.message);
+          return false;
+        }
+      } else {
+        console.error("❌ Error from server:", result.error);
+        alert(result.error);
+        return false;
+      }
+    } catch (error) {
+      console.error("❌ Network error:", error);
+      alert("❌ Network error: check your internet connection");
+      return false;
+    }
+  }
 }
 async function SigninBut(event) {
   event.preventDefault();
@@ -59,6 +101,41 @@ async function SigninBut(event) {
 
   ClearForm(registerForm);
   ClearForm(getElement("#login-form"));
+
+  // Обробка реєстрації
+  async function RegisterToDB(form) {
+    const formData = new FormData(form);
+    formData.append("action", "register");
+
+    try {
+      const response = await fetch("./Backend/auth.php", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      console.log(JSON.stringify(result, null, 2));
+      if (response.ok) {
+        if (result.success) {
+          console.log("✅ Sign in successfully:", result.message);
+          localStorage.setItem("profileInfo", JSON.stringify(result.profile));
+          return true;
+        } else if (result.alreadyExists) {
+          console.log("Username is occupied:", result.message);
+          ShowErrMessage("usernameR-erinput", result.message);
+          return false;
+        }
+      } else {
+        console.error("❌ Error from server:", result.error);
+        alert(result.error);
+        return false;
+      }
+    } catch (error) {
+      console.error("❌ Network error:", error);
+      alert("❌ Network error: check your internet connection");
+      return false;
+    }
+  }
 }
 
 function ValidateLoginFormInput(form) {
@@ -204,6 +281,17 @@ function ValidateRegisterFormInput(form) {
     return true;
   }
 }
+function ShowErrMessage(targetId, message) {
+  const target = getElement(`#${targetId}`);
+  target.style.display = "block";
+  target.textContent = message;
+
+  const siblingInput = target.previousElementSibling;
+  if (siblingInput.tagName !== "INPUT") {
+    console.log(siblingInput);
+    siblingInput.style.borderColor = "red";
+  }
+}
 function HideErrorMessage(event) {
   const message = getElement(`#${event.target.name}-erinput`);
   message.style.display = "none";
@@ -225,70 +313,4 @@ function ClearForm(form) {
   const registerBlock = getElement("#registerBlock");
   loginBlock.classList.remove("hidden");
   registerBlock.classList.add("hidden");
-}
-
-// Обробка логіну
-async function LoginToDB(form) {
-  const formData = new FormData(form);
-  formData.append("action", "login");
-
-  try {
-    const response = await fetch("./Backend/auth.php", {
-      method: "POST",
-      body: formData,
-    });
-    const result = await response.json();
-
-    console.log(JSON.stringify(result, null, 2));
-    if (response.ok) {
-      if (result.success) {
-        console.log("✅ Sign in successfully:", result.message);
-        sessionStorage.setItem("profileInfo", JSON.stringify(result.profile));
-        return true;
-      } else if (result.badLogin) {
-        console.log("Wrong username:", result.message);
-        return false;
-      } else if (result.badPassword) {
-        console.log("Wrong password:", result.message);
-        return true;
-      }
-    } else {
-      console.error("❌ Error from server:", result.error);
-      return false;
-    }
-  } catch (error) {
-    console.error("❌ Network error:", error);
-    return false;
-  }
-}
-// Обробка реєстрації
-async function RegisterToDB(form) {
-  const formData = new FormData(form);
-  formData.append("action", "register");
-
-  try {
-    const response = await fetch("./Backend/auth.php", {
-      method: "POST",
-      body: formData,
-    });
-    const result = await response.json();
-
-    console.log(JSON.stringify(result, null, 2));
-    if (response.ok) {
-      if (result.success) {
-        console.log("✅ Sign in successfully:", result.message);
-        sessionStorage.setItem("profileInfo", JSON.stringify(result.profile));
-        return true;
-      } else if (result.alreadyExists) {
-        console.log("Username is occupied:", result.message);
-        return false;
-      }
-    } else {
-      console.error("❌ Error from server:", result.error);
-      return false;
-    }
-  } catch (error) {
-    console.error("❌ Network error:", error);
-    return false;
-  }
 }

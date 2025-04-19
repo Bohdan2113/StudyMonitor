@@ -4,7 +4,7 @@ const CACHE_NAME = "pwa-cache-v1";
 const ASSETS = [
   "./StudyMonitor", // Головна сторінка
 
-  "index.php", // php-файл
+  "index.html", // php-файл
   "student.php", // php-файл
   "dashboard.php", // php-файл
   "tasks.php", // php-файл
@@ -61,42 +61,20 @@ self.addEventListener("install", (event) => {
 // Подія обробки запитів від клієнта (браузера)
 // Якщо файл є в кеші – повертаємо його, інакше робимо запит до мережі
 self.addEventListener("fetch", (event) => {
-  // Перевіряємо метод запиту
-  if (event.request.method === "POST") {
-    return;
-    // Обробляємо POST запит окремо
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // Зберігаємо відповідь на POST запит в кеш, якщо це можливо
-          const responseClone = response.clone(); // клонуємо одразу
-          if (response.ok) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return response;
-        })
-        .catch((error) => {
-          // Обробка помилки, наприклад, якщо немає доступу до мережі
-          return new Response("Network error", { status: 500 });
-        })
-    );
-  } else {
-    // Обробка GET запитів
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.match(event.request).then((cachedResponse) => {
-          const networkFetch = fetch(event.request).then((networkResponse) => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
+  if (event.request.method === "POST") return;
 
-          return cachedResponse || networkFetch;
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
         });
       })
-    );
-  }
+      .catch(() => {
+        return caches.match(event.request);
+      })
+  );
 });
 
 // Подія активації Service Worker
