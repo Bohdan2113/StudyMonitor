@@ -82,23 +82,7 @@
         </table>
       </div>
 
-      <div class="tableNext">
-        <button
-          class="text_edit"
-          aria-label="Previous table page"
-          title="Previous page"
-        >
-          &lt;
-        </button>
-        <button class="text_edit" aria-label="1 page">1</button>
-        <button
-          class="text_edit"
-          aria-label="Next table page"
-          title="Next page"
-        >
-          &gt;
-        </button>
-      </div>
+      <div id="paginationContainer" class="tableNext"></div>
     </section>
 
     <div id="shadow-wraper">

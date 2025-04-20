@@ -21,6 +21,17 @@ try {
             echo json_encode(["error" => "All fields are required"]);
             exit;
         }
+        // Валідація на перевищення максимальної довжини
+        if (mb_strlen($username) > 50) {
+            http_response_code(400);
+            echo json_encode(["field" => "usernameL", "max" => 50]);
+            exit;
+        }
+        if (mb_strlen($password) > 255) {
+            http_response_code(400);
+            echo json_encode(["field" => "passwordL", "max" => 255]);
+            exit;
+        }
 
         // Перевірка, чи username знаходиться в БД
         $query = "SELECT * FROM users WHERE username = ?";
@@ -61,6 +72,27 @@ try {
         if (empty($username) || empty($password) || empty($fname) || empty($lname)) {
             http_response_code(400);
             echo json_encode(["error" => "All fields are required"]);
+            exit;
+        }
+        // Валідація на перевищення максимальної довжини
+        if (mb_strlen($username) > 50) {
+            http_response_code(400);
+            echo json_encode(["field" => "usernameR", "max" => 50]);
+            exit;
+        }
+        if (mb_strlen($password) > 255) {
+            http_response_code(400);
+            echo json_encode(["field" => "passwordR", "max" => 255]);
+            exit;
+        }
+        if (mb_strlen($fname) > 100) {
+            http_response_code(400);
+            echo json_encode(["field" => "fnameR", "max" => 100]);
+            exit;
+        }
+        if (mb_strlen($lname) > 100) {
+            http_response_code(400);
+            echo json_encode(["field" => "lnameR", "max" => 100]);
             exit;
         }
 

@@ -12,23 +12,6 @@ window.onload = function () {
     }
   }
 };
-function syncCheckboxes(sourceId, targetId) {
-  let source = document.getElementById(sourceId);
-  let target = document.getElementById(targetId);
-
-  if (source && target) {
-    source.addEventListener("change", function () {
-      target.checked = source.checked;
-      // target.dispatchEvent(new Event("change"));
-    });
-
-    target.addEventListener("change", function () {
-      if (source.checked === target.checked) return;
-      source.checked = target.checked;
-      source.dispatchEvent(new Event("change"));
-    });
-  }
-}
 
 // burger menu open and close
 function burgerMenu() {
@@ -168,91 +151,6 @@ function GetStudentTableFields(studentId_num) {
   };
 }
 
-// Student options confirmation
-async function CreateAdd() {
-  const inputFields = GetFormInputFields();
-  if (!ValidateStudentFormInput(inputFields)) return;
-
-  let newStudent = new Student(
-    parseInt(inputFields.id.value),
-    false,
-    inputFields.group.value,
-    inputFields.fname.value.replace(/\s+/g, " ").trim(),
-    inputFields.lname.value.replace(/\s+/g, " ").trim(),
-    inputFields.gender.value,
-    inputFields.bdate.value
-  );
-
-  if (!(await AddStToDatabase(newStudent))) return;
-
-  studentList.push(newStudent);
-  addStudentToTable(newStudent);
-  CloseEdit("edit-student-block");
-}
-async function SaveEdit(studentId_num) {
-  let inputFields = GetFormInputFields();
-  if (!ValidateStudentFormInput(inputFields)) return;
-
-  let studentTableFields = GetStudentTableFields(studentId_num);
-  let curStudent = studentList.find((s) => s.id === studentId_num);
-  if (!curStudent) {
-    console.log("Studen`t not in the list");
-    return;
-  }
-
-  if (!(await UpdateStInDatabase(curStudent))) return;
-
-  // Update student data in the studentList
-  curStudent.id = parseInt(inputFields.id.value);
-  curStudent.group_name = inputFields.group.value;
-  curStudent.fname = inputFields.fname.value.replace(/\s+/g, " ").trim();
-  curStudent.lname = inputFields.lname.value.replace(/\s+/g, " ").trim();
-  curStudent.gender = inputFields.gender.value;
-  curStudent.bdate = inputFields.bdate.value;
-
-  // Update data in table
-  studentTableFields.studentGroup.textContent = curStudent.group_name;
-  studentTableFields.studentName.textContent = curStudent.name;
-  studentTableFields.studentGender.textContent = curStudent.gender;
-  studentTableFields.studentBdate.textContent = curStudent.formatDate();
-  studentTableFields.studentStatus.style.backgroundColor =
-    curStudent.defineStatusColor();
-
-  CloseEdit("edit-student-block");
-}
-async function OkDelete(stToDelList) {
-  if (!(await DeleteFromDataBase(stToDelList))) return;
-
-  // Remove current student from table
-  stToDelList.forEach((s) => {
-    const tr = document.getElementById(`student-${s.id}`);
-    if (tr) tr.remove();
-
-    // Remove all previous students from studentList
-    studentList = studentList.filter(
-      (student) => !stToDelList.includes(student)
-    );
-  });
-
-  let addFunction = () => {
-    // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
-    let deleteAllBtn = document.getElementById("del_all_btn");
-    let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
-
-    // Якщо хоча б один чекбокс обраний, показуємо кнопку
-    if (isChoosen) {
-      deleteAllBtn.style.display = "flex";
-    } else {
-      deleteAllBtn.style.display = "none";
-      let hCheckbox = document.getElementById("header-checkbox");
-      hCheckbox.checked = false;
-      hCheckbox.dispatchEvent(new Event("change"));
-    }
-  };
-  if (addFunction !== undefined) addFunction();
-  CloseDelete("del-student-block");
-}
-
 // Student form validation
 function ValidateStudentFormInput(inputFields) {
   let isValid = true;
@@ -381,9 +279,94 @@ function HideErrorMessage(event) {
   event.target.style.borderColor = "black";
 }
 
-// Additional functions
-function addStudentToTable(newStudent) {
-  const table = document.querySelector("#students_table tbody");
+// Student options confirmation
+async function CreateAdd() {
+  const inputFields = GetFormInputFields();
+  if (!ValidateStudentFormInput(inputFields)) return;
+
+  let newStudent = new Student(
+    parseInt(inputFields.id.value),
+    false,
+    inputFields.group.value,
+    inputFields.fname.value.replace(/\s+/g, " ").trim(),
+    inputFields.lname.value.replace(/\s+/g, " ").trim(),
+    inputFields.gender.value,
+    inputFields.bdate.value
+  );
+
+  if (!(await AddStToDatabase(newStudent))) return;
+
+  studentList.push(newStudent);
+  renderTablePage(stPagination, studentList, stPagination.lastPage);
+  // addStudentToTable(newStudent);
+  CloseEdit("edit-student-block");
+}
+async function SaveEdit(studentId_num) {
+  let inputFields = GetFormInputFields();
+  if (!ValidateStudentFormInput(inputFields)) return;
+
+  let studentTableFields = GetStudentTableFields(studentId_num);
+  let curStudent = studentList.find((s) => s.id === studentId_num);
+  if (!curStudent) {
+    console.log("Studen`t not in the list");
+    return;
+  }
+
+  // Update student data of student copy to check in backend
+  const curStudentCpy = curStudent.copy();
+  curStudentCpy.id = parseInt(inputFields.id.value);
+  curStudentCpy.group_name = inputFields.group.value;
+  curStudentCpy.fname = inputFields.fname.value.replace(/\s+/g, " ").trim();
+  curStudentCpy.lname = inputFields.lname.value.replace(/\s+/g, " ").trim();
+  curStudentCpy.gender = inputFields.gender.value;
+  curStudentCpy.bdate = inputFields.bdate.value;
+  if (!(await UpdateStInDatabase(curStudentCpy))) return;
+
+  // Assign fields from curStudentCpy to curStudent
+  Object.assign(curStudent, curStudentCpy);
+
+  // Update data in table
+  studentTableFields.studentGroup.textContent = curStudent.group_name;
+  studentTableFields.studentName.textContent = curStudent.name;
+  studentTableFields.studentGender.textContent = curStudent.gender;
+  studentTableFields.studentBdate.textContent = curStudent.formatDate();
+  studentTableFields.studentStatus.style.backgroundColor =
+    curStudent.statusColor();
+
+  CloseEdit("edit-student-block");
+}
+async function OkDelete(stToDelList) {
+  if (!(await DeleteFromDataBase(stToDelList))) return;
+
+  // Remove students from studentList
+  studentList = studentList.filter((student) => !stToDelList.includes(student));
+  renderTablePage(
+    stPagination,
+    studentList,
+    Math.min(stPagination.currentPage, stPagination.lastPage)
+  );
+
+  let addFunction = () => {
+    // Перевіряємо, чи хоча б у одного студента вибрано чекбокс
+    let deleteAllBtn = document.getElementById("del_all_btn");
+    let isChoosen = studentList.some((s) => s.checkbox); // Перевіряємо всі чекбокси
+
+    // Якщо хоча б один чекбокс обраний, показуємо кнопку
+    if (isChoosen) {
+      deleteAllBtn.style.display = "flex";
+    } else {
+      deleteAllBtn.style.display = "none";
+      let hCheckbox = document.getElementById("header-checkbox");
+      hCheckbox.checked = false;
+      hCheckbox.dispatchEvent(new Event("change"));
+    }
+  };
+  if (addFunction !== undefined) addFunction();
+  CloseDelete("del-student-block");
+}
+
+// Table rendering and pagination
+function addStudentToTable(newStudent, table) {
   const tr = document.createElement("tr");
   tr.id = `student-${newStudent.id}`;
   tr.scope = "row";
@@ -395,6 +378,7 @@ function addStudentToTable(newStudent) {
   checkbox.title = "Select";
   checkbox.ariaLabel = "Select student";
   checkbox.id = `${newStudent.id}-checkbox`;
+  checkbox.checked = newStudent.checkbox;
   checkbox.onchange = () => toggleStudentCheckbox(newStudent.id);
   tdCheckbox.appendChild(checkbox);
   tdCheckbox.setAttribute("data-label", "Select");
@@ -431,7 +415,7 @@ function addStudentToTable(newStudent) {
   const statusBar = document.createElement("div");
   statusBar.className = "statusBar";
   statusBar.id = `${newStudent.id}-status`;
-  statusBar.style.backgroundColor = newStudent.defineStatusColor();
+  statusBar.style.backgroundColor = newStudent.statusColor();
   divStatusBtn.appendChild(statusBar);
   tdStatus.appendChild(divStatusBtn);
   tdStatus.setAttribute("data-label", "Status");
@@ -477,6 +461,63 @@ function addStudentToTable(newStudent) {
   // Додаємо рядок у таблицю
   table.appendChild(tr);
 }
+function renderTablePage(paginationInfo, data, page = 1) {
+  if (page < 0 || page > paginationInfo.lastPage) return;
+
+  paginationInfo.currentPage = page;
+  const tableBody = document.querySelector("#students_table tbody"); // або твоя таблиця
+  tableBody.innerHTML = ""; // очищаємо таблицю
+
+  const start = (page - 1) * paginationInfo.perPage;
+  const end = start + paginationInfo.perPage;
+  const pageStudents = data.slice(start, end);
+
+  pageStudents.forEach((el) => {
+    addStudentToTable(el, tableBody);
+  });
+
+  renderPagination(paginationInfo, data);
+}
+function renderPagination(paginationInfo, data) {
+  const pagination = document.getElementById("paginationContainer");
+  pagination.innerHTML = "";
+
+  if (data.length === 0) return;
+
+  const totalPages = paginationInfo.lastPage;
+
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "text_edit";
+  prevBtn.innerHTML = "&lt;";
+  prevBtn.disabled = paginationInfo.currentPage === 1;
+  prevBtn.onclick = () =>
+    renderTablePage(paginationInfo, data, paginationInfo.currentPage - 1);
+  pagination.appendChild(prevBtn);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageBtn = document.createElement("button");
+    pageBtn.className = "text_edit";
+    pageBtn.innerText = i;
+    pageBtn.onclick = () => renderTablePage(paginationInfo, data, i);
+    if (i === paginationInfo.currentPage) {
+      Array.from(pagination.children).forEach((child) =>
+        child.classList.remove("active")
+      );
+      pageBtn.classList.add("active");
+    }
+    pagination.appendChild(pageBtn);
+  }
+
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "text_edit";
+  nextBtn.innerHTML = "&gt;";
+  nextBtn.disabled = paginationInfo.currentPage === totalPages;
+  nextBtn.onclick = () =>
+    renderTablePage(paginationInfo, data, paginationInfo.currentPage + 1);
+  pagination.appendChild(nextBtn);
+}
+
+// Additional functions
 function LoadInfoToDeleteModal(stToDelList) {
   // Load students to OKdel event
   let confirmButton = document.getElementById("ok_button");
@@ -519,6 +560,23 @@ function ChangeBackgroundDisplay(blockId_str) {
     // shadowWraper.style.pointerEvents = "auto";
   }
 }
+function syncCheckboxes(sourceId, targetId) {
+  let source = document.getElementById(sourceId);
+  let target = document.getElementById(targetId);
+
+  if (source && target) {
+    source.addEventListener("change", function () {
+      target.checked = source.checked;
+      // target.dispatchEvent(new Event("change"));
+    });
+
+    target.addEventListener("change", function () {
+      if (source.checked === target.checked) return;
+      source.checked = target.checked;
+      source.dispatchEvent(new Event("change"));
+    });
+  }
+}
 function toggleStudentCheckbox(studentId_num) {
   let curStudent = studentList.find((s) => s.id === studentId_num);
 
@@ -544,15 +602,18 @@ function toggleAllCheckbox(id_str) {
   studentList.forEach((s) => {
     if (s.checkbox !== final) {
       let checkbox = document.getElementById(`${s.id}-checkbox`);
-      if (checkbox.checked !== final) {
+      if (checkbox && checkbox.checked !== final) {
         toggleTableCheckBox(checkbox);
-        checkbox.dispatchEvent(new Event("change"));
+      } else {
+        // Перемикаємо стан чекбокса для поточного студента
+        toggleStudentCheckbox(s.id);
       }
     }
   });
 
   function toggleTableCheckBox(checkbox) {
     checkbox.checked = checkbox.checked ? false : true;
+    checkbox.dispatchEvent(new Event("change"));
   }
 }
 

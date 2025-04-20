@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
   studentList = await LoadStudentsFromServer();
-  ShowAllStudents(studentList);
+  renderTablePage(stPagination, studentList);
   syncCheckboxes("header-checkbox", "header-checkbox-ref");
   console.log("Students loaded");
 });
 
-let studentList = [];
 class Student {
   // static studentId = 0;
   constructor(
@@ -16,7 +15,7 @@ class Student {
     lname,
     gender,
     bdate,
-    status = "lightgray"
+    status = "offline"
   ) {
     this.id = id;
     this.checkbox = isChecked;
@@ -27,9 +26,21 @@ class Student {
     this.bdate = bdate;
     this.status = status;
   }
-
   get name() {
     return this.fname + " " + this.lname;
+  }
+
+  copy() {
+    return new Student(
+      this.id,
+      this.checkbox,
+      this.group_name,
+      this.fname,
+      this.lname,
+      this.gender,
+      this.bdate,
+      this.status
+    );
   }
   formatDate() {
     if (!this.bdate) return "";
@@ -41,19 +52,26 @@ class Student {
 
     return `${day}.${month}.${year}`;
   }
+  statusColor() {
+    if (this.name === "Bohdan Kruk") this.status = "online";
+    else this.status = "offline";
 
-  defineStatusColor() {
-    if (this.name === "Bohdan Kruk") this.status = "green";
-    else this.status = "lightgray";
-
-    return this.status;
+    return this.status === "online" ? "green" : "lightgray";
   }
 }
-
-function ShowAllStudents(stList) {
-  stList.forEach((s) => addStudentToTable(s));
+class Pagination {
+  constructor(perPage, currentPage = 1) {
+    this.currentPage = currentPage;
+    this.perPage = perPage;
+  }
+  get lastPage() {
+    return Math.ceil(studentList.length / this.perPage);
+  }
 }
+let studentList = [];
+const stPagination = new Pagination(1);
 
+// DataBase interaction
 async function LoadStudentsFromServer() {
   try {
     const response = await fetch("./BackEnd/get_students.php");
@@ -62,7 +80,7 @@ async function LoadStudentsFromServer() {
       (student) =>
         new Student(
           student.id,
-          student.checkbox,
+          false,
           student.group_name,
           student.fname,
           student.lname,
@@ -81,7 +99,6 @@ async function AddStToDatabase(newStudent) {
   try {
     const studentData = {
       id: newStudent.id,
-      checkbox: newStudent.checkbox,
       group_name: newStudent.group_name,
       fname: newStudent.fname,
       lname: newStudent.lname,
@@ -127,7 +144,6 @@ async function UpdateStInDatabase(student) {
   try {
     const studentData = {
       id: student.id,
-      checkbox: student.checkbox,
       group_name: student.group_name,
       fname: student.fname,
       lname: student.lname,

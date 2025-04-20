@@ -13,7 +13,6 @@ try {
 
     // Дістаємо поля
     $id = $data['id'] ?? null;
-    $isChecked = $data['checkbox'] ?? false;
     $group_name = $data['group_name'] ?? '';
     $fname = $data['fname'] ?? '';
     $lname = $data['lname'] ?? '';
@@ -57,9 +56,9 @@ try {
     }
 
     // Перевірка на дублікат 
-    $checkQuery = "SELECT COUNT(*) FROM students WHERE group_name = ? AND fname = ? AND lname = ? AND gender = ? AND bdate = ?";
+    $checkQuery = "SELECT COUNT(*) FROM students WHERE id != ? AND group_name = ? AND fname = ? AND lname = ? AND gender = ? AND bdate = ?";
     $checkStmt = $pdo->prepare($checkQuery);
-    $checkStmt->execute([$group_name, $fname, $lname, $gender, $bdate]);
+    $checkStmt->execute([$id, $group_name, $fname, $lname, $gender, $bdate]);
     $exists = $checkStmt->fetchColumn();
     if ($exists > 0) {
         http_response_code(409);
@@ -69,7 +68,6 @@ try {
 
     // Запит на оновлення даних студента
     $query = "UPDATE students SET 
-        checkbox = :checkbox,
         group_name = :group_name,
         fname = :fname,
         lname = :lname,
@@ -79,7 +77,6 @@ try {
         WHERE id = :id";
 
     $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':checkbox', $isChecked, PDO::PARAM_BOOL);
     $stmt->bindParam(':group_name', $group_name);
     $stmt->bindParam(':fname', $fname);
     $stmt->bindParam(':lname', $lname);

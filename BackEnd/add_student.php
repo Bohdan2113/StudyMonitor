@@ -12,7 +12,6 @@ try {
 
     // Дістаємо поля
     $id = $data['id'];
-    $isChecked = $data['checkbox'] ?? false;
     $group_name = $data['group_name'] ?? '';
     $fname = $data['fname'] ?? '';
     $lname = $data['lname'] ?? '';
@@ -68,12 +67,11 @@ try {
 
 
     // Вставка
-    $query = "INSERT INTO students (id, checkbox, group_name, fname, lname, gender, bdate, status) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO students (id, group_name, fname, lname, gender, bdate, status) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([
         $id,
-        $isChecked ? 1 : 0,
         $group_name,
         $fname,
         $lname,

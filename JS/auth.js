@@ -76,8 +76,18 @@ async function LoginBut(event) {
           return false;
         }
       } else {
-        console.error("❌ Error from server:", result.error);
-        alert(result.error);
+        if (result.field) {
+          if (result.max) {
+            ShowErrMessage(
+              `${result.field}-erinput`,
+              `Length must be less then ${result.max} characters`
+            );
+          } else if (result.error) {
+            ShowErrMessage(`${result.field}-erinput`, result.error);
+          }
+        } else if (result.error) {
+          alert(result.error);
+        }
         return false;
       }
     } catch (error) {
@@ -126,8 +136,18 @@ async function SigninBut(event) {
           return false;
         }
       } else {
-        console.error("❌ Error from server:", result.error);
-        alert(result.error);
+        if (result.field) {
+          if (result.max) {
+            ShowErrMessage(
+              `${result.field}-erinput`,
+              `Length must be less then ${result.max} characters`
+            );
+          } else if (result.error) {
+            ShowErrMessage(`${result.field}-erinput`, result.error);
+          }
+        } else if (result.error) {
+          alert(result.error);
+        }
         return false;
       }
     } catch (error) {
