@@ -479,7 +479,7 @@ function renderTablePage(paginationInfo, data, page = 1) {
 
   renderPagination(paginationInfo, data);
 }
-function renderPagination(paginationInfo, data) {
+function renderPagination(paginationInfo, data, seenPages = 2) {
   const pagination = document.getElementById("paginationContainer");
   pagination.innerHTML = "";
 
