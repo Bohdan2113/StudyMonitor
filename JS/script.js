@@ -2,6 +2,7 @@
 let saveDeleteListener;
 let saveEditListener;
 const $ = document.querySelector.bind(document);
+const seenPages = 4;
 
 // Add input events to the form fields
 window.onload = function () {
@@ -484,37 +485,71 @@ function renderPagination(paginationInfo, data) {
 
   if (data.length === 0) return;
 
-  const totalPages = paginationInfo.lastPage;
+  const lastPage = paginationInfo.lastPage;
+  const totalPages = lastPage;
+  const curPage = paginationInfo.currentPage;
 
   const prevBtn = document.createElement("button");
   prevBtn.className = "text_edit";
+  prevBtn.classList.add("arrow");
   prevBtn.innerHTML = "&lt;";
-  prevBtn.disabled = paginationInfo.currentPage === 1;
-  prevBtn.onclick = () =>
-    renderTablePage(paginationInfo, data, paginationInfo.currentPage - 1);
+  prevBtn.disabled = curPage === 1;
+  prevBtn.onclick = () => renderTablePage(paginationInfo, data, curPage - 1);
   pagination.appendChild(prevBtn);
 
-  for (let i = 1; i <= totalPages; i++) {
-    const pageBtn = document.createElement("button");
-    pageBtn.className = "text_edit";
-    pageBtn.innerText = i;
-    pageBtn.onclick = () => renderTablePage(paginationInfo, data, i);
-    if (i === paginationInfo.currentPage) {
-      Array.from(pagination.children).forEach((child) =>
-        child.classList.remove("active")
-      );
-      pageBtn.classList.add("active");
+  if (totalPages > seenPages + 4) {
+    const leftSeenCount = Math.floor((seenPages - 1) / 2);
+    const rightSeenCount = leftSeenCount + ((seenPages - 1) % 2);
+
+    Display(1);
+
+    if (curPage <= 3 + leftSeenCount) {
+      // Починаємо з 2 сторінки бо перша завжи виводиться,
+      // показуємо seenPages блоків + 1 замість одних крапочок
+      for (let i = 2; i < 2 + seenPages + 1; i++) Display(i);
+      Display(0);
+    } else if (curPage > totalPages - 3 - rightSeenCount) {
+      Display(0);
+      // Показуємо передостанні seenPages блоків + 1 замість одних крапочок
+      for (let i = lastPage - 1 - seenPages; i < lastPage; i++) Display(i);
+    } else {
+      Display(0);
+      for (let i = curPage - leftSeenCount; i <= curPage + rightSeenCount; i++)
+        Display(i);
+      Display(0);
     }
-    pagination.appendChild(pageBtn);
+
+    Display(paginationInfo.lastPage);
+  } else {
+    for (let i = 1; i <= totalPages; i++) {
+      Display(i);
+    }
   }
 
   const nextBtn = document.createElement("button");
   nextBtn.className = "text_edit";
+  nextBtn.classList.add("arrow");
   nextBtn.innerHTML = "&gt;";
-  nextBtn.disabled = paginationInfo.currentPage === totalPages;
-  nextBtn.onclick = () =>
-    renderTablePage(paginationInfo, data, paginationInfo.currentPage + 1);
+  nextBtn.disabled = curPage === totalPages;
+  nextBtn.onclick = () => renderTablePage(paginationInfo, data, curPage + 1);
   pagination.appendChild(nextBtn);
+
+  function Display(i) {
+    const pageBtn = document.createElement("button");
+    pageBtn.className = "text_edit";
+    if (i > 0) {
+      pageBtn.innerText = i;
+      pageBtn.onclick = () => renderTablePage(paginationInfo, data, i);
+      if (i === curPage) {
+        pageBtn.classList.add("active");
+      }
+    } else if (i === 0) {
+      pageBtn.classList.add("spaceDots");
+      pageBtn.innerText = "...";
+      pageBtn.disabled = true;
+    }
+    pagination.appendChild(pageBtn);
+  }
 }
 
 // Additional functions

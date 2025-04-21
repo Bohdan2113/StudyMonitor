@@ -68,8 +68,9 @@ class Pagination {
     return Math.ceil(studentList.length / this.perPage);
   }
 }
+const studentsPerPage = 1;
 let studentList = [];
-const stPagination = new Pagination(1);
+const stPagination = new Pagination(studentsPerPage);
 
 // DataBase interaction
 async function LoadStudentsFromServer() {
