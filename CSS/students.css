@@ -227,10 +227,8 @@ table th {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  /* margin-top: 20px; */
   flex-wrap: wrap;
 }
-
 .tableNext button {
   min-width: 40px;
   height: 40px;
@@ -239,32 +237,42 @@ table th {
   background-color: #f0f0f0;
   color: #333;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 6px;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
 }
-
 .tableNext button:hover {
   background-color: #d6e4ff;
   color: #1d4ed8;
   transform: scale(1.05);
 }
-
 .tableNext button:disabled {
-  background-color: #f0f0f0 !important;
+  background-color: #f0f0f0;
   color: #bababa;
   cursor: default;
-  /* box-shadow: none; */
   transform: none;
 }
-
 .tableNext button.active {
   background-color: #1d4ed8;
   color: white;
   font-weight: bold;
   box-shadow: 0 0 8px rgba(29, 78, 216, 0.4);
+}
+.tableNext button.arrow,
+.tableNext button.spaceDots {
+  min-width: 20px;
+}
+.tableNext button.spaceDots {
+  color: #000000;
+  cursor: default;
+  transform: none;
+  font-weight: bold;
+  box-shadow: none;
+  background-color: transparent;
+  padding: 0 0;
+  font-size: 25px;
 }
 
 #shadow-wraper {
