@@ -10,12 +10,21 @@ const ASSETS = [
   "tasks.php", // php-файл
   "messages.php", // php-файл
 
+  // BackEnd
   "BackEnd/db.php",
-  "BackEnd/get_students.php",
-  "BackEnd/add_student.php",
-  "BackEnd/update_student.php",
-  "BackEnd/delete_student.php",
-  "BackEnd/auth.php",
+
+  "BackEnd/feProcessing/get_students.php",
+  "BackEnd/feProcessing/add_student.php",
+  "BackEnd/feProcessing/update_student.php",
+  "BackEnd/feProcessing/delete_student.php",
+  "BackEnd/feProcessing/login.php",
+  "BackEnd/feProcessing/signin.php",
+
+  "BackEnd/Controllers/studentControler.php",
+  "BackEnd/Controllers/userControler.php",
+  
+  "BackEnd/Models/student.php",
+  "BackEnd/Models/user.php",
 
   "sw.js", // ✅ Service Worker файл
   "manifest.json", // ✅ Файл маніфеста

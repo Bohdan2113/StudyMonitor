@@ -158,69 +158,6 @@ table th {
   width: 90px;
 }
 
-@media screen and (max-width: 500px) {
-  table {
-    border: 0;
-  }
-  #media-select-all {
-    display: block;
-  }
-  table thead {
-    border: none;
-    clip-path: inset(50%);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-
-  table tr {
-    border-bottom: 3px solid #ddd;
-    display: block;
-    margin-bottom: 0.625em;
-  }
-
-  table td {
-    border-bottom: 1px solid #ddd;
-    display: block;
-    font-size: 0.8em;
-    text-align: right;
-    min-height: 25px;
-  }
-  table td::before {
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  table td:last-child {
-    border-bottom: 0;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .statusBar {
-    width: 15px;
-    height: 15px;
-  }
-  .option_cell {
-    justify-content: end;
-  }
-  .status_cell {
-    justify-content: end;
-  }
-  .option_cell button {
-    width: 20px;
-    height: 20px;
-  }
-  .option_cell button img {
-    margin: auto;
-    width: 15px;
-    height: 15px;
-  }
-}
 
 .tableNext {
   display: flex;
@@ -487,7 +424,72 @@ table th {
     font-size: 14px;
   }
 }
+@media screen and (max-width: 500px) {
+  table {
+    border: 0;
+  }
+  #media-select-all {
+    display: block;
+  }
+  table thead {
+    border: none;
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
 
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+    min-height: 25px;
+  }
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  table td:last-child {
+    border-bottom: 0;
+  }
+
+  .statusBar {
+    width: 15px;
+    height: 15px;
+  }
+  .option_cell {
+    justify-content: end;
+  }
+  .status_cell {
+    justify-content: end;
+  }
+  .option_cell button {
+    width: 20px;
+    height: 20px;
+  }
+  .option_cell button img {
+    margin: auto;
+    width: 15px;
+    height: 15px;
+  }
+
+  .tableNext button {
+    min-width: 32px;
+    padding: 0 6px;
+  }
+}
 @media (max-width: 390px) {
   section {
     padding: 5vw;
@@ -532,5 +534,10 @@ table th {
   .btn-container button {
     font-size: 10px;
     overflow: hidden;
+  }
+
+  .tableNext button {
+    min-width: 30px;
+    padding: 0 5px;
   }
 }

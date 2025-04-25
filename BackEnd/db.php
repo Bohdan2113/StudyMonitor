@@ -1,14 +1,17 @@
 <?php
-$host = 'localhost'; // хост
-$dbname = 'students_db'; // ім'я бази даних
-$username = 'root'; // користувач MySQL
-$password = ''; // пароль (за замовчуванням порожній)
+class Database {
+    private $host = 'localhost';
+    private $dbname = 'students_db';
+    private $username = 'root';
+    private $password = '';
 
-try {
-    // Підключення до бази даних
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    throw new Exception("DB connection error: " . $e->getMessage());
+    public function connect() {
+        try {
+            $pdo = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo;
+        } catch (PDOException $e) {
+            throw new Exception("Connection error: " . $e->getMessage());
+        }
+    }
 }
-?>

@@ -47,22 +47,20 @@ async function LoginBut(event) {
   if (!(await LoginToDB(loginForm))) return;
   window.location.href = "students.php";
 
-  ClearForm(loginForm);
+  // ClearForm(loginForm);
   ClearForm(getElement("#register-form"));
 
   // Обробка логіну
   async function LoginToDB(form) {
     const formData = new FormData(form);
-    formData.append("action", "login");
 
     try {
-      const response = await fetch("./Backend/auth.php", {
+      const response = await fetch("./BackEnd/feProcessing/login.php", {
         method: "POST",
         body: formData,
       });
-      const result = await response.json();
 
-      console.log(JSON.stringify(result, null, 2));
+      const result = await response.json();
       if (response.ok) {
         if (result.success) {
           console.log("✅ Sign in successfully:", result.message);
@@ -86,7 +84,7 @@ async function LoginBut(event) {
             ShowErrMessage(`${result.field}-erinput`, result.error);
           }
         } else if (result.error) {
-          alert(result.error);
+          console.log(result.error);
         }
         return false;
       }
@@ -115,10 +113,9 @@ async function SigninBut(event) {
   // Обробка реєстрації
   async function RegisterToDB(form) {
     const formData = new FormData(form);
-    formData.append("action", "register");
 
     try {
-      const response = await fetch("./Backend/auth.php", {
+      const response = await fetch("./BackEnd/feProcessing/signin.php", {
         method: "POST",
         body: formData,
       });
@@ -171,14 +168,6 @@ function ValidateLoginFormInput(form) {
     `${username.name}-erinput`,
     message
   );
-
-  // // Перевіряєм пароль на присутність
-  // ValidateField(
-  //   password,
-  //   password.value,
-  //   `${password.name}-erinput`,
-  //   "Fill this field"
-  // );
 
   return isValid;
 
@@ -241,14 +230,6 @@ function ValidateRegisterFormInput(form) {
     `${username.name}-erinput`,
     message
   );
-
-  // // Перевіряєм пароль на присутність
-  // ValidateField(
-  //   password,
-  //   password.value,
-  //   `${password.name}-erinput`,
-  //   "Fill this field"
-  // );
 
   return isValid;
 
