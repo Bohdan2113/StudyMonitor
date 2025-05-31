@@ -1,4 +1,4 @@
-<?php
+ <?php
 require_once __DIR__ . '/../Controllers/studentControler.php';
 header('Content-Type: application/json');
 

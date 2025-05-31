@@ -83,7 +83,7 @@ class StudentController {
 
         if ($exists > 0) {
             http_response_code(409);
-            return ["ok" => false, "error" => "Such student already exists"];
+            return ["ok" => false, "error" => ["error" => "Such student already exists"]];
             exit;
         }
         

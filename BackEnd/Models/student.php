@@ -69,7 +69,7 @@ class Student {
             $student['gender'],
             $student['bdate']
         ]);
-        $exists = $checkStmt->fetchColumn();
-        return $exists;
+        $count = $checkStmt->fetchColumn();
+        return $count;
     }
 }

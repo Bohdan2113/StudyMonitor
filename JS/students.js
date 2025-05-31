@@ -46,7 +46,10 @@ class Student {
     return `${day}.${month}.${year}`;
   }
   statusColor() {
-    if (this.name === "Bohdan Kruk") this.status = "online";
+    const profileInfo = JSON.parse(localStorage.getItem("profileInfo"));
+
+    if (this.name === profileInfo.fname + " " + profileInfo.lname)
+      this.status = "online";
     else this.status = "offline";
 
     return this.status === "online" ? "green" : "lightgray";
@@ -66,7 +69,7 @@ class Pagination {
 let saveDeleteListener;
 let saveEditListener;
 // Constants
-const studentsPerPage = 3;
+const studentsPerPage = 4;
 const seenPages = 2;
 let studentList = [];
 const stPagination = new Pagination(studentsPerPage);
@@ -698,22 +701,12 @@ async function LoadStudentsFromServer() {
 }
 async function AddStToDatabase(newStudent) {
   try {
-    const studentData = {
-      id: newStudent.id,
-      group_name: newStudent.group_name,
-      fname: newStudent.fname,
-      lname: newStudent.lname,
-      gender: newStudent.gender,
-      bdate: newStudent.bdate,
-      status: newStudent.status,
-    };
-
     const response = await fetch("./BackEnd/feProcessing/add_student.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(studentData),
+      body: JSON.stringify(newStudent),
     });
 
     const result = await response.json();
@@ -743,22 +736,12 @@ async function AddStToDatabase(newStudent) {
 }
 async function UpdateStInDatabase(student) {
   try {
-    const studentData = {
-      id: student.id,
-      group_name: student.group_name,
-      fname: student.fname,
-      lname: student.lname,
-      gender: student.gender,
-      bdate: student.bdate,
-      status: student.status,
-    };
-
     const response = await fetch("./BackEnd/feProcessing/update_student.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(studentData),
+      body: JSON.stringify(student),
     });
 
     const result = await response.json();
