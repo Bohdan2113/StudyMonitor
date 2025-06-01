@@ -109,49 +109,12 @@ let selectedNewChatMembers = [];
 let formMode = "new"; // 'new' або 'edit'
 let chatBeingEdited = null; // Зберігатиме екземпляр Chat, що редагується
 
-document.addEventListener("DOMContentLoaded", () => {
-  signedUsers = [
-    new User("admin_user_id", "Admin", "System", null),
-    new User("ann_user_id", "Ann", "Smith", "./Images/helloKitty.png"),
-    new User("john_user_id", "John", "Bond", null),
-    new User("ivon_user_id", "Ivon", "Stan", "./Images/helloKitty.png"),
-    currentUser,
-  ];
+document.addEventListener("DOMContentLoaded", async () => {
+  signedUsers = await LoadUsers();
+  console.log(signedUsers);
   currentUserName = currentUser.username;
   // Перетворюємо початкові дані чатів на екземпляри класу Chat
-  chatsData = [
-    // Важливо: memberIds має містити ВСІХ учасників, включаючи currentUser
-    new Chat(
-      "chat_admin_direct",
-      [currentUserName, "admin_user_id"],
-      "direct",
-      "Admin System"
-    ),
-    new Chat(
-      "chat_ann_direct",
-      [currentUserName, "ann_user_id"],
-      "direct",
-      "Ann Smith"
-    ),
-    new Chat(
-      "chat_john_direct",
-      [currentUserName, "john_user_id"],
-      "direct",
-      "John Bond"
-    ),
-    new Chat(
-      "chat_ivon_direct",
-      [currentUserName, "ivon_user_id"],
-      "direct",
-      "Ivon Stan"
-    ),
-    new Chat(
-      "group_work_chat",
-      [currentUserName, "ann_user_id", "admin_user_id"],
-      "group",
-      "Work Group"
-    ),
-  ];
+  chatsData = [];
 
   // --- Обробники подій ---
   // Обробник для головної кнопки форми додавання чатів
@@ -210,7 +173,12 @@ function setActiveChat(chatId) {
 }
 
 function renderNewChatMembersList() {
-  newChatMembersListULElement.innerHTML = "";
+  newChatMembersListULElement.innerHTML =
+    signedUsers.length <= 1
+      ? ` <div class="chat-window-placeholder">
+            <p>You are the only user of this website.</p>
+          </div>`
+      : "";
   signedUsers.forEach((user) => {
     if (user.username === currentUserName) return;
     const li = document.createElement("li");
@@ -500,7 +468,12 @@ function createChatItemElement(chatInstance) {
 function renderChatList() {
   chatsData.sort((a, b) => b.lastActivity - a.lastActivity);
 
-  chatListULElement.innerHTML = "";
+  chatListULElement.innerHTML =
+    chatsData.length < 1
+      ? ` <div class="chat-window-placeholder">
+            <p>There are no chats yet.</p>
+          </div>`
+      : "";
   chatsData.forEach((chat) => {
     // chat тут - це екземпляр Chat
     const chatElement = createChatItemElement(chat);
@@ -544,11 +517,9 @@ function updateChatWindow(chatId) {
       if (otherMemberId) {
         const otherUser = signedUsers.find((u) => u.username === otherMemberId);
         if (otherUser) {
-          const avatarSpan = document.createElement("span");
+          const avatarSpan = document.createElement("img");
           avatarSpan.classList.add("member-icon", "user-icon-small");
-          // Встановлюємо фон або src для img, якщо використовуєте img
-          avatarSpan.style.backgroundImage = `url("${otherUser.getAvatarUrl()}")`;
-          avatarSpan.title = otherUser.name; // Для підказки
+          avatarSpan.src = otherUser.getAvatarUrl();
           memberIconsListDiv.appendChild(avatarSpan);
         }
       }
@@ -561,34 +532,31 @@ function updateChatWindow(chatId) {
       membersInfoDiv.style.display = "flex"; // Показуємо блок
       addMemberIconSpan.style.display = "flex"; // Показуємо "+" (переконайтеся, що flex або inline-flex для .add-member-icon)
 
-      const otherMemberIdsInGroup = selectedChat.memberIds.filter(
-        (username) => username !== currentUserName
-      );
+      const memberIdsInGroup = selectedChat.memberIds;
       const maxAvatarsToShow = 3;
 
       for (
         let i = 0;
-        i < Math.min(otherMemberIdsInGroup.length, maxAvatarsToShow);
+        i < Math.min(memberIdsInGroup.length, maxAvatarsToShow);
         i++
       ) {
-        const memberId = otherMemberIdsInGroup[i];
+        const memberId = memberIdsInGroup[i];
         const member = signedUsers.find((u) => u.username === memberId);
         if (member) {
-          const avatarSpan = document.createElement("span");
+          const avatarSpan = document.createElement("img");
           avatarSpan.classList.add("member-icon", "user-icon-small");
-          avatarSpan.style.backgroundImage = `url("${member.getAvatarUrl()}")`;
-          avatarSpan.title = member.name;
+          avatarSpan.src = member.getAvatarUrl();
           memberIconsListDiv.appendChild(avatarSpan);
         }
       }
 
-      if (otherMemberIdsInGroup.length > maxAvatarsToShow) {
+      if (memberIdsInGroup.length > maxAvatarsToShow) {
         const ellipsisSpan = document.createElement("span");
         ellipsisSpan.classList.add("ellipsis-icon"); // Використовуємо наш новий клас
         ellipsisSpan.textContent = "...";
         // Можна додати title, наприклад, "+ X more"
         ellipsisSpan.title = `${
-          otherMemberIdsInGroup.length - maxAvatarsToShow
+          memberIdsInGroup.length - maxAvatarsToShow
         } more member(s)`;
         memberIconsListDiv.appendChild(ellipsisSpan);
       }
@@ -613,5 +581,21 @@ function updateChatWindow(chatId) {
     chatWindowContent.style.display = "none";
     chatRoomTitleElement.textContent = "";
     membersInfoDiv.style.display = "none"; // Ховаємо інформацію про учасників
+  }
+}
+
+async function LoadUsers() {
+  try {
+    const response = await fetch("./BackEnd/feProcessing/getUsers.php", {
+      method: "POST",
+    });
+    const data = await response.json();
+    return data.map(
+      (user) => new User(user.username, user.fname, user.lname, user.imageURL)
+    );
+  } catch (error) {
+    console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
+    return [];
   }
 }

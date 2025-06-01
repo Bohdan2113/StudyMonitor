@@ -121,7 +121,7 @@ async function SigninBut(event) {
       });
       const result = await response.json();
 
-      console.log(JSON.stringify(result, null, 2));
+      console.log(JSON.stringify(result));
       if (response.ok) {
         if (result.success) {
           console.log("✅ Sign in successfully:", result.message);

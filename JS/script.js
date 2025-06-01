@@ -46,15 +46,6 @@ document.addEventListener("click", function (event) {
   }
 });
 
-
-// Interface buttons evants
-function LogOutBut() {
-  removeActiveLink();
-  ClearProfile();
-  window.location.href = "index.html";
-  localStorage.removeItem("profileInfo");
-}
-
 // Notifacator indicator
 function HideNotifIndicator(event) {
   const notifIndicator = document.getElementById("notif-indicator");
@@ -129,5 +120,6 @@ function ClearForm() {
   inputFields.bdate.style.borderColor = "black";
 }
 function ClearProfile() {
-  $("#profile-name").textContent = "";
+  const profileName = $("#profile-name");
+  if (profileName) profileName.textContent = "";
 }

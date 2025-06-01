@@ -1,9 +1,9 @@
 class User {
-  constructor(username, fname, lname, imageUrl = null) {
+  constructor(username, fname, lname, imageURL = null) {
     this.username = username;
     this.fname = fname;
     this.lname = lname;
-    this.imageUrl = imageUrl;
+    this.imageURL = imageURL;
   }
 
   get name() {
@@ -11,8 +11,8 @@ class User {
   }
 
   getAvatarUrl() {
-    if (this.imageUrl && this.imageUrl.trim() !== "") {
-      return this.imageUrl;
+    if (this.imageURL && this.imageURL.trim() !== "") {
+      return this.imageURL;
     }
     // Більш сучасний SVG плейсхолдер
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237f8c8d'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E`;
@@ -21,13 +21,7 @@ class User {
 let currentUser = null;
 document.addEventListener("DOMContentLoaded", async () => {
   // Профіль інфо
-  const profileInfo = JSON.parse(localStorage.getItem("profileInfo"));
-  currentUser = new User(
-    profileInfo.username,
-    profileInfo.fname,
-    profileInfo.lname,
-    profileInfo.imgURL
-  );
+  currentUser = GetUserFromLocalStorage();
 
   try {
     await includeHTML("./Components/header.php", "header-placeholder");
@@ -61,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   let newAvatarFile = null; // Для зберігання обраного файлу аватара
-  $("#profile-name").textContent = currentUser.name;
+  UpdateProfileHeader(currentUser);
 
   function openProfileModal() {
     if (!currentUser) {
@@ -75,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     profileLnameInput.value = currentUser.lname || "";
     profileUsernameInput.value = currentUser.username;
     profileAvatarPreview.src = currentUser.getAvatarUrl(); // Використовуємо метод класу User
+    console.log(currentUser);
 
     newAvatarFile = null; // Скидаємо обраний файл при відкритті
     profileAvatarUploadInput.value = null; // Скидаємо значення інпуту файлу
@@ -132,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Обробка відправки форми
-  profileEditForm.addEventListener("submit", (event) => {
+  profileEditForm.addEventListener("submit", async (event) => {
     event.preventDefault(); // Запобігаємо стандартній відправці форми
 
     if (!currentUser) {
@@ -150,25 +145,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Тут має бути ваша логіка завантаження файлу newAvatarFile на сервер
       // Після успішного завантаження сервер повинен повернути новий URL аватара
       // Наприклад:
-      // uploadAvatarToServer(newAvatarFile).then(newImageUrl => {
-      //   currentUser.imageUrl = newImageUrl;
-      //   console.log('Profile updated with new avatar:', currentUser);
-      //   // Оновити відображення аватара в інших місцях (хедер, список чатів), якщо потрібно
-      //   updateUIAfterProfileChange();
-      // }).catch(error => {
-      //   console.error("Avatar upload failed:", error);
-      //   alert("Failed to upload new avatar.");
-      // });
-      // Тимчасово для демонстрації просто імітуємо оновлення:
-      currentUser.imageUrl = profileAvatarPreview.src; // Якщо просто хочемо зберегти DataURL (не рекомендується для реальних даних)
-      console.log(
-        "Profile (avatar potentially) updated. New avatar file:",
-        newAvatarFile.name
-      );
+      await uploadAvatarToServer(newAvatarFile)
+        .then((newImageUrl) => {
+          currentUser.imageURL = newImageUrl;
+          console.log("Profile updated with new avatar:", currentUser);
+          // Оновити відображення аватара в інших місцях (хедер, список чатів), якщо потрібно
+          UpdateProfileGlobally(currentUser);
+        })
+        .catch((error) => {
+          console.error("Avatar upload failed:", error);
+          alert("Failed to upload new avatar.");
+        });
+      console.log("Profile data updated:", currentUser);
     }
-
-    UpdateProfileGlobally(currentUser);
-    console.log("Profile data updated:", currentUser);
 
     closeProfileModal();
   });
@@ -224,10 +213,108 @@ function ChangeBackgroundDisplay(blockId_str) {
     // shadowWraper.style.pointerEvents = "auto";
   }
 }
-function UpdateProfileGlobally(user) {
+
+function GetUserFromLocalStorage() {
+  const profileInfo = JSON.parse(localStorage.getItem("profileInfo"));
+  if (!profileInfo) {
+    LogOutBut();
+    return;
+  }
+
+  return new User(
+    profileInfo.username,
+    profileInfo.fname,
+    profileInfo.lname,
+    profileInfo.imageURL
+  );
+}
+function UpdateProfileHeader(user) {
   $("#profile-name").textContent = user.name;
+  $("#main-profile-img").src = user.imageURL;
+}
+function LogOutBut() {
+  removeActiveLink();
+  ClearProfile();
+  window.location.href = "index.html";
+  localStorage.removeItem("profileInfo");
+}
+
+async function UpdateProfileGlobally(user) {
+  UpdateProfileHeader(user);
   localStorage.setItem("profileInfo", JSON.stringify(user));
 
-  renderChatList();
-  if (currentActiveChatId) updateChatWindow(currentActiveChatId);
+  if (typeof renderChatList === "function") renderChatList();
+  if (typeof updateChatWindow === "function" && currentActiveChatId)
+    updateChatWindow(currentActiveChatId);
+
+  await UpdateInfoToDB(user);
+}
+async function UpdateInfoToDB(user) {
+  try {
+    const response = await fetch("./BackEnd/feProcessing/updateUser.php", {
+      method: "POST",
+      body: JSON.stringify(user),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      if (result.success) {
+        console.log("✅ Updated successfully:", result.message);
+        return true;
+      }
+    } else {
+      if (result.field) {
+        if (result.max) {
+          ShowErrMessage(
+            `${result.field}-erinput`,
+            `Length must be less then ${result.max} characters`
+          );
+        } else if (result.error) {
+          ShowErrMessage(`${result.field}-erinput`, result.error);
+        }
+      } else if (result.error) {
+        console.log(result.error);
+      }
+      return false;
+    }
+  } catch (error) {
+    console.error("❌ Network error:", error);
+    alert("❌ Network error: check your internet connection");
+    return false;
+  }
+}
+async function uploadAvatarToServer(file) {
+  const formData = new FormData();
+  formData.append("avatarFile", file);
+
+  try {
+    const response = await fetch("./BackEnd/feProcessing/upload_avatar.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Server error: ${response.status} - ${
+          errorText || "Unknown upload error"
+        }`
+      );
+    }
+
+    const data = await response.json(); // Очікуємо JSON відповідь від PHP
+
+    if (data.success && data.imageURL) {
+      return data.imageURL;
+    } else {
+      throw new Error(
+        data.message ||
+          "Server did not return a valid image URL or success status."
+      );
+    }
+  } catch (error) {
+    console.error("Error uploading avatar:", error);
+    alert(`Upload failed: ${error.message}`);
+    throw error;
+  }
 }

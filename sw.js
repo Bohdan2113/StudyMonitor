@@ -19,6 +19,9 @@ const ASSETS = [
   "BackEnd/feProcessing/delete_student.php",
   "BackEnd/feProcessing/login.php",
   "BackEnd/feProcessing/signin.php",
+  "BackEnd/feProcessing/updateUser.php",
+  "BackEnd/feProcessing/getUsers.php",
+  "BackEnd/feProcessing/upload_avatar.php",
 
   "BackEnd/Controllers/studentControler.php",
   "BackEnd/Controllers/userControler.php",
