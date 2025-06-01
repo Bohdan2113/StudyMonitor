@@ -11,7 +11,7 @@ class UserController {
         $users = $userModel->getAll();
         return $users;
     }
-    public function updateStudent($user) {
+    public function updateUser($user) {
         $db = new Database();
         $pdo = $db->connect();
 
@@ -43,12 +43,12 @@ class UserController {
             "success" => true,
             "message" => "Welcome back, $username!",
             "profile" => [
-                "username" => $username
+                "username" => $username,
                 "fname" => $user["fname"],
                 "lname" => $user["lname"],
-                // "imgURL" => $user["imgURL"],
+                "imageURL" => $user["imageURL"],
             ]
-            ];
+        ];
     }
     public function Signin($data) {
         $db = new Database();
@@ -63,8 +63,8 @@ class UserController {
         $username = $data['usernameR'];
         $fname = $data['fnameR'];
         $lname = $data['lnameR'];
-        $imgURL = null;
-        $data['imageUrl'] = $imgURL;
+        $imageURL = null;
+        $data['imageURL'] = $imageURL;
 
         if ($userModel->usernameExists($username)) {
             return ["alreadyExists" => true, "message" => "Username is already taken", "success" => false];
@@ -75,10 +75,10 @@ class UserController {
             "success" => true,
             "message" => "Welcome back, $username!",
             "profile" => [
-                "id" => $username
+                "username" => $username,
                 "fname" => $fname,
                 "lname" => $lname,
-                "imgURL" => $imgURL,
+                "imageURL" => $imageURL,
             ]
         ];
     }

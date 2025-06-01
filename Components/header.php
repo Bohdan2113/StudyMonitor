@@ -48,7 +48,7 @@
       ;
       aria-label="My account"
     >
-      <img src="./Images/user.png" alt="user" />
+      <img src="./Images/user.png" id="main-profile-img" alt="user" />
       <span class="text_edit name" id="profile-name"></span>
 
       <div class="profile-dropdown-block">
