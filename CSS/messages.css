@@ -1,0 +1,660 @@
+body {
+  height: 100vh;
+}
+#shadow-wraper {
+  height: 100%;
+  display: flex;
+}
+
+/* Your base styles for the main content area, applied to 'main' */
+main.messages-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-left: 200px; /* From your original styles */
+  margin-top: 50px; /* From your original styles */
+  padding: 20px; /* From your original styles */
+
+  flex-grow: 1; /* ВАЖЛИВО: Займає весь залишковий простір по висоті */
+}
+
+/* Messages Section Specific Styles */
+.messages-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #2c3e50; /* Darker title color */
+}
+
+.messages-layout {
+  display: flex;
+  background-color: #fff; /* White background for the main chat area container */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  /* max-height: 85vh;
+  height: 85vh; */
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Left Panel: Chat List */
+.chat-list-panel {
+  flex: 0 0 280px; /* Fixed width, doesn't grow or shrink */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e0e0e0; /* Separator line */
+  background-color: #f9f9f9; /* Slightly different background for distinction */
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.chat-list-tabs {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px 15px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent; /* For active state */
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-button:hover {
+  background-color: #e9e9e9;
+}
+
+.tab-button.active {
+  color: #3498db; /* Or your theme's primary color */
+  border-bottom-color: #3498db;
+  font-weight: 600;
+}
+
+.chat-items-list {
+  list-style: none;
+  padding: 10px;
+  overflow-y: auto; /* Scroll if many chats */
+  flex-grow: 1; /* Take remaining space in the panel */
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: background-color 0.2s ease-in-out;
+  text-wrap: nowrapf;
+}
+
+.chat-item:hover {
+  background-color: #e0e6ec;
+}
+
+.chat-item.active-chat {
+  background-color: #8a9ad6; /* Purple-ish color from image */
+  color: white;
+}
+
+/* Аватар у списку вибору учасників нового чату */
+.new-chat-member-avatar {
+  width: 32px; /* Розмір аватара */
+  height: 32px;
+  border-radius: 50%; /* Круглий аватар */
+  margin-right: 10px; /* Відступ від чекбокса/імені */
+  object-fit: cover; /* Забезпечує правильне відображення зображення */
+  background-color: #e0e0e0; /* Колір фону, якщо зображення не завантажилось */
+}
+/* Аватар у списку існуючих чатів */
+.chat-item-icon {
+  /* Якщо ви використовували цей клас для іконок раніше */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; /* Розмір контейнера іконки */
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 12px;
+  overflow: hidden; /* Щоб img не виходив за межі круглого контейнера */
+  background-color: #bdc3c7; /* Фоновий колір для контейнера, якщо img не завантажиться */
+}
+.chat-item-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chat-item-name {
+  font-weight: 500;
+}
+
+/* Стилі для нової форми створення чату */
+.tab-content {
+  flex-grow: 1; /* Займає весь доступний простір в .chat-list-panel */
+  overflow-y: auto;
+  display: none; /* За замовчуванням приховані */
+}
+.tab-content.active {
+  display: flex; /* Або 'block', якщо не потрібен flex для вмісту */
+  flex-direction: column;
+}
+
+/* === Modern Styles for New Chat Form === */
+
+/* Визначимо кольорову палітру та змінні для зручності */
+:root {
+  --modern-bg-panel: #ffffff; /* Фон самої панелі форми */
+  --modern-bg-alt: #f8f9fa; /* Альтернативний фон для секцій або ховерів */
+
+  --modern-text-primary: #212529; /* Основний колір тексту (темно-сірий) */
+  --modern-text-secondary: #6c757d; /* Другорядний колір тексту (сірий) */
+  --modern-text-light: #495057; /* Світліший текст для лейблів, наприклад */
+
+  --modern-border-soft: #dee2e6; /* М'який колір для рамок */
+  --modern-border-input: #ced4da; /* Рамка для полів вводу */
+
+  --modern-primary-accent: #4a90e2; /* Приємний синій акцент (можна змінити) */
+  --modern-primary-accent-hover: #357abd;
+  --modern-primary-accent-focus-ring: rgba(74, 144, 226, 0.25);
+
+  --modern-checkbox-accent: var(--modern-primary-accent);
+
+  --modern-button-secondary-bg: #e9ecef;
+  --modern-button-secondary-hover-bg: #dde1e5;
+  --modern-button-secondary-text: var(--modern-text-primary);
+  --modern-button-secondary-border: var(--modern-border-input);
+
+  --modern-border-radius-base: 0.375rem; /* 6px */
+  --modern-border-radius-sm: 0.25rem; /* 4px */
+
+  --modern-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --modern-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Контейнер форми створення нового чату */
+#new-chat-form {
+  display: none; /* JS керує відображенням */
+  background-color: var(--modern-bg-panel);
+}
+
+#new-chat-form .new-chat-form-content {
+  padding: 16px; /* Внутрішні відступи для контенту форми */
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* Відстань між основними блоками форми */
+  height: 100%; /* Дозволяє списку розтягуватися */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.new-chat-form-title {
+  font-size: 1.1rem; /* Трохи більший заголовок */
+  font-weight: 600; /* Більш виразний */
+  color: var(--modern-text-primary);
+  margin-bottom: 0; /* Гап вже є в батьківському new-chat-form-content */
+}
+
+/* Список учасників для вибору */
+.new-chat-members-list {
+  list-style: none;
+  padding: 0;
+  flex-grow: 1; /* Дозволяє списку займати доступний простір */
+  min-height: 100px;
+  overflow-y: auto;
+  border: 1px solid var(--modern-border-soft);
+  border-radius: var(--modern-border-radius-base);
+  background-color: #fff; /* Явний білий фон для списку */
+}
+
+.new-chat-members-list li {
+  padding: 10px 14px; /* Комфортні відступи */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid var(--modern-border-soft);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.new-chat-members-list li:last-child {
+  border-bottom: none;
+}
+
+.new-chat-members-list li:hover {
+  background-color: var(--modern-bg-alt);
+}
+
+.new-chat-members-list li input[type="checkbox"] {
+  margin-right: 12px;
+  accent-color: var(--modern-checkbox-accent);
+  width: 16px; /* Трохи більші чекбокси */
+  height: 16px;
+  cursor: pointer;
+}
+.new-chat-members-list li label {
+  /* Додано стиль для лейбла для кращої клікабельності */
+  flex-grow: 1;
+  cursor: pointer;
+  color: var(--modern-text-light);
+  font-size: 0.95rem;
+}
+
+/* Контейнер для введення назви чату */
+.new-chat-name-input-container {
+  display: flex; /* Керується JS */
+  flex-direction: column;
+  gap: 6px;
+}
+
+.new-chat-name-input-container label {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  color: var(--modern-text-light);
+}
+
+.new-chat-name-input-container input[type="text"] {
+  padding: 10px 12px;
+  border: 1px solid var(--modern-border-input);
+  border-radius: var(--modern-border-radius-base);
+  font-size: 0.95rem;
+  color: var(--modern-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.new-chat-name-input-container input[type="text"]:focus {
+  outline: none;
+  border-color: var(--modern-primary-accent);
+  box-shadow: 0 0 0 0.2rem var(--modern-primary-accent-focus-ring);
+}
+
+/* Контейнер для кнопок дій */
+.new-chat-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px; /* Невеликий відступ зверху */
+}
+
+.action-button {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border: 1px solid transparent; /* Додамо для консистентності, особливо для secondary */
+  border-radius: var(--modern-border-radius-base);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+.action-button:active {
+  transform: translateY(1px); /* Ефект натискання */
+}
+/* Головна кнопка (Створити) */
+.primary-button {
+  background-color: var(--modern-primary-accent);
+  color: white;
+  border-color: var(--modern-primary-accent);
+}
+.primary-button:hover {
+  background-color: var(--modern-primary-accent-hover);
+  border-color: var(--modern-primary-accent-hover);
+  box-shadow: var(--modern-shadow-sm);
+}
+/* Другорядна кнопка (Скасувати) */
+.secondary-button {
+  background-color: var(--modern-button-secondary-bg);
+  color: var(--modern-button-secondary-text);
+  border-color: var(--modern-button-secondary-border);
+}
+.secondary-button:hover {
+  background-color: var(--modern-button-secondary-hover-bg);
+  border-color: #adb5bd; /* Трохи темніша рамка при ховері */
+}
+
+/* Right Panel: Chat Window */
+.chat-window-panel {
+  flex: 1; /* Takes remaining space */
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* No padding here, handle inside children */
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-left: 3px solid #8a9ad6;
+}
+
+.chat-window-content {
+  display: flex; /* Важливо, якщо це був ваш попередній стиль для .chat-window-panel */
+  flex-direction: column;
+  flex-grow: 1; /* Займає весь доступний простір, коли видимий */
+}
+
+.chat-window-placeholder {
+  display: flex; /* Використовується для центрування тексту */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* Займає весь доступний простір */
+  text-align: center;
+  padding: 20px;
+  color: #777;
+  font-size: 1.1rem;
+}
+
+.chat-window-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+}
+.chat-window-header.clickable-header {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.chat-window-header.clickable-header:hover {
+  background-color: #f8f9fa;
+}
+
+.chat-room-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.members-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.members-label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.member-icons-list {
+  display: flex;
+  gap: -5px; /* Overlap icons slightly if desired, or use positive for space */
+}
+
+.member-icon.user-icon-small,
+.message-avatar.user-icon-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #ccc; /* Placeholder */
+  border: 2px solid white; /* To make them appear stacked */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  color: #777;
+  /* TODO: Add actual user icon/image */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237f8c8d'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.member-icons-list .member-icon:not(:first-child) {
+  margin-left: -8px; /* Overlap effect */
+}
+.member-icons-list .ellipsis-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* Такий же розмір, як user-icon-small */
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e0e0e0; /* Або інший колір фону */
+  color: #555; /* Колір крапок */
+  font-weight: bold;
+  font-size: 0.9rem; /* Розмір крапок */
+  border: 2px solid white;
+  margin-left: -8px; /* Для ефекту накладання, якщо потрібно */
+  cursor: default; /* Не клікабельна */
+}
+
+.add-member-icon.plus-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid white;
+  margin-left: 0px; /* Adjust if needed for overlap */
+}
+.add-member-icon.plus-icon::before {
+  content: "+";
+}
+
+.messages-display-area {
+  flex: 1; /* Takes up available space for messages */
+  padding: 20px;
+  overflow-y: auto; /* Enable scrolling for messages */
+  display: flex;
+  flex-direction: column;
+}
+.messages-area-sub-title {
+  font-size: 0.9rem;
+  color: #777;
+  text-align: center;
+  margin-bottom: 15px;
+  position: relative; /* For the line effect */
+}
+.messages-area-sub-title::before,
+.messages-area-sub-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%; /* Adjust width of lines */
+  height: 1px;
+  background-color: #ddd;
+}
+.messages-area-sub-title::before {
+  left: 0;
+}
+.messages-area-sub-title::after {
+  right: 0;
+}
+
+.message-entry {
+  display: flex;
+  margin-bottom: 15px;
+  max-width: 75%; /* Messages don't take full width */
+}
+
+.avatar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px; /* Space between avatar and bubble */
+}
+
+.message-avatar.user-icon-small {
+  margin-bottom: 4px;
+  border: none; /* No border for message avatars unless specified */
+}
+
+.message-sender-name {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.message-content-column {
+  flex: 1;
+}
+
+.message-bubble {
+  padding: 10px 15px;
+  border-radius: 18px;
+  line-height: 1.4;
+  word-wrap: break-word; /* Prevent overflow */
+}
+
+.received-message {
+  align-self: flex-start;
+}
+
+.received-message .message-bubble {
+  background-color: #e9e9eb; /* Light grey for received */
+  color: #333;
+  border-top-left-radius: 5px; /* Different corner for speech bubble effect */
+}
+
+.sent-message {
+  align-self: flex-end;
+  flex-direction: row-reverse; /* Avatar on the right */
+}
+
+.sent-message .avatar-column {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.sent-message .message-bubble {
+  background-color: #8a9ad6; /* Purple-ish for sent */
+  color: white;
+  border-top-right-radius: 5px; /* Different corner */
+}
+
+.message-input-container {
+  display: flex;
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f9f9f9; /* Slightly different bg for input area */
+}
+
+.message-input-field {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px; /* Rounded input field */
+  margin-right: 10px;
+  font-size: 0.9rem;
+  resize: none; /* if it were a textarea */
+}
+.message-input-field:focus {
+  outline: none;
+  border-color: #8a9ad6;
+  box-shadow: 0 0 0 2px rgba(138, 154, 214, 0.3);
+}
+
+.send-message-button {
+  padding: 10px;
+  background-color: #e0e0e0;
+  color: #555; /* Колір для SVG іконки, якщо вона використовує currentColor */
+  border: 1px solid #ccc;
+  border-radius: 50%; /* Зробимо кнопку круглою */
+  width: 40px; /* Фіксована ширина */
+  height: 40px; /* Фіксована висота */
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-message-button:hover {
+  background-color: #d0d0d0;
+}
+
+.send-icon {
+  display: inline-block;
+  width: 20px; /* Розмір іконки */
+  height: 20px; /* Розмір іконки */
+  background-color: currentColor; /* Використовує колір тексту кнопки для SVG маски */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transform: translateX(2px);
+}
+
+/* Responsive Adjustments */
+
+/* Tablet and Smaller Desktops */
+@media (max-width: 940px) {
+  /* Your provided breakpoint */
+  main.messages-main-content {
+    margin-left: 48px; /* Your original style for this breakpoint */
+    padding: 20px;
+  }
+
+  .chat-list-panel {
+    flex: 0 0 220px; /* Slightly smaller chat list */
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 640px) {
+  main.messages-main-content {
+    padding: 10px; /* Remove padding or adjust as full width might be desired */
+  }
+
+  .messages-layout {
+    flex-direction: column; /* Stack panels vertically */
+    border-radius: 0; /* Full width, no radius for the container */
+    box-shadow: none;
+  }
+
+  .chat-list-panel {
+    flex-basis: auto; /* Allow it to size based on content or a fixed height */
+    width: 100%;
+    max-height: 170px; /* Example max height for chat list on mobile */
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0; /* No radius when stacked */
+  }
+  .chat-list-tabs .tab-button {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+  .chat-item {
+    padding: 10px 12px;
+  }
+
+  .chat-window-panel {
+    width: 100%;
+    border-radius: 0; /* No radius when stacked */
+  }
+
+  .chat-window-header {
+    padding: 12px 15px;
+  }
+  .chat-room-title {
+    font-size: 1rem;
+  }
+  .member-icon.user-icon-small,
+  .add-member-icon.plus-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .messages-display-area {
+    padding: 15px;
+  }
+  .message-entry {
+    max-width: 85%; /* Allow messages to be a bit wider on mobile */
+  }
+
+  .message-input-container {
+    padding: 10px 15px;
+  }
+}

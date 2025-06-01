@@ -173,6 +173,208 @@ header img {
   background-color: rgb(201, 248, 224);
 }
 
+/* === Profile Modal Styles === */
+
+:root {
+  /* Можете використовувати ті ж змінні, що і для форми чату, або визначити нові */
+  --modal-overlay-bg: rgba(0, 0, 0, 0.6); /* Затемнення фону */
+  --modal-content-bg: #ffffff;
+  --modal-text-primary: #1a202c; /* Темніший текст */
+  --modal-text-secondary: #4a5568; /* Сірий текст */
+  --modal-border-color: #e2e8f0;
+  --modal-primary-accent: #4a90e2; /* Той самий синій акцент */
+  --modal-primary-accent-hover: #357abd;
+  --modal-primary-accent-focus-ring: rgba(74, 144, 226, 0.25);
+  --modal-button-secondary-bg: #edf2f7;
+  --modal-button-secondary-hover-bg: #e2e8f0;
+  --modal-button-secondary-text: var(--modal-text-primary);
+
+  --modal-border-radius: 0.75rem; /* 12px, більш заокруглений */
+  --modal-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Поверх іншого контенту */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--modal-content-bg);
+  padding: 28px 32px; /* Більше внутрішніх відступів */
+  border-radius: var(--modal-border-radius);
+  box-shadow: var(--modal-shadow);
+  position: relative;
+  width: 100%;
+  max-width: 480px; /* Максимальна ширина модального вікна */
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--modal-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+.modal-close-button:hover {
+  color: var(--modal-text-primary);
+}
+
+.profile-modal-content h2 {
+  font-size: 1.75rem; /* 28px */
+  font-weight: 600;
+  color: var(--modal-text-primary);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Секція аватара */
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-avatar-img {
+  width: 120px; /* Більший аватар */
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border: 3px solid var(--modal-border-color);
+  background-color: #f0f0f0; /* Фон, якщо зображення немає */
+}
+
+.avatar-upload-label {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--modal-button-secondary-bg);
+  color: var(--modal-primary-accent);
+  border: 1px solid var(--modal-primary-accent);
+  border-radius: var(--modal-border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.avatar-upload-label:hover {
+  background-color: var(--modal-primary-accent);
+  color: white;
+}
+.avatar-upload-label input[type="file"] {
+  display: none; /* Ховаємо стандартний інпут файлу */
+}
+
+/* Групи форми */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  color: var(--modal-text-light, #4a5568); /* Використання змінної, якщо є */
+  margin-bottom: 8px;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 12px 16px; /* Більші інпути */
+  border: 1px solid var(--modal-border-color);
+  border-radius: var(--modal-border-radius-sm, 0.375rem);
+  font-size: 1rem; /* 16px */
+  color: var(--modal-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; /* Щоб padding не впливав на ширину */
+}
+.form-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--modal-primary-accent);
+  box-shadow: 0 0 0 0.2rem var(--modal-primary-accent-focus-ring);
+}
+.form-group input[type="text"][readonly] {
+  background-color: #f7fafc; /* Світлий фон для readonly поля */
+  color: var(--modal-text-secondary);
+  cursor: not-allowed;
+}
+
+/* Кнопки дій у модальному вікні */
+.profile-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.profile-modal-actions .button-primary,
+.profile-modal-actions .button-secondary {
+  flex-grow: 1;
+  padding: 12px 15px; /* Більші кнопки */
+  border: 1px solid transparent;
+  border-radius: var(--modal-border-radius-sm, 0.375rem);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+.profile-modal-actions .button-primary:active,
+.profile-modal-actions .button-secondary:active {
+  transform: translateY(1px);
+}
+
+.profile-modal-actions .button-primary {
+  background-color: var(--modal-primary-accent);
+  color: white;
+  border-color: var(--modal-primary-accent);
+}
+.profile-modal-actions .button-primary:hover {
+  background-color: var(--modal-primary-accent-hover);
+  border-color: var(--modal-primary-accent-hover);
+  box-shadow: var(--modal-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.profile-modal-actions .button-secondary {
+  background-color: var(--modal-button-secondary-bg);
+  color: var(--modal-button-secondary-text);
+  border-color: var(--modal-border-color);
+}
+.profile-modal-actions .button-secondary:hover {
+  background-color: var(--modal-button-secondary-hover-bg);
+  border-color: #cbd5e0; /* Трохи темніша рамка */
+}
+
 @media (max-width: 940px) {
   .notif-dropdown-block .message-oversee {
     min-width: 21vw;

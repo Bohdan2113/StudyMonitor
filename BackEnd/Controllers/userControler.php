@@ -4,6 +4,22 @@ require_once __DIR__ . '/../db.php';
 header('Content-Type: application/json');
 
 class UserController {
+    public function readAll() {
+        $db = new Database();
+        $pdo = $db->connect();
+        $userModel = new User($pdo);
+        $users = $userModel->getAll();
+        return $users;
+    }
+    public function updateStudent($user) {
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $userModel = new User($pdo);
+        $userModel->update($user);
+
+        return  ["success" => true, "message" => "User updated"];
+    }
     public function Login($data) {
         $db = new Database();
         $pdo = $db->connect();
@@ -13,25 +29,26 @@ class UserController {
         if (!$isValid['ok']) 
             return array_merge($isValid['error'], ["success" => false]);
 
-            $username = $data["usernameL"];
-            $password = $data["passwordL"];
-    
-            $user = $userModel->findByUsername($username);
-            if (!$user)
-                return ["badLogin" => true, "message" => "Username is undefined", "success" => false];
-    
-            if (!$userModel->verifyPassword($password, $user["password"]))
-                return ["badPassword" => true, "message" => "Incorrect password", "success" => false];
-    
-            return [
-                "success" => true,
-                "message" => "Welcome back, $username!",
-                "profile" => [
-                    "fname" => $user["fname"],
-                    "lname" => $user["lname"],
-                    "username" => $username
-                ]
-                ];
+        $username = $data["usernameL"];
+        $password = $data["passwordL"];
+
+        $user = $userModel->findByUsername($username);
+        if (!$user)
+            return ["badLogin" => true, "message" => "Username is undefined", "success" => false];
+
+        if (!$userModel->verifyPassword($password, $user["password"]))
+            return ["badPassword" => true, "message" => "Incorrect password", "success" => false];
+
+        return [
+            "success" => true,
+            "message" => "Welcome back, $username!",
+            "profile" => [
+                "username" => $username
+                "fname" => $user["fname"],
+                "lname" => $user["lname"],
+                // "imgURL" => $user["imgURL"],
+            ]
+            ];
     }
     public function Signin($data) {
         $db = new Database();
@@ -46,6 +63,8 @@ class UserController {
         $username = $data['usernameR'];
         $fname = $data['fnameR'];
         $lname = $data['lnameR'];
+        $imgURL = null;
+        $data['imageUrl'] = $imgURL;
 
         if ($userModel->usernameExists($username)) {
             return ["alreadyExists" => true, "message" => "Username is already taken", "success" => false];
@@ -56,9 +75,10 @@ class UserController {
             "success" => true,
             "message" => "Welcome back, $username!",
             "profile" => [
+                "id" => $username
                 "fname" => $fname,
                 "lname" => $lname,
-                "username" => $username
+                "imgURL" => $imgURL,
             ]
         ];
     }

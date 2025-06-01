@@ -22,7 +22,7 @@ const ASSETS = [
 
   "BackEnd/Controllers/studentControler.php",
   "BackEnd/Controllers/userControler.php",
-  
+
   "BackEnd/Models/student.php",
   "BackEnd/Models/user.php",
 
@@ -36,12 +36,14 @@ const ASSETS = [
   "CSS/nav.css", // CSS-стилі
   "CSS/students.css", // CSS-стилі
   "CSS/auth.css", // CSS-стилі
+  "CSS/messages.css", // CSS-стилі
 
   "JS/cashe.js", // Головний JavaScript-файл
   "JS/script.js", // Головний JavaScript-файл
   "JS/components.js", // Підключення компонент JavaScript-файл
   "JS/students.js", // Завантаження студентів JavaScript-файл
   "JS/auth.js", // Завантаження студентів JavaScript-
+  "JS/messages.js", // Завантаження студентів JavaScript-
 
   "Images/bin.png", // Іконка 128px
   "Images/hamburger.png", // Іконка 512px

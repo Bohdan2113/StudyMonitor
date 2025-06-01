@@ -607,17 +607,6 @@ function LoadInfoToDeleteModal(stToDelList) {
 
   ChangeBackgroundDisplay("shadow-wraper");
 }
-function ChangeBackgroundDisplay(blockId_str) {
-  let shadowWraper = document.getElementById(blockId_str);
-
-  if (shadowWraper.style.display === "flex") {
-    shadowWraper.style.display = "none";
-    // shadowWraper.style.pointerEvents = "none";
-  } else {
-    shadowWraper.style.display = "flex";
-    // shadowWraper.style.pointerEvents = "auto";
-  }
-}
 function syncCheckboxes(sourceId, targetId) {
   let source = document.getElementById(sourceId);
   let target = document.getElementById(targetId);
