@@ -17,15 +17,18 @@
     <link rel="manifest" href="manifest.json" />
   </head>
 
-  <body>
+ <body>
     <div id="shadow-wraper">
       <header id="header-placeholder"></header>
       <nav id="nav-placeholder"></nav>
 
+
       <main class="messages-main-content">
         <!-- <h1 class="messages-title">Messages</h1> -->
 
+
         <div class="messages-layout">
+
 
           <!-- Ліва панель: Список чатів -->
           <aside class="chat-list-panel">
@@ -39,6 +42,7 @@
                 <!-- Сюди JavaScript буде додавати існуючі чати -->
               </ul>
             </div>
+
 
               <!-- Контейнер для форми створення нового чату (спочатку прихований) -->
             <div id="new-chat-form" class="tab-content">
@@ -59,12 +63,14 @@
             </div>
           </aside>
 
+
           <!-- Права панель: Вікно чату -->
           <section class="chat-window-panel">
             <!-- Блок-заповнювач, коли чат не обрано -->
             <div class="chat-window-placeholder">
               <p>Please select a chat to start messaging.</p>
             </div>
+
 
               <!-- Основний контент вікна чату (спочатку прихований) -->
             <div class="chat-window-content" style="display: none;">
@@ -78,9 +84,10 @@
                 </div>
               </header>
 
+
               <div class="messages-display-area">
                 <!-- <h3 class="messages-area-sub-title">Messages</h3>
-                
+               
                 <div class="message-entry received-message">
                   <div class="avatar-column">
                     <span class="message-avatar user-icon-small">
@@ -93,6 +100,7 @@
                     </div>
                   </div>
                 </div>
+
 
                 <div class="message-entry sent-message">
                   <div class="avatar-column">
@@ -108,20 +116,25 @@
                 </div> -->
               </div>
 
+
               <footer class="message-input-container">
                 <input type="text" class="message-input-field" placeholder="" aria-label="Message input"/>
                 <button class="send-message-button" aria-label="Send message">
-                  <span class="send-icon"></span> <!-- Тепер порожній span -->
+                  <span class="send-icon"></span>
                 </button>
               </footer>
-            
+           
             </div>
           </section>
         </div>
       </main>
     </div>
 
+
     <script src="JS/script.js" defer></script>
     <script src="JS/messages.js" defer></script>
   </body>
+
 </html>
+
+
