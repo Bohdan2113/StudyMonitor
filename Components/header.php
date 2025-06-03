@@ -11,8 +11,6 @@
       <a
         href="./messages.php"
         aria-label="Notifications"
-        onclick="HideNotifIndicator(event)"
-        oncontextmenu="ShowNotifIndicator()"
       >
         <img src="./Images/notification.svg" alt="notification" id="notif-img" />
         <span id="notif-indicator" id="notif-indicator"></span>

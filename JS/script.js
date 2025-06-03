@@ -47,7 +47,7 @@ document.addEventListener("click", function (event) {
 });
 
 // Notifacator indicator
-function HideNotifIndicator(event) {
+function HideNotifIndicator() {
   const notifIndicator = document.getElementById("notif-indicator");
   if (notifIndicator) {
     notifIndicator.style.display = "none";

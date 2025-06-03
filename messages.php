@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="CSS/messages.css" />
 
     <script src="JS/cashe.js" defer></script>
-    <script src="JS/components.js"></script>
+    <script src="JS/components.js" defer></script>
     <link rel="manifest" href="manifest.json" />
   </head>
 
@@ -86,34 +86,6 @@
 
 
               <div class="messages-display-area">
-                <!-- <h3 class="messages-area-sub-title">Messages</h3>
-               
-                <div class="message-entry received-message">
-                  <div class="avatar-column">
-                    <span class="message-avatar user-icon-small">
-                    </span>
-                    <span class="message-sender-name">Admin</span>
-                  </div>
-                  <div class="message-content-column">
-                    <div class="message-bubble">
-                      Тут буде текст повідомлення від Admin
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="message-entry sent-message">
-                  <div class="avatar-column">
-                    <span class="message-avatar user-icon-small">
-                    </span>
-                    <span class="message-sender-name">Me</span>
-                  </div>
-                  <div class="message-content-column">
-                    <div class="message-bubble">
-                      Тут буде текст повідомлення від Me
-                    </div>
-                  </div>
-                </div> -->
               </div>
 
 
