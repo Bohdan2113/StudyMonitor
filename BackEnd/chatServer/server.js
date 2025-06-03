@@ -93,7 +93,7 @@ async function main() {
                   });
 
                 return {
-                  ...chatRoom,
+                  chatRoom,
                   hasUnreadMessages: unreadMessagesCount > 0,
                 };
               })
