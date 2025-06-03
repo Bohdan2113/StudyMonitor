@@ -29,6 +29,12 @@ const ASSETS = [
   "BackEnd/Models/student.php",
   "BackEnd/Models/user.php",
 
+  "BackEnd/chatServer/db.js",
+  "BackEnd/chatServer/models.js",
+  "BackEnd/chatServer/server.js",
+  "BackEnd/chatServer/package-lock.json",
+  "BackEnd/chatServer/package.json",
+
   "sw.js", // ✅ Service Worker файл
   "manifest.json", // ✅ Файл маніфеста
   "Components/header.php", // Component php-файл
@@ -54,6 +60,7 @@ const ASSETS = [
   "Images/notification.svg", // Іконка 512px
   "Images/pencil.png", // Іконка 512px
   "Images/user.png", // Іконка 512px
+  "icons/ICON.png", // Іконка 128px
   "icons/icon.128.png", // Іконка 128px
   "icons/icon.192.png", // Іконка 192px
   "icons/icon.256.png", // Іконка 256px

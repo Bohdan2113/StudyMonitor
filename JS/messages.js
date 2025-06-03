@@ -1,5 +1,3 @@
-// JS/messages.js
-
 class Chat {
   constructor(
     id,
@@ -22,8 +20,6 @@ class Chat {
     this.lastActivity = new Date(lastActivity);
     this.hasUnread = hasUnread; // <--- ІНІЦІАЛІЗАЦІЯ ПОЛЯ
   }
-
-  // getDisplayName, getChatAvatarUrl, defaultGroupAvatarUrl - без змін
   getDisplayName(allUsers, currentUsernameParam) {
     if (this.type === "direct") {
       const otherMemberId = this.memberIds.find(
@@ -476,9 +472,6 @@ function setActiveChat(chatId, fetchMsgs = true) {
   }
   CheckAndHideNotifIndicator();
 }
-
-// renderNewChatMembersList, handleMemberSelection, updateNewChatNameInputVisibility, resetNewChatForm, switchToTab, handleEditChatHeaderClick, populateFormForEditing, handleCreateNewChat, handleSaveChanges - БЕЗ ЗМІН
-
 function renderNewChatMembersList() {
   if (!signedUsers || signedUsers.length === 0) {
     newChatMembersListULElement.innerHTML = `<div class="chat-window-placeholder" style="padding: 10px; text-align:center;"><p>Loading users or no other users available.</p></div>`;
@@ -667,7 +660,7 @@ function handleSaveChanges() {
   } else alert("Not connected to chat server. Please try again.");
 }
 
-// --- Функції для рендерингу списку чатів та вікна чату ---
+// --- Функції для рендерингу списку чатів та вікна чату
 function createChatItemElement(chatInstance) {
   const listItem = document.createElement("li");
   listItem.classList.add("chat-item");
@@ -697,7 +690,6 @@ function createChatItemElement(chatInstance) {
   listItem.appendChild(nameSpan);
   return listItem;
 }
-
 function renderChatList() {
   chatsData.sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity));
   chatListULElement.innerHTML = "";
@@ -715,8 +707,6 @@ function renderChatList() {
   });
   CheckAndHideNotifIndicator();
 }
-
-// updateChatWindow, sendChatMessage, renderMessagesForActiveChat, displayMessage - БЕЗ ЗМІН
 function updateChatWindow(chatId) {
   const selectedChat = chatsData.find((chat) => chat.id === chatId);
   const membersInfoDiv = chatWindowContent.querySelector(".members-info");
@@ -877,20 +867,6 @@ function displayMessage(messageObject, chatContext) {
 }
 
 // --- Індикатор нотифікацій ---
-function ShowNotifIndicator() {
-  const globalNotifIndicator = document.getElementById("notif-indicator");
-  if (globalNotifIndicator) {
-    globalNotifIndicator.style.display = "block";
-    localStorage.setItem("notifHidden", "false");
-  } else console.warn("ShowNotifIndicator: #notif-indicator not found");
-}
-function HideNotifIndicator() {
-  const globalNotifIndicator = document.getElementById("notif-indicator");
-  if (globalNotifIndicator) {
-    globalNotifIndicator.style.display = "none";
-    localStorage.setItem("notifHidden", "true");
-  } else console.warn("HideNotifIndicator: #notif-indicator not found");
-}
 function CheckAndHideNotifIndicator() {
   if (!chatListULElement) {
     console.warn("CheckAndHideNotifIndicator: chatListULElement not found.");
@@ -902,7 +878,6 @@ function CheckAndHideNotifIndicator() {
   else HideNotifIndicator();
 }
 
-// LoadUsers - БЕЗ ЗМІН
 async function LoadUsers() {
   try {
     const response = await fetch("./BackEnd/feProcessing/getUsers.php", {
