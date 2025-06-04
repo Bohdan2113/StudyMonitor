@@ -240,14 +240,13 @@ function LogOutBut() {
 }
 
 async function UpdateProfileGlobally(user) {
+  await UpdateInfoToDB(user);
   UpdateProfileHeader(user);
   localStorage.setItem("profileInfo", JSON.stringify(user));
 
   if (typeof renderChatList === "function") renderChatList();
   if (typeof updateChatWindow === "function" && currentActiveChatId)
     updateChatWindow(currentActiveChatId);
-
-  await UpdateInfoToDB(user);
 }
 async function UpdateInfoToDB(user) {
   try {

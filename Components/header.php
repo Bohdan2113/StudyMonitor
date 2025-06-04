@@ -13,11 +13,11 @@
         aria-label="Notifications"
       >
         <img src="./Images/notification.svg" alt="notification" id="notif-img" />
-        <span id="notif-indicator" id="notif-indicator"></span>
+        <span id="notif-indicator"></span>
       </a>
 
       <div class="notif-dropdown-block">
-        <ul>
+        <!-- <ul>
           <li>
             <a href="#" class="clickable" aria-label="New message shortcut">
               <div class="sender-info">
@@ -36,7 +36,7 @@
               <div class="message-oversee"></div>
             </a>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
 
